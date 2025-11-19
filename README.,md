@@ -1,0 +1,13 @@
+# VSB IT Dashboard - Backend
+
+
+Simple Node.js + Express backend using SQLite (better-sqlite3).
+
+
+## Setup
+
+
+1. Copy files into a project folder (this repo's root).
+2. Create `db/` folder and place `schema.sql` inside it (already included here).
+3. Create `.env` from `.env.example` and set values.
+4. Install

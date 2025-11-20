@@ -128,3 +128,33 @@ document.addEventListener('DOMContentLoaded', () => {
   if (pollingHandle) clearInterval(pollingHandle);
   pollingHandle = setInterval(load, POLL_INTERVAL_MS);
 });
+// Add Notice Handler
+document.addEventListener("DOMContentLoaded", () => {
+    const form = document.getElementById("addNoticeForm");
+    if (!form) return;
+
+    form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const title = document.getElementById("noticeTitle").value;
+        const content = document.getElementById("noticeContent").value;
+        const duration = parseInt(document.getElementById("noticeDuration").value) || 10;
+
+        const payload = { title, content, duration };
+
+        try {
+            await fetch(apiRoot + "/api/notices", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            });
+
+            alert("Notice Added Successfully!");
+            form.reset();
+
+        } catch (err) {
+            alert("Failed to add notice: " + err.message);
+        }
+    });
+});
+

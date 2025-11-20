@@ -1,6 +1,29 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- ===== Add Notice Form ===== -->
+<div id="addNotice" style="margin:20px;padding:20px;background:#ffffff10;border-radius:10px;">
+    <h2 class="text-white text-xl mb-2">Add Notice</h2>
+
+    <form id="addNoticeForm">
+        <input id="noticeTitle" placeholder="Title" required
+            class="bg-gray-800 text-white p-2 rounded w-1/2 mb-2" />
+
+        <input id="noticeDuration" type="number" min="1" value="10"
+            placeholder="Duration (sec)"
+            class="bg-gray-800 text-white p-2 rounded w-32 mb-2" />
+
+        <textarea id="noticeContent" rows="3" placeholder="Content"
+            class="bg-gray-800 text-white p-2 rounded w-full mb-2"></textarea>
+
+        <button type="submit"
+            class="bg-blue-600 px-4 py-2 rounded text-white hover:bg-blue-700">
+            Add Notice
+        </button>
+    </form>
+</div>
+<!-- =========================== -->
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>V.S.B Engineering College - IT Department Dashboard</title>
@@ -236,6 +259,19 @@
         }
     </style>
 </head>
+<body>
+  <div id="addNotice">
+    <h3>Add Notice</h3>
+    <form id="addNoticeForm">
+      <input id="noticeTitle" placeholder="Title" required style="width:60%;padding:6px;margin:4px 0;" />
+      <input id="noticeDuration" placeholder="Duration (s)" type="number" value="10" min="1" style="width:20%;padding:6px;margin:4px;" />
+      <br/>
+      <textarea id="noticeContent" placeholder="Content" rows="3" style="width:85%;padding:6px;margin:4px 0;"></textarea>
+      <br/>
+      <button id="addBtn" type="submit">Add Notice</button>
+    </form>
+    <hr/>
+  </div>
 <body class="text-white">
     <!-- Professional Header -->
     <header class="gradient-primary p-4 shadow-2xl">
@@ -574,7 +610,7 @@
                                 </div>
                                 <div>
                                     <h3 class="font-bold mb-1">AI Research Grant</h3>
-                                    <p class="text-sm opacity-75">Received ₹50 Lakhs research grant from AICTE for Advanced AI Research Lab.</p>
+                                    <p class="text-sm opacity-75">Received â‚¹50 Lakhs research grant from AICTE for Advanced AI Research Lab.</p>
                                     <p class="text-xs mt-2 text-blue-400">March 2024</p>
                                 </div>
                             </div>
@@ -586,7 +622,7 @@
                                 </div>
                                 <div>
                                     <h3 class="font-bold mb-1">100% Internship Placement</h3>
-                                    <p class="text-sm opacity-75">All final year students secured internships in reputed companies with average stipend of ₹15,000.</p>
+                                    <p class="text-sm opacity-75">All final year students secured internships in reputed companies with average stipend of â‚¹15,000.</p>
                                     <p class="text-xs mt-2 text-blue-400">February 2024</p>
                                 </div>
                             </div>
@@ -661,7 +697,7 @@
                             <p class="text-sm opacity-90">Placement Rate</p>
                         </div>
                         <div class="text-center p-3 bg-gradient-to-r from-green-500 to-emerald-500 bg-opacity-20 rounded-lg">
-                            <p class="text-xl font-bold text-green-400">₹42 LPA</p>
+                            <p class="text-xl font-bold text-green-400">â‚¹42 LPA</p>
                             <p class="text-sm opacity-90">Highest Package</p>
                         </div>
                         <div class="text-center p-3 bg-gradient-to-r from-blue-500 to-indigo-500 bg-opacity-20 rounded-lg">
@@ -789,12 +825,12 @@
             </div>
             <div class="overflow-hidden">
                 <div class="ticker-animation whitespace-nowrap text-sm">
-                    <span class="mx-6">📢 End Semester Examinations Commencing from May 20th</span>
-                    <span class="mx-6">📢 Project Viva-Voce Schedule Released - Check Student Portal</span>
-                    <span class="mx-6">📢 Industrial Visit to Tech Park - Permission Letters Required</span>
-                    <span class="mx-6">📢 Congratulations to IT Department for 95% Placement Record</span>
-                    <span class="mx-6">📢 New Advanced Computing Lab Inauguration on May 25th</span>
-                    <span class="mx-6">📢 Faculty Development Program on Cloud Computing - Register Now</span>
+                    <span class="mx-6">ðŸ“¢ End Semester Examinations Commencing from May 20th</span>
+                    <span class="mx-6">ðŸ“¢ Project Viva-Voce Schedule Released - Check Student Portal</span>
+                    <span class="mx-6">ðŸ“¢ Industrial Visit to Tech Park - Permission Letters Required</span>
+                    <span class="mx-6">ðŸ“¢ Congratulations to IT Department for 95% Placement Record</span>
+                    <span class="mx-6">ðŸ“¢ New Advanced Computing Lab Inauguration on May 25th</span>
+                    <span class="mx-6">ðŸ“¢ Faculty Development Program on Cloud Computing - Register Now</span>
                 </div>
             </div>
         </div>
@@ -1420,7 +1456,7 @@
             const placementStats = document.querySelectorAll('.glass-morphism .text-2xl, .glass-morphism .text-xl');
             if (placementStats.length >= 3) {
                 placementStats[0].textContent = `${rate}%`;
-                placementStats[1].textContent = `₹${package} LPA`;
+                placementStats[1].textContent = `â‚¹${package} LPA`;
                 placementStats[2].textContent = `${companies}+`;
             }
         }
@@ -1460,3 +1496,4 @@
     </script>
 </body>
 </html>
+

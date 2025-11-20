@@ -1,1 +1,110 @@
-믯⾿⨪ ‪湩敤⹸獪ⴠ丠瑯捩扥慯摲戠捡敫摮⠠楦敬瀭牥楳瑳湥散਩⨠删灥慬散愠祮攠楸瑳湩⁧牢歯湥映汩⁥楷桴琠楨⁳潷歲湩⁧敳癲牥ਮ⨠ਯ潣獮⁴獦㴠爠煥極敲✨獦⤧瀮潲業敳㭳挊湯瑳瀠瑡⁨‽敲畱物⡥瀧瑡❨㬩挊湯瑳攠灸敲獳㴠爠煥極敲✨硥牰獥❳㬩挊湯瑳挠牯⁳‽敲畱物⡥挧牯❳㬩挊湯瑳笠瘠㨴甠極癤‴⁽‽敲畱物⡥甧極❤㬩ਊ潣獮⁴灡⁰‽硥牰獥⡳㬩愊灰甮敳挨牯⡳⤩਻灡⹰獵⡥硥牰獥⹳獪湯⤨㬩愊灰甮敳攨灸敲獳献慴楴⡣慰桴樮楯⡮彟楤湲浡ⱥ✠異汢捩⤧⤩਻挊湯瑳䐠彂䅐䡔㴠瀠瑡⹨潪湩弨摟物慮敭‬搧⹢獪湯⤧਻愊祳据映湵瑣潩⁮敲摡䉄⤨੻†牴⁹੻††潣獮⁴慲⁷‽睡楡⁴獦爮慥䙤汩⡥䉄偟呁ⱈ✠瑵㡦⤧਻††潣獮⁴慰獲摥㴠䨠体⹎慰獲⡥慲⥷਻††敲畴湲䄠牲祡椮䅳牲祡瀨牡敳⥤㼠瀠牡敳⁤›嵛਻†⁽慣捴⁨攨牲 ੻††晩⠠牥⹲潣敤㴠㴽✠久䕏呎⤧爠瑥牵⁮嵛਻††桴潲⁷牥㭲 素紊ਊ獡湹⁣畦据楴湯眠楲整䉄搨瑡⥡੻†睡楡⁴獦眮楲整楆敬䐨彂䅐䡔‬半乏献牴湩楧祦搨瑡ⱡ渠汵ⱬ㈠Ⱙ✠瑵㡦⤧਻੽愊灰朮瑥✨愯楰港瑯捩獥Ⱗ愠祳据⠠敲ⱱ爠獥 㸽笠 琠祲笠 †挠湯瑳渠瑯捩獥㴠愠慷瑩爠慥䑤⡂㬩 †爠獥樮潳⡮潮楴散⥳਻†⁽慣捴⁨攨牲 ੻††潣獮汯⹥牥潲⡲牥⥲਻††敲⹳瑳瑡獵㔨〰⸩獪湯笨攠牲牯›䘧楡敬⁤潴爠慥⁤䉄‧⥽਻†੽⥽਻愊灰朮瑥✨愯楰港瑯捩獥㨯摩Ⱗ愠祳据⠠敲ⱱ爠獥 㸽笠 琠祲笠 †挠湯瑳渠瑯捩獥㴠愠慷瑩爠慥䑤⡂㬩 †挠湯瑳渠㴠渠瑯捩獥昮湩⡤⁸㸽砠椮⁤㴽‽敲⹱慰慲獭椮⥤਻††晩⠠渡 敲畴湲爠獥献慴畴⡳〴⤴樮潳⡮⁻牥潲㩲✠潎⁴潦湵❤素㬩 †爠獥樮潳⡮⥮਻†⁽慣捴⁨攨牲 ੻††潣獮汯⹥牥潲⡲牥⥲਻††敲⹳瑳瑡獵㔨〰⸩獪湯笨攠牲牯›䘧楡敬⁤潴爠慥⁤䉄‧⥽਻†੽⥽਻愊灰瀮獯⡴⼧灡⽩潮楴散❳‬獡湹⁣爨煥‬敲⥳㴠‾੻†牴⁹੻††潣獮⁴⁻楴汴ⱥ挠湯整瑮‬畤慲楴湯素㴠爠煥戮摯㭹 †椠⁦ℨ楴汴⁥籼琠灹潥⁦楴汴⁥㴡‽猧牴湩❧簠⁼楴汴⹥牴浩⤨氮湥瑧⁨㴽‽⤰笠 ††爠瑥牵⁮敲⹳瑳瑡獵㐨〰⸩獪湯笨攠牲牯›琧瑩敬椠⁳敲畱物摥‧⥽਻††੽††晩⠠挡湯整瑮簠⁼祴数景挠湯整瑮℠㴽✠瑳楲杮‧籼挠湯整瑮琮楲⡭⸩敬杮桴㴠㴽〠 ੻†††敲畴湲爠獥献慴畴⡳〴⤰樮潳⡮⁻牥潲㩲✠潣瑮湥⁴獩爠煥極敲❤素㬩 †素 †挠湯瑳搠牵畎⁭‽畎扭牥搨牵瑡潩⥮਻††晩⠠畎扭牥椮乳乡搨牵畎⥭簠⁼畤乲浵㰠‽⤰笠 ††爠瑥牵⁮敲⹳瑳瑡獵㐨〰⸩獪湯笨攠牲牯›搧牵瑡潩⁮畭瑳戠⁥⁡潰楳楴敶渠浵敢❲素㬩 †素ਊ††潣獮⁴潮䵷⁳‽慄整渮睯⤨਻††潣獮⁴潮楴散㴠笠 ††椠㩤甠極癤⠴Ⱙ ††琠瑩敬›楴汴⹥牴浩⤨ਬ†††潣瑮湥㩴挠湯整瑮琮楲⡭Ⱙ ††搠牵瑡潩㩮搠牵畎Ɑ ††挠敲瑡摥瑁›潮䵷ⱳ ††挠敲瑡摥瑁卉㩏渠睥䐠瑡⡥潮䵷⥳琮䥯体瑓楲杮⤨ †素਻ †挠湯瑳渠瑯捩獥㴠愠慷瑩爠慥䑤⡂㬩 †渠瑯捩獥瀮獵⡨潮楴散㬩 †愠慷瑩眠楲整䉄渨瑯捩獥㬩ਊ††敲⹳瑳瑡獵㈨㄰⸩獪湯渨瑯捩⥥਻†⁽慣捴⁨攨牲 ੻††潣獮汯⹥牥潲⡲牥⥲਻††敲⹳瑳瑡獵㔨〰⸩獪湯笨攠牲牯›䘧楡敬⁤潴挠敲瑡⁥潮楴散‧⥽਻†੽⥽਻愊灰搮汥瑥⡥⼧灡⽩潮楴散⽳椺❤‬獡湹⁣爨煥‬敲⥳㴠‾੻†牴⁹੻††潣獮⁴摩㴠爠煥瀮牡浡⹳摩਻††敬⁴潮楴散⁳‽睡楡⁴敲摡䉄⤨਻††潣獮⁴敢潦敲敌⁮‽潮楴散⹳敬杮桴਻††潮楴散⁳‽潮楴散⹳楦瑬牥渨㴠‾⹮摩℠㴽椠⥤਻††晩⠠潮楴散⹳敬杮桴㴠㴽戠晥牯䱥湥 ੻†††敲畴湲爠獥献慴畴⡳〴⤴樮潳⡮⁻牥潲㩲✠潎⁴潦湵❤素㬩 †素 †愠慷瑩眠楲整䉄渨瑯捩獥㬩 †爠獥樮潳⡮⁻畳捣獥㩳琠畲⁥⥽਻†⁽慣捴⁨攨牲 ੻††潣獮汯⹥牥潲⡲牥⥲਻††敲⹳瑳瑡獵㔨〰⸩獪湯笨攠牲牯›䘧楡敬⁤潴搠汥瑥⁥潮楴散‧⥽਻†੽⥽਻挊湯瑳瀠牯⁴‽牰捯獥⹳湥⹶佐呒簠⁼〵〰਻灡⹰楬瑳湥瀨牯ⱴ⠠ 㸽笠 挠湯潳敬氮杯怨潎楴散潢牡⁤偁⁉畲湮湩⁧湯栠瑴㩰⼯潬慣桬獯㩴笤潰瑲恽㬩紊㬩਍
+/**
+ * index.js - Noticeboard backend (file-persistence)
+ * Replace any existing broken file with this working server.
+ */
+const fs = require('fs').promises;
+const path = require('path');
+const express = require('express');
+const cors = require('cors');
+const { v4: uuidv4 } = require('uuid');
+
+const app = express();
+app.use(cors());
+app.use(express.json());
+app.use(express.static(path.join(__dirname, 'public')));
+
+const DB_PATH = path.join(__dirname, 'db.json');
+
+async function readDB(){
+  try {
+    const raw = await fs.readFile(DB_PATH, 'utf8');
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed : [];
+  } catch (err) {
+    if (err.code === 'ENOENT') return [];
+    throw err;
+  }
+}
+
+async function writeDB(data){
+  await fs.writeFile(DB_PATH, JSON.stringify(data, null, 2), 'utf8');
+}
+
+app.get('/api/notices', async (req, res) => {
+  try {
+    const notices = await readDB();
+    res.json(notices);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Failed to read DB' });
+  }
+});
+
+app.get('/api/notices/:id', async (req, res) => {
+  try {
+    const notices = await readDB();
+    const n = notices.find(x => x.id === req.params.id);
+    if (!n) return res.status(404).json({ error: 'Not found' });
+    res.json(n);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Failed to read DB' });
+  }
+});
+
+app.post('/api/notices', async (req, res) => {
+  try {
+    const { title, content, duration } = req.body;
+    if (!title || typeof title !== 'string' || title.trim().length === 0) {
+      return res.status(400).json({ error: 'title is required' });
+    }
+    if (!content || typeof content !== 'string' || content.trim().length === 0) {
+      return res.status(400).json({ error: 'content is required' });
+    }
+    const durNum = Number(duration);
+    if (Number.isNaN(durNum) || durNum <= 0) {
+      return res.status(400).json({ error: 'duration must be a positive number' });
+    }
+
+    const nowMs = Date.now();
+    const notice = {
+      id: uuidv4(),
+      title: title.trim(),
+      content: content.trim(),
+      duration: durNum,
+      createdAt: nowMs,
+      createdAtISO: new Date(nowMs).toISOString()
+    };
+
+    const notices = await readDB();
+    notices.push(notice);
+    await writeDB(notices);
+
+    res.status(201).json(notice);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Failed to create notice' });
+  }
+});
+
+app.delete('/api/notices/:id', async (req, res) => {
+  try {
+    const id = req.params.id;
+    let notices = await readDB();
+    const beforeLen = notices.length;
+    notices = notices.filter(n => n.id !== id);
+    if (notices.length === beforeLen) {
+      return res.status(404).json({ error: 'Not found' });
+    }
+    await writeDB(notices);
+    res.json({ success: true });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Failed to delete notice' });
+  }
+});
+
+const port = process.env.PORT || 5000;
+app.listen(port, () => {
+  console.log(`Noticeboard API running on http://localhost:${port}`);
+});

@@ -121,4 +121,10 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('duration').value = '';
   });
 
- 
+  // initial load
+  load();
+
+  // start polling after initial load
+  if (pollingHandle) clearInterval(pollingHandle);
+  pollingHandle = setInterval(load, POLL_INTERVAL_MS);
+});

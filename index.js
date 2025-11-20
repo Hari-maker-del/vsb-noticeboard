@@ -10,8 +10,26 @@ const { v4: uuidv4 } = require('uuid');
 
 const app = express();
 app.use(cors());
-app.use(express.json());
+
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.json());
+
+// --- ADMIN PASSWORD PROTECTION (simple) ---
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || '3551';
+app.use((req, res, next) => {
+  // protect only POST, PUT, DELETE on /api/notices
+  if (['POST','PUT','DELETE'].includes(req.method) && req.path.startsWith('/api/notices')) {
+    // check header first, then query param as fallback
+    const pass = req.get('x-admin-password') || req.query.admin_password || (req.body && req.body.admin_password);
+    if (!pass || pass !== ADMIN_PASSWORD) {
+      return res.status(401).json({ error: 'Unauthorized' });
+    }
+    // optional: strip admin_password from body so it doesn't get saved
+    if (req.body && req.body.admin_password) delete req.body.admin_password;
+  }
+  next();
+});
+// --- end admin middleware ---
 
 const DB_PATH = path.join(__dirname, 'db.json');
 

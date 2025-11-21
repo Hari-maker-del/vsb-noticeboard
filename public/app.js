@@ -1,130 +1,156 @@
-﻿/* public/app.js — polling-enabled noticeboard frontend */
+﻿/* public/app.js - improved noticeboard client
+   - polling
+   - add, edit, delete
+   - simple client-side password gate (for convenience only)
+*/
+
 const apiRoot = '/api/notices';
-const POLL_INTERVAL_MS = 5000; // change this value to adjust refresh frequency
+const POLL_INTERVAL_MS = 5000;
 
 let lastFetchedAt = null;
 let pollingHandle = null;
+let noticesCache = [];
+
+// Small helpers
+function el(id){ return document.getElementById(id); }
+function escapeHtml(s){ return String(s||'').replace(/[&<>"']/g, c=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c])); }
 
 async function fetchNotices(){
   const r = await fetch(apiRoot);
-  if (!r.ok) throw new Error('Failed to fetch');
-  return r.json();
+  if (!r.ok) throw new Error('Failed to fetch notices: ' + r.status);
+  const json = await r.json();
+  lastFetchedAt = Date.now();
+  noticesCache = json;
+  return json;
 }
 
 function render(notices){
-  const root = document.getElementById('list');
+  const root = el('list');
+  if (!root) return;
   root.innerHTML = '';
 
-  // last updated
-  const meta = document.getElementById('lastUpdated');
-  if (lastFetchedAt) meta.textContent = 'Last updated: ' + new Date(lastFetchedAt).toLocaleTimeString();
-  else meta.textContent = '';
+  const meta = el('lastUpdated');
+  if (lastFetchedAt && meta) meta.textContent = 'Last updated: ' + new Date(lastFetchedAt).toLocaleTimeString();
+  else if (meta) meta.textContent = '';
 
   if (!notices || notices.length === 0) {
     root.innerHTML = '<p>No notices.</p>';
     return;
   }
+
+  // newest first
   notices.slice().reverse().forEach(n => {
-    const el = document.createElement('div');
-    el.className = 'notice';
-    el.innerHTML = `
-      <strong>${escapeHtml(n.title)}</strong>
-      <div class="meta">${new Date(n.createdAtISO || n.createdAt).toLocaleString()} — duration: ${n.duration}s</div>
-      <p>${escapeHtml(n.content)}</p>
-      <button data-id="${n.id}" class="delBtn">Delete</button>
+    const card = document.createElement('div');
+    card.className = 'notice card';
+    card.style = 'padding:12px;margin:10px 0;border-radius:8px;background:#0b1220;color:#e6eef8;border:1px solid rgba(255,255,255,0.04);';
+
+    card.innerHTML = `
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <div style="flex:1">
+          <strong>${escapeHtml(n.title)}</strong>
+          <div style="font-size:12px;color:#b9c6d8">${new Date(n.createdAtISO || n.createdAt).toLocaleString()} — duration: ${n.duration}s</div>
+        </div>
+        <div style="margin-left:12px">
+          <button class="editBtn" data-id="${n.id}" style="margin-right:6px">Edit</button>
+          <button class="delBtn"  data-id="${n.id}">Delete</button>
+        </div>
+      </div>
+      <p style="margin-top:8px">${escapeHtml(n.content)}</p>
     `;
-    root.appendChild(el);
+    root.appendChild(card);
   });
 
-  // attach delete handlers
-  document.querySelectorAll('.delBtn').forEach(btn => {
-    btn.removeEventListener('click', onDeleteClick);
-    btn.addEventListener('click', onDeleteClick);
+  // handlers
+  document.querySelectorAll('.delBtn').forEach(btn=>{
+    btn.onclick = onDeleteClick;
+  });
+  document.querySelectorAll('.editBtn').forEach(btn=>{
+    btn.onclick = onEditClick;
   });
 }
 
-function onDeleteClick(ev) {
-  const btn = ev.currentTarget;
-  const id = btn.dataset.id;
+function onDeleteClick(ev){
+  const id = ev.currentTarget.dataset.id;
   if (!confirm('Delete this notice?')) return;
-  btn.disabled = true;
-  fetch(`${apiRoot}/${id}`, { method: 'DELETE' })
-    .then(async res => {
-      if (!res.ok) {
-        const err = await res.json().catch(()=>({error: res.status}));
-        alert('Error: ' + (err.error || res.status));
-      }
+  ev.currentTarget.disabled = true;
+  fetch(`${apiRoot}/${id}`, { method:'DELETE' })
+    .then(r=>{
+      if (!r.ok) throw new Error('Delete failed: ' + r.status);
+      return fetchNotices().then(render);
     })
-    .catch(e => alert('Failed to delete: ' + e.message))
-    .finally(() => {
-      btn.disabled = false;
-      load(); // refresh after DELETE
-    });
+    .catch(e=> alert('Delete error: ' + e.message))
+    .finally(()=> ev.currentTarget.disabled = false);
 }
 
-function escapeHtml(s = '') {
-  return (''+s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function onEditClick(ev){
+  const id = ev.currentTarget.dataset.id;
+  const n = noticesCache.find(x=>x.id===id);
+  if (!n) return alert('Notice not found');
+  // password prompt (simple)
+  const pw = prompt('Enter admin password to edit:');
+  if (pw !== '3551') return alert('Wrong password');
+  // fill form (we will use a modal-like small form area)
+  el('noticeTitle').value = n.title;
+  el('noticeContent').value = n.content;
+  el('noticeDuration').value = n.duration;
+  el('addBtn').textContent = 'Save changes';
+  el('addBtn').dataset.editId = id;
+  window.scrollTo({top:0,behavior:'smooth'});
 }
 
-async function load(){
-  try {
-    const data = await fetchNotices();
-    lastFetchedAt = Date.now();
-    render(data);
-  } catch (e){
-    document.getElementById('list').innerText = 'Failed to load notices: ' + e.message;
-  }
+function resetAddForm(){
+  el('addNoticeForm').reset();
+  el('addBtn').textContent = 'Add Notice';
+  delete el('addBtn').dataset.editId;
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-  // Add last-updated element if missing
-  if (!document.getElementById('lastUpdated')) {
-    const header = document.querySelector('header') || document.body;
-    const el = document.createElement('div');
-    el.id = 'lastUpdated';
-    el.style.fontSize = '0.9em';
-    el.style.color = '#666';
-    el.style.marginTop = '6px';
-    header.appendChild(el);
-  }
+document.addEventListener('DOMContentLoaded', ()=> {
+  // form submit
+  const form = el('addNoticeForm');
+  if (form) {
+    form.addEventListener('submit', async function(e){
+      e.preventDefault();
+      const title = el('noticeTitle').value.trim() || 'No title';
+      const content = el('noticeContent').value.trim() || '';
+      const duration = parseInt(el('noticeDuration').value || '10', 10) || 10;
 
-  document.getElementById('createForm').addEventListener('submit', async (ev) => {
-    ev.preventDefault();
-    const title = document.getElementById('title').value;
-    const content = document.getElementById('content').value;
-    const duration = Number(document.getElementById('duration').value);
+      // if edit present
+      const editId = el('addBtn').dataset.editId;
+      // client-side password gate (convenience only)
+      const pw = prompt('Enter admin password:');
+      if (pw !== '3551') return alert('Wrong password');
 
-    try {
-      const res = await fetch(apiRoot, {
-        method: 'POST',
-        headers: {'Content-Type':'application/json'},
-        body: JSON.stringify({ title, content, duration })
-      });
-      if (!res.ok) {
-        const err = await res.json();
-        alert('Error: ' + (err.error || res.status));
-        return;
+      const payload = { title, content, duration };
+
+      try {
+        if (editId) {
+          const res = await fetch(`${apiRoot}/${editId}`, {
+            method: 'PUT',
+            headers: { 'Content-Type':'application/json' },
+            body: JSON.stringify(payload)
+          });
+          if (!res.ok) throw new Error('Edit failed: ' + res.status);
+        } else {
+          const res = await fetch(apiRoot, {
+            method: 'POST',
+            headers: { 'Content-Type':'application/json' },
+            body: JSON.stringify(payload)
+          });
+          if (!res.ok) throw new Error('Add failed: ' + res.status);
+        }
+        await fetchNotices().then(render);
+        resetAddForm();
+      } catch(err) {
+        alert('Save failed: ' + err.message);
       }
-      document.getElementById('title').value = '';
-      document.getElementById('content').value = '';
-      document.getElementById('duration').value = '';
-      load(); // immediate refresh after create
-    } catch (e) {
-      alert('Failed to create: ' + e.message);
-    }
+    });
+  }
+
+  // initial fetch and start polling
+  fetchNotices().then(render).catch(err => {
+    console.error('Initial fetch failed', err);
+    const root = el('list');
+    if (root) root.innerHTML = '<p style="color:#f88">Failed to load notices — open console for details</p>';
   });
-
-  document.getElementById('refreshBtn').addEventListener('click', load);
-  document.getElementById('clearBtn').addEventListener('click', () => {
-    document.getElementById('title').value = '';
-    document.getElementById('content').value = '';
-    document.getElementById('duration').value = '';
-  });
-
-  // initial load
-  load();
-
-  // start polling after initial load
-  if (pollingHandle) clearInterval(pollingHandle);
-  pollingHandle = setInterval(load, POLL_INTERVAL_MS);
+  pollingHandle = setInterval(()=> fetchNotices().then(render).catch(()=>{}), POLL_INTERVAL_MS);
 });

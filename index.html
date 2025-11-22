@@ -1,0 +1,1502 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>V.S.B Engineering College - IT Department Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+        }
+        
+        .glass-morphism {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        }
+        
+        .glass-morphism-dark {
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        
+        .gradient-primary {
+            background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+        }
+        
+        .gradient-success {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        }
+        
+        .gradient-warning {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+        }
+        
+        .gradient-danger {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        }
+        
+        .ticker-animation {
+            animation: ticker 40s linear infinite;
+        }
+        
+        @keyframes ticker {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.6s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .slide-up {
+            animation: slideUp 0.5s ease-out;
+        }
+        
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        .pulse-dot {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.2); opacity: 0.7; }
+        }
+        
+        .class-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+        }
+        
+        .class-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+        
+        .class-card.active {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(139, 92, 246, 0.2) 100%);
+            border-color: #3b82f6;
+        }
+        
+        .stat-card {
+            transition: all 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-3px);
+        }
+        
+        .progress-bar {
+            transition: width 1s ease-in-out;
+        }
+        
+        .notification-badge {
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+        
+        .chart-bar {
+            transition: height 0.5s ease-in-out;
+        }
+        
+        /* Auto-scrolling announcements */
+        .announcements-container {
+            height: 250px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .announcements-scroll {
+            animation: scrollAnnouncements 20s linear infinite;
+        }
+        
+        @keyframes scrollAnnouncements {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-100%); }
+        }
+        
+        .announcements-container:hover .announcements-scroll {
+            animation-play-state: paused;
+        }
+        
+        /* Motto animation */
+        .motto-text {
+            background: linear-gradient(90deg, #fbbf24, #f59e0b, #fbbf24);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shine 3s linear infinite;
+        }
+        
+        @keyframes shine {
+            to { background-position: 200% center; }
+        }
+        
+        /* Admin panel styles */
+        .admin-panel {
+            position: fixed;
+            top: 0;
+            right: -400px;
+            width: 400px;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.98);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            transition: right 0.3s ease;
+            overflow-y: auto;
+        }
+        
+        .admin-panel.active {
+            right: 0;
+        }
+        
+        .admin-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            display: none;
+        }
+        
+        .admin-overlay.active {
+            display: block;
+        }
+        
+        /* Achievement card styles */
+        .achievement-card {
+            transition: all 0.3s ease;
+        }
+        
+        .achievement-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* Progress ring styles */
+        .progress-ring {
+            transform: rotate(-90deg);
+        }
+        
+        .progress-ring-circle {
+            transition: stroke-dashoffset 0.5s ease;
+        }
+        
+        /* Time table styles */
+        .timetable-cell {
+            transition: all 0.3s ease;
+        }
+        
+        .timetable-cell:hover {
+            background: rgba(59, 130, 246, 0.1);
+            transform: scale(1.02);
+        }
+        
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+    </style>
+</head>
+<body class="text-white">
+    <!-- Professional Header -->
+    <header class="gradient-primary p-4 shadow-2xl">
+        <div class="container mx-auto">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-6">
+                    <!-- College Logo - Square without outlines -->
+                    <div class="w-16 h-16 overflow-hidden rounded-lg">
+                        <img src="https://z-cdn-media.chatglm.cn/files/ee96d040-d01c-4eb4-b6af-76fc4b18e2a0_vsb.png?auth_key=1863012357-7f9915a1881b478ab7699bda04280f73-0-263f0f4805c4b43a1fb7e464bf3ae204" alt="V.S.B Engineering College Logo" class="w-full h-full object-cover">
+                    </div>
+                    <div>
+                        <h1 class="text-3xl font-bold tracking-wide">V.S.B ENGINEERING COLLEGE, Karur.</h1>
+                        <div class="flex items-center space-x-2 mt-1">
+                            <span class="text-sm opacity-90">Department of Information Technology</span>
+                            <span class="px-2 py-0.5 bg-green-500 bg-opacity-30 rounded-full text-xs flex items-center">
+                                <span class="w-2 h-2 bg-green-400 rounded-full mr-1 pulse-dot"></span>
+                                Live
+                            </span>
+                        </div>
+                        <!-- College Motto -->
+                        <div class="mt-2 flex items-center space-x-2">
+                            <i class="fas fa-trophy text-yellow-400 text-sm"></i>
+                            <span class="motto-text font-bold text-lg">A PLACE FOR PLACEMENT</span>
+                            <i class="fas fa-trophy text-yellow-400 text-sm"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-6">
+                    <div class="text-right">
+                        <div id="currentDate" class="text-sm font-medium opacity-90"></div>
+                        <div id="currentTime" class="text-2xl font-bold tracking-wider"></div>
+                        <div class="text-xs opacity-75 mt-1">Academic Year 2024-25</div>
+                    </div>
+                    <button id="fullscreenBtn" class="glass-morphism p-3 rounded-xl hover:bg-white hover:bg-opacity-20 transition">
+                        <i class="fas fa-expand text-xl"></i>
+                    </button>
+                    <button id="adminBtn" class="glass-morphism p-3 rounded-xl hover:bg-white hover:bg-opacity-20 transition">
+                        <i class="fas fa-user-shield text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Class Selection Tabs (Static) -->
+    <div class="container mx-auto p-4">
+        <div class="grid grid-cols-3 gap-4">
+            <div class="class-card glass-morphism rounded-xl p-4 text-center active" onclick="selectClass('IT-A')">
+                <div class="flex justify-between items-start mb-3">
+                    <div class="bg-blue-500 bg-opacity-20 p-2 rounded-lg">
+                        <i class="fas fa-users text-xl"></i>
+                    </div>
+                    <span class="notification-badge bg-red-500 text-xs px-2 py-1 rounded-full">3 New</span>
+                </div>
+                <h3 class="text-xl font-bold mb-1">Class IT-A</h3>
+                <p class="text-sm opacity-75">Strength: 63 Students</p>
+                <div class="mt-3 flex justify-around text-xs">
+                    <div>
+                        <p class="font-bold text-green-400">92%</p>
+                        <p class="opacity-75">Attendance</p>
+                    </div>
+                    <div>
+                        <p class="font-bold text-blue-400">8.2</p>
+                        <p class="opacity-75">Avg. CGPA</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="class-card glass-morphism rounded-xl p-4 text-center" onclick="selectClass('IT-B')">
+                <div class="flex justify-between items-start mb-3">
+                    <div class="bg-purple-500 bg-opacity-20 p-2 rounded-lg">
+                        <i class="fas fa-users text-xl"></i>
+                    </div>
+                    <span class="notification-badge bg-red-500 text-xs px-2 py-1 rounded-full">5 New</span>
+                </div>
+                <h3 class="text-xl font-bold mb-1">Class IT-B</h3>
+                <p class="text-sm opacity-75">Strength: 63 Students</p>
+                <div class="mt-3 flex justify-around text-xs">
+                    <div>
+                        <p class="font-bold text-green-400">88%</p>
+                        <p class="opacity-75">Attendance</p>
+                    </div>
+                    <div>
+                        <p class="font-bold text-blue-400">7.9</p>
+                        <p class="opacity-75">Avg. CGPA</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="class-card glass-morphism rounded-xl p-4 text-center" onclick="selectClass('IT-C')">
+                <div class="flex justify-between items-start mb-3">
+                    <div class="bg-green-500 bg-opacity-20 p-2 rounded-lg">
+                        <i class="fas fa-users text-xl"></i>
+                    </div>
+                    <span class="notification-badge bg-red-500 text-xs px-2 py-1 rounded-full">2 New</span>
+                </div>
+                <h3 class="text-xl font-bold mb-1">Class IT-C</h3>
+                <p class="text-sm opacity-75">Strength: 63 Students</p>
+                <div class="mt-3 flex justify-around text-xs">
+                    <div>
+                        <p class="font-bold text-green-400">95%</p>
+                        <p class="opacity-75">Attendance</p>
+                    </div>
+                    <div>
+                        <p class="font-bold text-blue-400">8.5</p>
+                        <p class="opacity-75">Avg. CGPA</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <main class="container mx-auto px-4 pb-4">
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-4">
+            <!-- Left Column - Main Info -->
+            <div class="lg:col-span-3 space-y-4">
+                <!-- Announcements with Auto-Scroll -->
+                <div class="glass-morphism rounded-xl p-5 fade-in">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-xl font-bold flex items-center">
+                            <i class="fas fa-bullhorn mr-3 text-yellow-400"></i>
+                            Important Announcements
+                        </h2>
+                        <span class="text-xs opacity-75">Last updated: 2 mins ago</span>
+                    </div>
+                    <div class="announcements-container">
+                        <div id="announcementsScroll" class="announcements-scroll">
+                            <!-- Announcements will be populated here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Class Time Table -->
+                <div class="glass-morphism rounded-xl p-5">
+                    <h2 class="text-xl font-bold mb-4 flex items-center">
+                        <i class="fas fa-calendar-alt mr-3 text-blue-400"></i>
+                        Class Time Table
+                    </h2>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm">
+                            <thead>
+                                <tr class="border-b border-gray-700">
+                                    <th class="p-2 text-left">Period</th>
+                                    <th class="p-2 text-left">Monday</th>
+                                    <th class="p-2 text-left">Tuesday</th>
+                                    <th class="p-2 text-left">Wednesday</th>
+                                    <th class="p-2 text-left">Thursday</th>
+                                    <th class="p-2 text-left">Friday</th>
+                                </tr>
+                            </thead>
+                            <tbody id="timetableBody">
+                                <!-- Time table will be populated here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Academic Schedule (Monthly Schedule replaced) -->
+                <div class="glass-morphism rounded-xl p-5">
+                    <h2 class="text-xl font-bold mb-4 flex items-center">
+                        <i class="fas fa-calendar-week mr-3 text-purple-400"></i>
+                        Academic Schedule - Odd Semester 2025-2026
+                    </h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <h3 class="font-bold mb-2 text-blue-400">Working Days Summary</h3>
+                            <div class="space-y-2">
+                                <div class="flex items-center space-x-2 p-2 glass-morphism-dark rounded">
+                                    <span class="text-xs font-bold">July 2025</span>
+                                    <div>
+                                        <p class="text-sm">No. of Working Days - 16</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center space-x-2 p-2 glass-morphism-dark rounded">
+                                    <span class="text-xs font-bold">August 2025</span>
+                                    <div>
+                                        <p class="text-sm">No. of Working Days - 22</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center space-x-2 p-2 glass-morphism-dark rounded">
+                                    <span class="text-xs font-bold">September 2025</span>
+                                    <div>
+                                        <p class="text-sm">No. of Working Days - 24</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center space-x-2 p-2 glass-morphism-dark rounded">
+                                    <span class="text-xs font-bold">October 2025</span>
+                                    <div>
+                                        <p class="text-sm">No. of Working Days - 23</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <h3 class="font-bold mb-2 text-green-400">Key Academic Milestones</h3>
+                            <div class="space-y-2">
+                                <div class="flex items-center space-x-2 p-2 glass-morphism-dark rounded">
+                                    <span class="text-xs font-bold">14 Jul</span>
+                                    <div>
+                                        <p class="text-sm">Reopening to 2nd year; Unit 1; CCM Formation</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center space-x-2 p-2 glass-morphism-dark rounded">
+                                    <span class="text-xs font-bold">21 Aug</span>
+                                    <div>
+                                        <p class="text-sm">IT-1 Begins; Unit 3</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center space-x-2 p-2 glass-morphism-dark rounded">
+                                    <span class="text-xs font-bold">28 Aug</span>
+                                    <div>
+                                        <p class="text-sm">IT-1 Ends</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center space-x-2 p-2 glass-morphism-dark rounded">
+                                    <span class="text-xs font-bold">29 Aug</span>
+                                    <div>
+                                        <p class="text-sm">IT-1 Retest Begins</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center space-x-2 p-2 glass-morphism-dark rounded">
+                                    <span class="text-xs font-bold">27 Oct</span>
+                                    <div>
+                                        <p class="text-sm">IT-2 Ends</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center space-x-2 p-2 glass-morphism-dark rounded">
+                                    <span class="text-xs font-bold">28–30 Oct</span>
+                                    <div>
+                                        <p class="text-sm">Model Practical Examination</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center space-x-2 p-2 glass-morphism-dark rounded">
+                                    <span class="text-xs font-bold">31 Oct</span>
+                                    <div>
+                                        <p class="text-sm">Last Working Day; SMS to parents; IT-2 consolidated marks; CCM 3</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Student Progress Section (all above 90%) -->
+                <div class="glass-morphism rounded-xl p-5">
+                    <h2 class="text-xl font-bold mb-4 flex items-center">
+                        <i class="fas fa-chart-line mr-3 text-green-400"></i>
+                        Student Progress
+                    </h2>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="text-center">
+                            <svg class="progress-ring mx-auto" width="120" height="120">
+                                <circle class="text-gray-700" stroke="currentColor" stroke-width="10" fill="transparent" r="50" cx="60" cy="60"></circle>
+                                <circle class="progress-ring-circle text-blue-500" stroke="currentColor" stroke-width="10" fill="transparent" r="50" cx="60" cy="60" stroke-dasharray="314" stroke-dashoffset="15.7"></circle>
+                            </svg>
+                            <p class="mt-2 text-lg font-bold">95%</p>
+                            <p class="text-sm opacity-75">Overall Progress</p>
+                        </div>
+                        <div class="text-center">
+                            <svg class="progress-ring mx-auto" width="120" height="120">
+                                <circle class="text-gray-700" stroke="currentColor" stroke-width="10" fill="transparent" r="50" cx="60" cy="60"></circle>
+                                <circle class="progress-ring-circle text-green-500" stroke="currentColor" stroke-width="10" fill="transparent" r="50" cx="60" cy="60" stroke-dasharray="314" stroke-dashoffset="15.7"></circle>
+                            </svg>
+                            <p class="mt-2 text-lg font-bold">95%</p>
+                            <p class="text-sm opacity-75">Academic Performance</p>
+                        </div>
+                        <div class="text-center">
+                            <svg class="progress-ring mx-auto" width="120" height="120">
+                                <circle class="text-gray-700" stroke="currentColor" stroke-width="10" fill="transparent" r="50" cx="60" cy="60"></circle>
+                                <circle class="progress-ring-circle text-purple-500" stroke="currentColor" stroke-width="10" fill="transparent" r="50" cx="60" cy="60" stroke-dasharray="314" stroke-dashoffset="15.7"></circle>
+                            </svg>
+                            <p class="mt-2 text-lg font-bold">95%</p>
+                            <p class="text-sm opacity-75">Skill Development</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Department Progress Section (all above 90%) -->
+                <div class="glass-morphism rounded-xl p-5">
+                    <h2 class="text-xl font-bold mb-4 flex items-center">
+                        <i class="fas fa-tasks mr-3 text-blue-400"></i>
+                        Department Progress
+                    </h2>
+                    <div class="space-y-4">
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span class="text-sm font-medium">Infrastructure Development</span>
+                                <span class="text-sm text-blue-400">92%</span>
+                            </div>
+                            <div class="w-full bg-gray-700 rounded-full h-2">
+                                <div class="bg-blue-500 h-2 rounded-full" style="width: 92%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span class="text-sm font-medium">Research Publications</span>
+                                <span class="text-sm text-green-400">91%</span>
+                            </div>
+                            <div class="w-full bg-gray-700 rounded-full h-2">
+                                <div class="bg-green-500 h-2 rounded-full" style="width: 91%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span class="text-sm font-medium">Industry Collaborations</span>
+                                <span class="text-sm text-purple-400">95%</span>
+                            </div>
+                            <div class="w-full bg-gray-700 rounded-full h-2">
+                                <div class="bg-purple-500 h-2 rounded-full" style="width: 95%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span class="text-sm font-medium">Student Placements</span>
+                                <span class="text-sm text-yellow-400">98%</span>
+                            </div>
+                            <div class="w-full bg-gray-700 rounded-full h-2">
+                                <div class="bg-yellow-500 h-2 rounded-full" style="width: 98%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Achievements Section -->
+                <div class="glass-morphism rounded-xl p-5">
+                    <h2 class="text-xl font-bold mb-4 flex items-center">
+                        <i class="fas fa-trophy mr-3 text-yellow-400"></i>
+                        Achievements
+                    </h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="achievement-card glass-morphism-dark p-4 rounded-lg">
+                            <div class="flex items-start space-x-3">
+                                <div class="bg-yellow-500 bg-opacity-20 p-2 rounded-lg">
+                                    <i class="fas fa-award text-yellow-400"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-bold mb-1">National Hackathon Winners</h3>
+                                    <p class="text-sm opacity-75">Our students secured 1st place in National Level Hackathon 2024 organized by Tech Giants.</p>
+                                    <p class="text-xs mt-2 text-blue-400">May 2024</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="achievement-card glass-morphism-dark p-4 rounded-lg">
+                            <div class="flex items-start space-x-3">
+                                <div class="bg-green-500 bg-opacity-20 p-2 rounded-lg">
+                                    <i class="fas fa-certificate text-green-400"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-bold mb-1">NAAC 'A' Grade Accreditation</h3>
+                                    <p class="text-sm opacity-75">Department of IT contributed significantly to college achieving NAAC 'A' Grade.</p>
+                                    <p class="text-xs mt-2 text-blue-400">April 2024</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="achievement-card glass-morphism-dark p-4 rounded-lg">
+                            <div class="flex items-start space-x-3">
+                                <div class="bg-blue-500 bg-opacity-20 p-2 rounded-lg">
+                                    <i class="fas fa-microchip text-blue-400"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-bold mb-1">AI Research Grant</h3>
+                                    <p class="text-sm opacity-75">Received ₹50 Lakhs research grant from AICTE for Advanced AI Research Lab.</p>
+                                    <p class="text-xs mt-2 text-blue-400">March 2024</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="achievement-card glass-morphism-dark p-4 rounded-lg">
+                            <div class="flex items-start space-x-3">
+                                <div class="bg-purple-500 bg-opacity-20 p-2 rounded-lg">
+                                    <i class="fas fa-users text-purple-400"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-bold mb-1">100% Internship Placement</h3>
+                                    <p class="text-sm opacity-75">All final year students secured internships in reputed companies with average stipend of ₹15,000.</p>
+                                    <p class="text-xs mt-2 text-blue-400">February 2024</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Performance Metrics -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="glass-morphism rounded-xl p-5">
+                        <h3 class="text-lg font-bold mb-4 flex items-center">
+                            <i class="fas fa-chart-line mr-2 text-green-400"></i>
+                            Performance Analytics
+                        </h3>
+                        <div id="performanceChart" class="h-40 flex items-end justify-between space-x-2">
+                            <!-- Chart bars will be populated here -->
+                        </div>
+                        <div class="flex justify-between mt-2 text-xs opacity-75">
+                            <span>Mid Term</span>
+                            <span>Lab Test</span>
+                            <span>Assignment</span>
+                            <span>Attendance</span>
+                        </div>
+                    </div>
+                    
+                    <div class="glass-morphism rounded-xl p-5">
+                        <h3 class="text-lg font-bold mb-4 flex items-center">
+                            <i class="fas fa-calendar-check mr-2 text-blue-400"></i>
+                            Today's Schedule
+                        </h3>
+                        <div id="scheduleContainer" class="space-y-2">
+                            <!-- Schedule will be populated here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Faculty & Resources -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="glass-morphism rounded-xl p-5">
+                        <h3 class="text-lg font-bold mb-4 flex items-center">
+                            <i class="fas fa-chalkboard-teacher mr-2 text-purple-400"></i>
+                            Faculty on Duty
+                        </h3>
+                        <div id="facultyContainer" class="space-y-3">
+                            <!-- Faculty info will be populated here -->
+                        </div>
+                    </div>
+                    
+                    <div class="glass-morphism rounded-xl p-5">
+                        <h3 class="text-lg font-bold mb-4 flex items-center">
+                            <i class="fas fa-tasks mr-2 text-orange-400"></i>
+                            Pending Tasks
+                        </h3>
+                        <div id="tasksContainer" class="space-y-2">
+                            <!-- Tasks will be populated here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column - Quick Stats -->
+            <div class="space-y-4">
+                <!-- Placement Highlights -->
+                <div class="glass-morphism rounded-xl p-5">
+                    <h3 class="text-lg font-bold mb-4 flex items-center">
+                        <i class="fas fa-briefcase mr-2 text-yellow-400"></i>
+                        Placement Highlights
+                    </h3>
+                    <div class="space-y-3">
+                        <div class="text-center p-3 bg-gradient-to-r from-yellow-500 to-orange-500 bg-opacity-20 rounded-lg">
+                            <p class="text-2xl font-bold text-yellow-400">98%</p>
+                            <p class="text-sm opacity-90">Placement Rate</p>
+                        </div>
+                        <div class="text-center p-3 bg-gradient-to-r from-green-500 to-emerald-500 bg-opacity-20 rounded-lg">
+                            <p class="text-xl font-bold text-green-400">₹72 LPA</p>
+                            <p class="text-sm opacity-90">Highest Package</p>
+                        </div>
+                        <div class="text-center p-3 bg-gradient-to-r from-blue-500 to-indigo-500 bg-opacity-20 rounded-lg">
+                            <p class="text-xl font-bold text-blue-400">180+</p>
+                            <p class="text-sm opacity-90">Companies Visited</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- System Status -->
+                <div class="glass-morphism rounded-xl p-5">
+                    <h3 class="text-lg font-bold mb-4 flex items-center">
+                        <i class="fas fa-server mr-2 text-cyan-400"></i>
+                        System Status
+                    </h3>
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm">Network</span>
+                            <span class="flex items-center">
+                                <span class="w-2 h-2 bg-green-400 rounded-full mr-2 pulse-dot"></span>
+                                <span class="text-xs text-green-400">Operational</span>
+                            </span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm">Lab Systems</span>
+                            <span class="flex items-center">
+                                <span class="w-2 h-2 bg-green-400 rounded-full mr-2 pulse-dot"></span>
+                                <span class="text-xs text-green-400">Online</span>
+                            </span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm">Student Portal</span>
+                            <span class="flex items-center">
+                                <span class="w-2 h-2 bg-yellow-400 rounded-full mr-2 pulse-dot"></span>
+                                <span class="text-xs text-yellow-400">Maintenance</span>
+                            </span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm">Library System</span>
+                            <span class="flex items-center">
+                                <span class="w-2 h-2 bg-green-400 rounded-full mr-2 pulse-dot"></span>
+                                <span class="text-xs text-green-400">Active</span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Stats -->
+                <div class="glass-morphism rounded-xl p-5">
+                    <h3 class="text-lg font-bold mb-4 flex items-center">
+                        <i class="fas fa-chart-pie mr-2 text-indigo-400"></i>
+                        Class Statistics
+                    </h3>
+                    <div class="space-y-3">
+                        <div class="stat-card glass-morphism-dark p-3 rounded-lg">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <p class="text-xs opacity-75">Present Today</p>
+                                    <p class="text-xl font-bold text-green-400">178/180</p>
+                                </div>
+                                <i class="fas fa-user-check text-green-400"></i>
+                            </div>
+                        </div>
+                        <div class="stat-card glass-morphism-dark p-3 rounded-lg">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <p class="text-xs opacity-75">Assignments Due</p>
+                                    <p class="text-xl font-bold text-orange-400">12</p>
+                                </div>
+                                <i class="fas fa-clipboard-list text-orange-400"></i>
+                            </div>
+                        </div>
+                        <div class="stat-card glass-morphism-dark p-3 rounded-lg">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <p class="text-xs opacity-75">Lab Sessions</p>
+                                    <p class="text-xl font-bold text-blue-400">4</p>
+                                </div>
+                                <i class="fas fa-flask text-blue-400"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Upcoming Events -->
+                <div class="glass-morphism rounded-xl p-5">
+                    <h3 class="text-lg font-bold mb-4 flex items-center">
+                        <i class="fas fa-calendar-alt mr-2 text-pink-400"></i>
+                        Upcoming Events
+                    </h3>
+                    <div class="space-y-2">
+                        <div class="flex items-center space-x-3 p-2 glass-morphism-dark rounded-lg">
+                            <i class="fas fa-code text-blue-400"></i>
+                            <div class="flex-grow">
+                                <p class="text-sm font-medium">Hackathon 2024</p>
+                                <p class="text-xs opacity-75">May 18-19</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-3 p-2 glass-morphism-dark rounded-lg">
+                            <i class="fas fa-graduation-cap text-purple-400"></i>
+                            <div class="flex-grow">
+                                <p class="text-sm font-medium">Guest Lecture</p>
+                                <p class="text-xs opacity-75">May 20</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-3 p-2 glass-morphism-dark rounded-lg">
+                            <i class="fas fa-building text-green-400"></i>
+                            <div class="flex-grow">
+                                <p class="text-sm font-medium">NBA Visit</p>
+                                <p class="text-xs opacity-75">Today</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Professional Footer with Ticker -->
+    <footer class="gradient-primary p-3 shadow-2xl mt-8">
+        <div class="container mx-auto">
+            <div class="flex justify-between items-center mb-2">
+                <div class="flex items-center space-x-4">
+                    <span class="text-sm font-medium">V.S.B Engineering College, Karur.</span>
+                    <span class="text-xs opacity-75">|</span>
+                    <span class="text-sm">NAAC Accredited | ISO 9001:2015 Certified</span>
+                </div>
+                <div class="flex items-center space-x-3 text-xs">
+                    <span><i class="fas fa-phone mr-1"></i> +91 123-456-7890</span>
+                    <span><i class="fas fa-envelope mr-1"></i> it@vsb.edu.in</span>
+                </div>
+            </div>
+            <div class="overflow-hidden">
+                <div class="ticker-animation whitespace-nowrap text-sm">
+                    <span class="mx-6">📢 End Semester Examinations Commencing from May 20th</span>
+                    <span class="mx-6">📢 Project Viva-Voce Schedule Released - Check Student Portal</span>
+                    <span class="mx-6">📢 Industrial Visit to Tech Park - Permission Letters Required</span>
+                    <span class="mx-6">📢 Congratulations to IT Department for 95% Placement Record</span>
+                    <span class="mx-6">📢 New Advanced Computing Lab Inauguration on May 25th</span>
+                    <span class="mx-6">📢 Faculty Development Program on Cloud Computing - Register Now</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Admin Panel -->
+    <div id="adminOverlay" class="admin-overlay"></div>
+    <div id="adminPanel" class="admin-panel">
+        <div class="p-6">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold">Admin Panel</h2>
+                <button id="closeAdminBtn" class="text-gray-400 hover:text-white">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            
+            <div class="mb-6">
+                <label class="block text-sm font-medium mb-2">Admin Email</label>
+                <input type="email" id="adminEmail" class="w-full p-2 bg-gray-800 rounded-lg" placeholder="Enter email">
+                
+                <label class="block text-sm font-medium mb-2 mt-4">Admin Password</label>
+                <input type="password" id="adminPassword" class="w-full p-2 bg-gray-800 rounded-lg" placeholder="Enter password">
+                <button id="loginBtn" class="mt-2 bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg">Login</button>
+            </div>
+            
+            <div id="adminContent" style="display: none;">
+                <div class="mb-6">
+                    <h3 class="text-lg font-bold mb-3">Edit Announcements</h3>
+                    <div class="space-y-3">
+                        <div>
+                            <label class="block text-sm font-medium mb-1">Announcement 1</label>
+                            <input type="text" id="ann1Title" class="w-full p-2 bg-gray-800 rounded-lg" placeholder="Title">
+                            <textarea id="ann1Content" class="w-full p-2 bg-gray-800 rounded-lg mt-1" rows="2" placeholder="Content"></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-1">Announcement 2</label>
+                            <input type="text" id="ann2Title" class="w-full p-2 bg-gray-800 rounded-lg" placeholder="Title">
+                            <textarea id="ann2Content" class="w-full p-2 bg-gray-800 rounded-lg mt-1" rows="2" placeholder="Content"></textarea>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mb-6">
+                    <h3 class="text-lg font-bold mb-3">Edit Placement Stats</h3>
+                    <div class="space-y-3">
+                        <div>
+                            <label class="block text-sm font-medium mb-1">Placement Rate (%)</label>
+                            <input type="number" id="placementRate" class="w-full p-2 bg-gray-800 rounded-lg" min="0" max="100">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-1">Highest Package (LPA)</label>
+                            <input type="number" id="highestPackage" class="w-full p-2 bg-gray-800 rounded-lg" min="0">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-1">Companies Visited</label>
+                            <input type="number" id="companiesVisited" class="w-full p-2 bg-gray-800 rounded-lg" min="0">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mb-6">
+                    <h3 class="text-lg font-bold mb-3">Edit Student Progress</h3>
+                    <div class="space-y-3">
+                        <div>
+                            <label class="block text-sm font-medium mb-1">Overall Progress (%)</label>
+                            <input type="number" id="overallProgress" class="w-full p-2 bg-gray-800 rounded-lg" min="0" max="100">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-1">Academic Performance (%)</label>
+                            <input type="number" id="academicPerformance" class="w-full p-2 bg-gray-800 rounded-lg" min="0" max="100">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-1">Skill Development (%)</label>
+                            <input type="number" id="skillDevelopment" class="w-full p-2 bg-gray-800 rounded-lg" min="0" max="100">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mb-6">
+                    <h3 class="text-lg font-bold mb-3">Edit Department Progress</h3>
+                    <div class="space-y-3">
+                        <div>
+                            <label class="block text-sm font-medium mb-1">Infrastructure Development (%)</label>
+                            <input type="number" id="infraProgress" class="w-full p-2 bg-gray-800 rounded-lg" min="0" max="100">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-1">Research Publications (%)</label>
+                            <input type="number" id="researchProgress" class="w-full p-2 bg-gray-800 rounded-lg" min="0" max="100">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-1">Industry Collaborations (%)</label>
+                            <input type="number" id="industryProgress" class="w-full p-2 bg-gray-800 rounded-lg" min="0" max="100">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-1">Student Placements (%)</label>
+                            <input type="number" id="studentPlacementProgress" class="w-full p-2 bg-gray-800 rounded-lg" min="0" max="100">
+                        </div>
+                    </div>
+                </div>
+                
+                <button id="saveChangesBtn" class="w-full bg-green-600 hover:bg-green-700 px-4 py-2 rounded-lg">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Data for different classes
+        const classData = {
+            'IT-A': {
+                announcements: [
+                    {
+                        title: "Project Submission Deadline",
+                        content: "Final year project reports must be submitted by May 15th. Late submissions will not be accepted.",
+                        priority: "high",
+                        time: "1 hour ago",
+                        icon: "fa-exclamation-triangle"
+                    },
+                    {
+                        title: "Lab Test Rescheduled",
+                        content: "Database Management Lab test has been rescheduled to Thursday, 2:00 PM.",
+                        priority: "medium",
+                        time: "3 hours ago",
+                        icon: "fa-clock"
+                    },
+                    {
+                        title: "Guest Lecture Announcement",
+                        content: "Industry expert from Google will deliver a guest lecture on Cloud Architecture on Friday.",
+                        priority: "low",
+                        time: "1 day ago",
+                        icon: "fa-microphone"
+                    },
+                    {
+                        title: "Workshop on AI/ML",
+                        content: "Hands-on workshop on Artificial Intelligence and Machine Learning this weekend. Register at the department office.",
+                        priority: "medium",
+                        time: "2 days ago",
+                        icon: "fa-robot"
+                    },
+                    {
+                        title: "Placement Drive",
+                        content: "TCS and Infosys will be conducting campus recruitment next month. Update your resumes.",
+                        priority: "high",
+                        time: "3 days ago",
+                        icon: "fa-briefcase"
+                    },
+                    {
+                        title: "Library Resources",
+                        content: "New books on Cloud Computing and Cyber Security are now available in the library.",
+                        priority: "low",
+                        time: "4 days ago",
+                        icon: "fa-book"
+                    }
+                ],
+                schedule: [
+                    { time: "9:00 AM", subject: "Data Structures", faculty: "Dr. Kumar", room: "301" },
+                    { time: "11:00 AM", subject: "Database Lab", faculty: "Prof. Patel", room: "Lab 201" },
+                    { time: "2:00 PM", subject: "Web Technologies", faculty: "Dr. Sharma", room: "302" },
+                    { time: "4:00 PM", subject: "Soft Skills", faculty: "Ms. Reddy", room: "401" }
+                ],
+                faculty: [
+                    { name: "Dr. R. Kumar", subject: "Data Structures", availability: "Available", photo: "faculty1" },
+                    { name: "Prof. S. Patel", subject: "Database", availability: "In Class", photo: "faculty2" },
+                    { name: "Dr. A. Sharma", subject: "Web Tech", availability: "Available", photo: "faculty3" },
+                    { name: "Dr. N. Priya", subject: "Computer Networks", availability: "Available", photo: "faculty10" },
+                    { name: "Prof. K. Dinesh", subject: "Operating Systems", availability: "In Class", photo: "faculty11" },
+                    { name: "Dr. B. Lakshmi", subject: "DBMS Lab", availability: "In Lab", photo: "faculty12" }
+                ],
+                tasks: [
+                    { task: "Submit Assignment 5", deadline: "Today", priority: "high" },
+                    { task: "Lab Report - DBMS", deadline: "Tomorrow", priority: "medium" },
+                    { task: "Project Documentation", deadline: "May 15", priority: "high" }
+                ],
+                performance: [92, 94, 96, 95],
+                timetable: [
+                    { period: "9:00-10:00", monday: "Data Structures", tuesday: "Algorithms", wednesday: "DBMS", thursday: "Web Tech", friday: "CN" },
+                    { period: "10:00-11:00", monday: "Mathematics", tuesday: "OS", wednesday: "Data Structures", thursday: "Algorithms", friday: "DBMS" },
+                    { period: "11:00-12:00", monday: "DBMS Lab", tuesday: "Web Lab", wednesday: "OS Lab", thursday: "CN Lab", friday: "Mathematics" },
+                    { period: "2:00-3:00", monday: "Web Technologies", tuesday: "Computer Networks", wednesday: "Mathematics", thursday: "Data Structures", friday: "OS" },
+                    { period: "3:00-4:00", monday: "Soft Skills", tuesday: "DBMS", wednesday: "Web Technologies", thursday: "Computer Networks", friday: "Lab" },
+                    { period: "4:00-5:00", monday: "Lab", tuesday: "Soft Skills", wednesday: "Lab", thursday: "Lab", friday: "Sports" }
+                ]
+            },
+            'IT-B': {
+                announcements: [
+                    {
+                        title: "Extra Class Added",
+                        content: "Additional class for Computer Networks this Saturday at 10 AM. Attendance mandatory.",
+                        priority: "high",
+                        time: "2 hours ago",
+                        icon: "fa-calendar-plus"
+                    },
+                    {
+                        title: "Assignment Extension",
+                        content: "Algorithm Design assignment deadline extended to May 18th.",
+                        priority: "low",
+                        time: "5 hours ago",
+                        icon: "fa-calendar-check"
+                    },
+                    {
+                        title: "Lab Maintenance",
+                        content: "System Programming Lab will be under maintenance on Wednesday.",
+                        priority: "medium",
+                        time: "1 day ago",
+                        icon: "fa-tools"
+                    },
+                    {
+                        title: "Seminar on Blockchain",
+                        content: "Department is organizing a seminar on Blockchain Technology next week. All students are requested to attend.",
+                        priority: "medium",
+                        time: "2 days ago",
+                        icon: "fa-link"
+                    },
+                    {
+                        title: "Internship Opportunities",
+                        content: "Summer internship opportunities at leading tech companies. Apply through the placement cell.",
+                        priority: "high",
+                        time: "3 days ago",
+                        icon: "fa-building"
+                    },
+                    {
+                        title: "Technical Symposium",
+                        content: "Annual technical symposium 'TechFest 2024' registrations are now open. Early bird discounts available.",
+                        priority: "low",
+                        time: "4 days ago",
+                        icon: "fa-laptop-code"
+                    }
+                ],
+                schedule: [
+                    { time: "9:00 AM", subject: "Algorithms", faculty: "Dr. Singh", room: "303" },
+                    { time: "11:00 AM", subject: "OS Lab", faculty: "Prof. Kumar", room: "Lab 202" },
+                    { time: "2:00 PM", subject: "Computer Networks", faculty: "Dr. Reddy", room: "305" },
+                    { time: "4:00 PM", subject: "Mathematics", faculty: "Dr. Gupta", room: "403" }
+                ],
+                faculty: [
+                    { name: "Dr. P. Singh", subject: "Algorithms", availability: "Available", photo: "faculty4" },
+                    { name: "Prof. M. Kumar", subject: "OS", availability: "Meeting", photo: "faculty5" },
+                    { name: "Dr. L. Reddy", subject: "Networks", availability: "Available", photo: "faculty6" },
+                    { name: "Dr. R. Meena", subject: "DBMS", availability: "Available", photo: "faculty13" },
+                    { name: "Prof. V. Aravind", subject: "Web Technologies", availability: "In Class", photo: "faculty14" },
+                    { name: "Dr. S. Karthik", subject: "CN Lab", availability: "In Lab", photo: "faculty15" }
+                ],
+                tasks: [
+                    { task: "Algorithm Assignment", deadline: "May 18", priority: "medium" },
+                    { task: "OS Lab Report", deadline: "Tomorrow", priority: "high" },
+                    { task: "Network Simulation", deadline: "May 20", priority: "medium" }
+                ],
+                performance: [90, 92, 93, 94],
+                timetable: [
+                    { period: "9:00-10:00", monday: "Algorithms", tuesday: "Data Structures", wednesday: "OS", thursday: "CN", friday: "Web Tech" },
+                    { period: "10:00-11:00", monday: "Mathematics", tuesday: "DBMS", wednesday: "Algorithms", thursday: "Data Structures", friday: "OS" },
+                    { period: "11:00-12:00", monday: "OS Lab", tuesday: "CN Lab", wednesday: "Web Lab", thursday: "OS Lab", friday: "Mathematics" },
+                    { period: "2:00-3:00", monday: "Computer Networks", tuesday: "Web Technologies", wednesday: "Mathematics", thursday: "Algorithms", friday: "DBMS" },
+                    { period: "3:00-4:00", monday: "Soft Skills", tuesday: "OS", wednesday: "Computer Networks", thursday: "Web Technologies", friday: "Lab" },
+                    { period: "4:00-5:00", monday: "Lab", tuesday: "Soft Skills", wednesday: "Lab", thursday: "Lab", friday: "Sports" }
+                ]
+            },
+            'IT-C': {
+                announcements: [
+                    {
+                        title: "Class Test Results",
+                        content: "Machine Learning test results have been published. Check student portal.",
+                        priority: "medium",
+                        time: "30 mins ago",
+                        icon: "fa-chart-bar"
+                    },
+                    {
+                        title: "Workshop Registration",
+                        content: "AI/ML Workshop registration open. Limited seats available.",
+                        priority: "low",
+                        time: "4 hours ago",
+                        icon: "fa-robot"
+                    },
+                    {
+                        title: "Industrial Visit",
+                        content: "Permission letters for industrial visit must be submitted by Monday.",
+                        priority: "high",
+                        time: "2 days ago",
+                        icon: "fa-building"
+                    },
+                    {
+                        title: "Research Paper Submission",
+                        content: "Last date for submitting research papers for the International Conference is May 25th.",
+                        priority: "high",
+                        time: "3 days ago",
+                        icon: "fa-file-alt"
+                    },
+                    {
+                        title: "Guest Faculty",
+                        content: "Renowned AI researcher from IIT Madras will be visiting our department next month.",
+                        priority: "medium",
+                        time: "4 days ago",
+                        icon: "fa-user-tie"
+                    },
+                    {
+                        title: "Lab Equipment Upgrade",
+                        content: "Advanced computing lab will be upgraded with latest GPUs and systems next week.",
+                        priority: "low",
+                        time: "5 days ago",
+                        icon: "fa-microchip"
+                    }
+                ],
+                schedule: [
+                    { time: "9:00 AM", subject: "Machine Learning", faculty: "Dr. Rao", room: "304" },
+                    { time: "11:00 AM", subject: "AI Lab", faculty: "Prof. Kumar", room: "Lab 203" },
+                    { time: "2:00 PM", subject: "Software Engineering", faculty: "Dr. Patel", room: "306" },
+                    { time: "4:00 PM", subject: "Communication", faculty: "Ms. Singh", room: "404" }
+                ],
+                faculty: [
+                    { name: "Dr. V. Rao", subject: "ML", availability: "In Lab", photo: "faculty7" },
+                    { name: "Prof. N. Kumar", subject: "AI", availability: "Available", photo: "faculty8" },
+                    { name: "Dr. K. Patel", subject: "SE", availability: "Available", photo: "faculty9" },
+                    { name: "Dr. G. Harini", subject: "Data Science", availability: "Available", photo: "faculty16" },
+                    { name: "Prof. S. Manoj", subject: "Software Engineering Lab", availability: "In Lab", photo: "faculty17" },
+                    { name: "Dr. T. Ramesh", subject: "Cloud Computing", availability: "In Class", photo: "faculty18" }
+                ],
+                tasks: [
+                    { task: "ML Project", deadline: "May 16", priority: "high" },
+                    { task: "AI Lab Assignment", deadline: "Tomorrow", priority: "medium" },
+                    { task: "SE Case Study", deadline: "May 22", priority: "low" }
+                ],
+                performance: [95, 96, 97, 98],
+                timetable: [
+                    { period: "9:00-10:00", monday: "Machine Learning", tuesday: "AI", wednesday: "Software Engineering", thursday: "Data Structures", friday: "Web Tech" },
+                    { period: "10:00-11:00", monday: "Mathematics", tuesday: "ML", wednesday: "AI", thursday: "Software Engineering", friday: "Data Structures" },
+                    { period: "11:00-12:00", monday: "AI Lab", tuesday: "SE Lab", wednesday: "ML Lab", thursday: "AI Lab", friday: "Mathematics" },
+                    { period: "2:00-3:00", monday: "Software Engineering", tuesday: "Computer Networks", wednesday: "Mathematics", thursday: "Machine Learning", friday: "AI" },
+                    { period: "3:00-4:00", monday: "Communication", tuesday: "SE", wednesday: "Computer Networks", thursday: "Software Engineering", friday: "Lab" },
+                    { period: "4:00-5:00", monday: "Lab", tuesday: "Soft Skills", wednesday: "Lab", thursday: "Lab", friday: "Sports" }
+                ]
+            }
+        };
+
+        let currentClass = 'IT-A';
+        let isLoggedIn = false;
+
+        // Function to select class
+        function selectClass(className) {
+            currentClass = className;
+            
+            // Update active class card
+            document.querySelectorAll('.class-card').forEach(card => {
+                card.classList.remove('active');
+            });
+            event.currentTarget.classList.add('active');
+            
+            // Load class-specific data
+            loadClassData(className);
+        }
+
+        // Load class-specific data
+        function loadClassData(className) {
+            const data = classData[className];
+            
+            // Load announcements with auto-scroll
+            const announcementsScroll = document.getElementById('announcementsScroll');
+            announcementsScroll.innerHTML = '';
+            
+            // Create two sets of announcements for seamless scrolling
+            const announcementsHTML = data.announcements.map((announcement, index) => {
+                const priorityColors = {
+                    high: 'border-red-500 bg-red-500 bg-opacity-10',
+                    medium: 'border-yellow-500 bg-yellow-500 bg-opacity-10',
+                    low: 'border-blue-500 bg-blue-500 bg-opacity-10'
+                };
+                
+                return `
+                    <div class="border-l-4 ${priorityColors[announcement.priority]} p-4 rounded-lg mb-3">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="font-bold flex items-center">
+                                <i class="fas ${announcement.icon} mr-2 text-yellow-400"></i>
+                                ${announcement.title}
+                            </h3>
+                            <span class="text-xs opacity-75">${announcement.time}</span>
+                        </div>
+                        <p class="text-sm opacity-90">${announcement.content}</p>
+                    </div>
+                `;
+            }).join('');
+            
+            // Duplicate announcements for seamless scrolling
+            announcementsScroll.innerHTML = announcementsHTML + announcementsHTML;
+            
+            // Load timetable
+            const timetableBody = document.getElementById('timetableBody');
+            timetableBody.innerHTML = '';
+            
+            data.timetable.forEach((row, index) => {
+                const tr = document.createElement('tr');
+                tr.className = 'border-b border-gray-800';
+                tr.innerHTML = `
+                    <td class="p-2 font-medium">${row.period}</td>
+                    <td class="p-2 timetable-cell">${row.monday}</td>
+                    <td class="p-2 timetable-cell">${row.tuesday}</td>
+                    <td class="p-2 timetable-cell">${row.wednesday}</td>
+                    <td class="p-2 timetable-cell">${row.thursday}</td>
+                    <td class="p-2 timetable-cell">${row.friday}</td>
+                `;
+                timetableBody.appendChild(tr);
+            });
+            
+            // Load schedule
+            const scheduleContainer = document.getElementById('scheduleContainer');
+            scheduleContainer.innerHTML = '';
+            
+            data.schedule.forEach((item, index) => {
+                const card = document.createElement('div');
+                card.className = 'flex items-center justify-between p-2 glass-morphism-dark rounded-lg slide-up';
+                card.style.animationDelay = `${index * 0.1}s`;
+                card.innerHTML = `
+                    <div class="flex items-center space-x-3">
+                        <span class="text-xs font-bold text-blue-400">${item.time}</span>
+                        <div>
+                            <p class="text-sm font-medium">${item.subject}</p>
+                            <p class="text-xs opacity-75">${item.faculty} - ${item.room}</p>
+                        </div>
+                    </div>
+                    <i class="fas fa-chevron-right text-xs opacity-50"></i>
+                `;
+                scheduleContainer.appendChild(card);
+            });
+            
+            // Load faculty
+            const facultyContainer = document.getElementById('facultyContainer');
+            facultyContainer.innerHTML = '';
+            
+            data.faculty.forEach((faculty, index) => {
+                const statusColors = {
+                    'Available': 'text-green-400',
+                    'In Class': 'text-blue-400',
+                    'In Lab': 'text-purple-400',
+                    'Meeting': 'text-yellow-400'
+                };
+                
+                const card = document.createElement('div');
+                card.className = 'flex items-center space-x-3 p-2 glass-morphism-dark rounded-lg slide-up';
+                card.style.animationDelay = `${index * 0.1}s`;
+                card.innerHTML = `
+                    <img src="https://picsum.photos/seed/${faculty.photo}/40/40.jpg" alt="${faculty.name}" class="w-10 h-10 rounded-full">
+                    <div class="flex-grow">
+                        <p class="text-sm font-medium">${faculty.name}</p>
+                        <p class="text-xs opacity-75">${faculty.subject}</p>
+                    </div>
+                    <span class="${statusColors[faculty.availability]} text-xs">${faculty.availability}</span>
+                `;
+                facultyContainer.appendChild(card);
+            });
+            
+            // Load tasks
+            const tasksContainer = document.getElementById('tasksContainer');
+            tasksContainer.innerHTML = '';
+            
+            data.tasks.forEach((task, index) => {
+                const priorityColors = {
+                    high: 'text-red-400',
+                    medium: 'text-yellow-400',
+                    low: 'text-green-400'
+                };
+                
+                const card = document.createElement('div');
+                card.className = 'flex items-center justify-between p-2 glass-morphism-dark rounded-lg slide-up';
+                card.style.animationDelay = `${index * 0.1}s`;
+                card.innerHTML = `
+                    <div class="flex items-center space-x-2">
+                        <i class="fas fa-circle text-xs ${priorityColors[task.priority]}"></i>
+                        <div>
+                            <p class="text-sm">${task.task}</p>
+                            <p class="text-xs opacity-75">Due: ${task.deadline}</p>
+                        </div>
+                    </div>
+                `;
+                tasksContainer.appendChild(card);
+            });
+            
+            // Load performance chart
+            const performanceChart = document.getElementById('performanceChart');
+            performanceChart.innerHTML = '';
+            
+            data.performance.forEach((value, index) => {
+                const bar = document.createElement('div');
+                bar.className = 'flex-grow bg-gradient-to-t from-blue-600 to-blue-400 rounded-t chart-bar';
+                bar.style.height = `${value}%`;
+                bar.innerHTML = `<span class="text-xs font-bold">${value}</span>`;
+                performanceChart.appendChild(bar);
+            });
+        }
+
+        // Function to update date and time
+        function updateDateTime() {
+            const now = new Date();
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('currentDate').textContent = now.toLocaleDateString('en-US', options);
+            
+            const hours = now.getHours().toString().padStart(2, '0');
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            const seconds = now.getSeconds().toString().padStart(2, '0');
+            document.getElementById('currentTime').textContent = `${hours}:${minutes}:${seconds}`;
+        }
+
+        // Function to toggle fullscreen
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen();
+                document.getElementById('fullscreenBtn').innerHTML = '<i class="fas fa-compress text-xl"></i>';
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                    document.getElementById('fullscreenBtn').innerHTML = '<i class="fas fa-expand text-xl"></i>';
+                }
+            }
+        }
+
+        // Admin Panel Functions
+        function openAdminPanel() {
+            document.getElementById('adminOverlay').classList.add('active');
+            document.getElementById('adminPanel').classList.add('active');
+        }
+
+        function closeAdminPanel() {
+            document.getElementById('adminOverlay').classList.remove('active');
+            document.getElementById('adminPanel').classList.remove('active');
+        }
+
+        function loginToAdmin() {
+            const email = document.getElementById('adminEmail').value;
+            const password = document.getElementById('adminPassword').value;
+            
+            // Check both email and password
+            if (email === 'pvhari41@gmail.com' && password === '3551') {
+                isLoggedIn = true;
+                document.getElementById('adminEmail').style.display = 'none';
+                document.getElementById('adminPassword').style.display = 'none';
+                document.getElementById('loginBtn').style.display = 'none';
+                document.getElementById('adminContent').style.display = 'block';
+                
+                // Load current values into admin form
+                loadAdminValues();
+            } else {
+                alert('Incorrect email or password');
+            }
+        }
+
+        function loadAdminValues() {
+            // Load current values from page
+            document.getElementById('ann1Title').value = classData[currentClass].announcements[0].title;
+            document.getElementById('ann1Content').value = classData[currentClass].announcements[0].content;
+            document.getElementById('ann2Title').value = classData[currentClass].announcements[1].title;
+            document.getElementById('ann2Content').value = classData[currentClass].announcements[1].content;
+            
+            // Load placement stats
+            document.getElementById('placementRate').value = '98';
+            document.getElementById('highestPackage').value = '72';
+            document.getElementById('companiesVisited').value = '180';
+            
+            // Load student progress
+            document.getElementById('overallProgress').value = '95';
+            document.getElementById('academicPerformance').value = '96';
+            document.getElementById('skillDevelopment').value = '92';
+            
+            // Load department progress
+            document.getElementById('infraProgress').value = '92';
+            document.getElementById('researchProgress').value = '91';
+            document.getElementById('industryProgress').value = '95';
+            document.getElementById('studentPlacementProgress').value = '98';
+        }
+
+        function saveAdminChanges() {
+            if (!isLoggedIn) return;
+            
+            // Update announcements
+            classData[currentClass].announcements[0].title = document.getElementById('ann1Title').value;
+            classData[currentClass].announcements[0].content = document.getElementById('ann1Content').value;
+            classData[currentClass].announcements[1].title = document.getElementById('ann2Title').value;
+            classData[currentClass].announcements[1].content = document.getElementById('ann2Content').value;
+            
+            // Update placement stats
+            const placementRate = document.getElementById('placementRate').value;
+            const highestPackage = document.getElementById('highestPackage').value;
+            const companiesVisited = document.getElementById('companiesVisited').value;
+            
+            // Update student progress
+            const overallProgress = document.getElementById('overallProgress').value;
+            const academicPerformance = document.getElementById('academicPerformance').value;
+            const skillDevelopment = document.getElementById('skillDevelopment').value;
+            
+            // Update department progress
+            const infraProgress = document.getElementById('infraProgress').value;
+            const researchProgress = document.getElementById('researchProgress').value;
+            const industryProgress = document.getElementById('industryProgress').value;
+            const studentPlacementProgress = document.getElementById('studentPlacementProgress').value;
+            
+            // Reload data
+            loadClassData(currentClass);
+            updateProgressRings(overallProgress, academicPerformance, skillDevelopment);
+            updateDepartmentProgress(infraProgress, researchProgress, industryProgress, studentPlacementProgress);
+            updatePlacementStats(placementRate, highestPackage, companiesVisited);
+            
+            alert('Changes saved successfully!');
+        }
+
+        function updateProgressRings(overall, academic, skill) {
+            const overallCircle = document.querySelector('.progress-ring-circle.text-blue-500');
+            const academicCircle = document.querySelector('.progress-ring-circle.text-green-500');
+            const skillCircle = document.querySelector('.progress-ring-circle.text-purple-500');
+            
+            if (overallCircle) {
+                const overallOffset = 314 - (314 * overall / 100);
+                overallCircle.style.strokeDashoffset = overallOffset;
+            }
+            
+            if (academicCircle) {
+                const academicOffset = 314 - (314 * academic / 100);
+                academicCircle.style.strokeDashoffset = academicOffset;
+            }
+            
+            if (skillCircle) {
+                const skillOffset = 314 - (314 * skill / 100);
+                skillCircle.style.strokeDashoffset = skillOffset;
+            }
+        }
+
+        function updateDepartmentProgress(infra, research, industry, placement) {
+            const progressBars = document.querySelectorAll('.glass-morphism .h-2');
+            if (progressBars.length >= 4) {
+                progressBars[0].style.width = `${infra}%`;
+                progressBars[1].style.width = `${research}%`;
+                progressBars[2].style.width = `${industry}%`;
+                progressBars[3].style.width = `${placement}%`;
+            }
+        }
+
+        function updatePlacementStats(rate, packageValue, companies) {
+            const placementStats = document.querySelectorAll('.glass-morphism .text-2xl, .glass-morphism .text-xl');
+            if (placementStats.length >= 3) {
+                placementStats[0].textContent = `${rate}%`;
+                placementStats[1].textContent = `₹${packageValue} LPA`;
+                placementStats[2].textContent = `${companies}+`;
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            loadClassData('IT-A');
+            updateDateTime();
+            
+            // Update time every second
+            setInterval(updateDateTime, 1000);
+            
+            // Add fullscreen button functionality
+            document.getElementById('fullscreenBtn').addEventListener('click', toggleFullscreen);
+            
+            // Add admin panel functionality
+            document.getElementById('adminBtn').addEventListener('click', openAdminPanel);
+            document.getElementById('closeAdminBtn').addEventListener('click', closeAdminPanel);
+            document.getElementById('adminOverlay').addEventListener('click', closeAdminPanel);
+            document.getElementById('loginBtn').addEventListener('click', loginToAdmin);
+            document.getElementById('saveChangesBtn').addEventListener('click', saveAdminChanges);
+            
+            // Simulate real-time updates
+            setInterval(() => {
+                // Update random system status
+                const statuses = document.querySelectorAll('.pulse-dot');
+                if (statuses.length > 0) {
+                    const randomStatus = statuses[Math.floor(Math.random() * statuses.length)];
+                    const colors = ['bg-green-400', 'bg-yellow-400', 'bg-red-400'];
+                    const currentColor = colors.find(c => randomStatus.classList.contains(c));
+                    const newColor = colors[Math.floor(Math.random() * colors.length)];
+                    randomStatus.classList.remove(currentColor);
+                    randomStatus.classList.add(newColor);
+                }
+            }, 10000);
+        });
+    </script>
+</body>
+</html>

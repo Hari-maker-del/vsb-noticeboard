@@ -38,9 +38,9 @@ Node.js, Express, SQLite/PostgreSQL, JWT, bcrypt, Multer, AWS S3-compatible obje
 ## Production architecture
 - **Database:** SQLite remains the zero-setup local default; set `DATABASE_URL` to switch to PostgreSQL. The PostgreSQL schema is in `database/postgres.sql` and CI validates it against PostgreSQL 17.
 - **Uploads:** local disk is the development default. Set `STORAGE_PROVIDER=s3` plus `S3_BUCKET`, `S3_REGION` and credentials for S3-compatible object storage. The upload API uses memory buffering and writes the object only after validation.
-- **Deployment:** `render.yaml` provisions a Node web service and managed Render Postgres with an HTTP health check at `/api/health`. Render web services require binding to `0.0.0.0`; the app does this automatically. citeturn0search0turn0search2
-- **Monitoring:** every request receives an `X-Request-ID`, structured JSON request/error logs, database-aware health status and admin operational counters. Render also exposes service CPU, memory, disk and HTTP metrics. citeturn0search6
-- **Backups:** `npm run backup:postgres` creates a PostgreSQL dump when `DATABASE_URL` and `pg_dump` are available. Render Postgres also provides managed recovery/backups. citeturn1search3turn1search7
+- **Deployment:** `render.yaml` provisions a Node web service and managed Render Postgres with an HTTP health check at `/api/health`. Render web services require binding to `0.0.0.0`; the app does this automatically.
+- **Monitoring:** every request receives an `X-Request-ID`, structured JSON request/error logs, database-aware health status and admin operational counters. Render also exposes service CPU, memory, disk and HTTP metrics.
+- **Backups:** `npm run backup:postgres` creates a PostgreSQL dump when `DATABASE_URL` and `pg_dump` are available. Render Postgres also provides managed recovery/backups.
 
 ## Local setup
 1. Copy `.env.example` to `.env`.
@@ -62,7 +62,7 @@ The database is created at `data/vsb-noticeboard.sqlite` unless `DATABASE_URL` i
 6. Monitor request logs/metrics and schedule PostgreSQL backups according to your retention requirements.
 7. Never commit `.env`, database files, private uploads, backup files or credentials.
 
-Render's default filesystem is ephemeral, so local uploads should not be treated as durable production storage; managed Postgres is preferred for relational data and object storage for arbitrary files. citeturn0search1turn0search7
+Render's default filesystem is ephemeral, so local uploads should not be treated as durable production storage; managed Postgres is preferred for relational data and object storage for arbitrary files.
 
 ## API
 - `/api/auth/login`, `/api/me`, `/api/profile`

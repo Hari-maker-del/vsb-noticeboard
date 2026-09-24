@@ -1,21 +1,6 @@
 {
-    "name": "vsb-it-dashboard-backend",
-    "version": "1.0.0",
-    "description": "Backend for VSB IT Dashboard â€” Node.js + Express + SQLite",
-    "main": "index.js",
-    "scripts": {
-        "start": "node index.js",
-        "dev": "nodemon index.js"
-    },
-    "dependencies": {
-        "bcrypt": "^5.1.0",
-        "cors": "^2.8.5",
-        "dotenv": "^16.0.0",
-        "express": "^4.21.2",
-        "jsonwebtoken": "^9.0.0",
-        "uuid": "^13.0.0"
-    },
-    "devDependencies": {
-        "nodemon": "^2.0.22"
-    }
+  "name":"vsb-noticeboard","version":"2.0.0","description":"Production-ready full-stack noticeboard for V.S.B Engineering College IT Department",
+  "main":"server.js","scripts":{"start":"node server.js","dev":"nodemon server.js"},
+  "dependencies":{"bcrypt":"^5.1.1","cors":"^2.8.5","dotenv":"^16.4.7","express":"^4.21.2","helmet":"^8.1.0","jsonwebtoken":"^9.0.2","express-rate-limit":"^7.5.0","sqlite3":"^5.1.7","uuid":"^11.0.5"},
+  "devDependencies":{"nodemon":"^3.1.7"}
 }

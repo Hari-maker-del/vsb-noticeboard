@@ -1,5 +1,5 @@
 require('dotenv').config();
-const express=require('express'),cors=require('cors'),helmet=require('helmet'),rateLimit=require('express-rate-limit'),bcrypt=require('bcrypt'),jwt=require('jsonwebtoken'),multer=require('multer'),path=require('path'),fs=require('fs');
+const express=require('express'),cors=require('cors'),helmet=require('helmet'),rateLimit=require('express-rate-limit'),bcrypt=require('bcryptjs'),jwt=require('jsonwebtoken'),multer=require('multer'),path=require('path'),fs=require('fs');
 const {v4:uuidv4}=require('uuid'),{initDb,all,get,run}=require('./database');
 const {saveUpload,getUploadUrl}=require('./storage');
 const app=express(),PORT=Number(process.env.PORT||5000),NODE_ENV=process.env.NODE_ENV||'development',JWT_SECRET=process.env.JWT_SECRET||(NODE_ENV==='production'?'':'dev-only-change-me');

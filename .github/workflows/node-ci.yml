@@ -13,7 +13,7 @@ jobs:
         with:
           node-version: "22"
           cache: npm
-      - run: npm ci
+      - run: npm install
       - run: node --check server.js
       - run: node --check database.js
       - run: node --check storage.js
@@ -45,6 +45,7 @@ jobs:
         with:
           node-version: "22"
           cache: npm
-      - run: npm ci
+      - run: npm install
       - run: node --check database.js
       - run: node test/postgres-smoke.js
+      - run: npm run test:integration

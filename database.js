@@ -5,7 +5,8 @@ function pgSql(sql){
   let i=0;
   let out=sql.replace(/\?/g,()=>'$'+(++i));
   out=out.replace(/datetime\((["'])now\1\)/gi,'CURRENT_TIMESTAMP');
-  out=out.replace(/datetime\(/gi,'(');
+  out=out.replace(/datetime\\(COALESCE\\(([^)]+)\\)\\)/gi,'(COALESCE($1)::timestamptz)');
+  out=out.replace(/datetime\\(([^)]+)\\)/gi,'($1::timestamptz)');
   out=out.replace(/INSERT OR IGNORE INTO/gi,'INSERT INTO');
   if(/INSERT INTO/i.test(out)&&/read_receipts/i.test(out)) out+=' ON CONFLICT (user_id,notice_id) DO NOTHING';
   if(/INSERT INTO/i.test(out)&&/classes/i.test(out)&&/VALUES/i.test(out)) out+=' ON CONFLICT (code) DO NOTHING';

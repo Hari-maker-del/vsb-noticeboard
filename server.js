@@ -31,7 +31,7 @@ app.get('/api/notices',optionalAuth,async(req,res)=>{
     const rows=await all(sql,req.user?[req.user.id,...p,limit,offset]:[...p,limit,offset]);
     const c=await get(`SELECT COUNT(*) count FROM notices n WHERE ${w.join(' AND ')}`,p);
     res.json({items:rows,total:Number(c.count),limit,offset});
-  }catch{res.status(500).json({error:'Failed to load notices'})}
+  }catch(e){console.error(JSON.stringify({type:'notices_error',request_id:req.requestId,error:e.message}));res.status(500).json({error:'Failed to load notices'})}
 });
 app.post('/api/notices/:id/read',auth(['ADMIN','FACULTY','STUDENT']),async(req,res)=>{await run('INSERT OR IGNORE INTO read_receipts(user_id,notice_id) VALUES(?,?)',[req.user.id,req.params.id]);res.json({success:true})});
 app.post('/api/notices',staff,async(req,res)=>{try{const b=req.body;if(!clean(b.title,200)||!clean(b.content,10000))return res.status(400).json({error:'Title and content are required'});const id=require('uuid').v4();await run('INSERT INTO notices(id,title,content,category,priority,class_code,attachment_url,publish_at,expires_at,pinned,created_by) VALUES(?,?,?,?,?,?,?,?,?,?,?)',[id,clean(b.title,200),clean(b.content,10000),clean(b.category,50)||'General',['low','medium','high'].includes(b.priority)?b.priority:'medium',clean(b.class_code,20)||null,safeUrl(b.attachment_url),b.publish_at||null,b.expires_at||null,bool(b.pinned)?1:0,req.user.id]);await audit(req.user.id,'CREATE','notice',id);res.status(201).json(await get('SELECT * FROM notices WHERE id=?',[id]))}catch{res.status(400).json({error:'Failed to create notice'})}});

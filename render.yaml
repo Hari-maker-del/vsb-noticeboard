@@ -3,7 +3,7 @@ services:
     name: vsb-noticeboard
     runtime: node
     plan: starter
-    buildCommand: npm ci
+    buildCommand: npm install
     startCommand: npm start
     healthCheckPath: /api/health
     envVars:

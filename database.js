@@ -47,7 +47,7 @@ async function initDb(){
     return true;
   }
   const sqlite3=require('sqlite3').verbose(),dir=path.join(__dirname,'data');fs.mkdirSync(dir,{recursive:true});
-  db=new sqlite3.Database(path.join(dir,'vsb-noticeboard.sqlite'));
+  db=new sqlite3.Database(process.env.SQLITE_PATH||path.join(dir,'vsb-noticeboard.sqlite'));
   const schema=fs.readFileSync(path.join(__dirname,'database/schema.sql'),'utf8');
   await new Promise((resolve,reject)=>db.exec(schema,e=>e?reject(e):resolve()));
   await run('PRAGMA foreign_keys = ON');

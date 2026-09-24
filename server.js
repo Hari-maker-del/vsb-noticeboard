@@ -14,8 +14,8 @@ const staff=auth(['ADMIN','FACULTY']),admin=auth(['ADMIN']);
 const clean=(v,max=5000)=>String(v??'').trim().slice(0,max);
 const safeUrl=v=>{const x=clean(v,1000);if(!x)return null;if(x.startsWith('/'))return x;try{const u=new URL(x);return ['http:','https:'].includes(u.protocol)?x:null}catch{return null}};
 const bool=v=>v===true||v===1||v==='1'||v==='true';
-app.get('/api/health',(q,s)=>s.json({ok:true,service:'VSB Noticeboard',version:'2.1.0'}));
-app.post('/api/auth/login',async(req,res)=>{try{const email=clean(req.body.email,254).toLowerCase(),password=String(req.body.password||'');const u=await get('SELECT * FROM users WHERE email=? AND active=1',[email]);if(!u||!(await bcrypt.compare(password,u.password_hash)))return res.status(401).json({error:'Invalid credentials'});const token=jwt.sign({id:u.id,name:u.name,email:u.email,role:u.role,class_code:u.class_code||null},JWT_SECRET,{expiresIn:'8h'});res.json({token,user:{id:u.id,name:u.name,email:u.email,role:u.role}})}catch{res.status(500).json({error:'Login failed'})}});
+app.get('/api/health',(q,s)=>s.json({ok:true,service:'VSB Noticeboard',version:'3.0.0',timestamp:new Date().toISOString()}));
+app.post('/api/auth/login',async(req,res)=>{try{const email=clean(req.body.email,254).toLowerCase(),password=String(req.body.password||'');const u=await get('SELECT * FROM users WHERE email=? AND active=1',[email]);if(!u||!(await bcrypt.compare(password,u.password_hash)))return res.status(401).json({error:'Invalid credentials'});const token=jwt.sign({id:u.id,name:u.name,email:u.email,role:u.role,class_code:u.class_code||null},JWT_SECRET,{expiresIn:'8h'});res.json({token,user:{id:u.id,name:u.name,email:u.email,role:u.role,class_code:u.class_code||null,roll_no:u.roll_no||null,semester:u.semester||null,department:u.department||'Information Technology'}})}catch{res.status(500).json({error:'Login failed'})}});
 app.get('/api/notices',optionalAuth,async(req,res)=>{
   try{
     const w=['(n.publish_at IS NULL OR datetime(n.publish_at)<=datetime("now"))','(n.expires_at IS NULL OR datetime(n.expires_at)>datetime("now"))'];const p=[];

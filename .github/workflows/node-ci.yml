@@ -16,6 +16,8 @@ jobs:
       - run: node --check server.js
       - run: node --check database.js
       - run: node --check storage.js
+      - run: node --check scripts/backup-postgres.js
+      - run: node --check scripts/migrate-sqlite-to-postgres.js
       - run: node --check public/app.js
       - run: npm test
       - run: npm run test:integration

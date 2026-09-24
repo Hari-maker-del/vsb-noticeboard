@@ -8,7 +8,8 @@
     "dev": "nodemon server.js",
     "test": "node --check server.js && node --check database.js && node --check storage.js && node test/smoke.js",
     "test:integration": "node test/integration.js",
-    "backup:postgres": "node scripts/backup-postgres.js"
+    "backup:postgres": "node scripts/backup-postgres.js",
+    "migrate:postgres": "node scripts/migrate-sqlite-to-postgres.js"
   },
   "dependencies": {
     "bcrypt": "^5.1.1",

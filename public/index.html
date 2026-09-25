@@ -299,22 +299,6 @@ button{cursor:pointer}
 </div>
 
 <script src="/app.js"></script>
-<script>
-(() => {
-  const cls = document.getElementById('class');
-  const hero = document.getElementById('heroClass');
-  const live = document.getElementById('liveClass');
-  const syncClass = () => { hero.textContent = cls.value; live.textContent = cls.value; };
-  cls.addEventListener('change', syncClass); syncClass();
-
-  Promise.all([
-    fetch('/api/classes').then(r=>r.json()),
-    fetch('/api/notices?class_code='+encodeURIComponent(cls.value)+'&limit=1').then(r=>r.json())
-  ]).then(([classes, notices]) => {
-    document.getElementById('metricClasses').textContent = Array.isArray(classes) ? classes.length : '—';
-    document.getElementById('metricNotices').textContent = typeof notices.total === 'number' ? notices.total : (Array.isArray(notices)?notices.length:'—');
-  }).catch(() => {});
-})();
-</script>
+<script src="/bootstrap.js"></script>
 </body>
 </html>

@@ -85,5 +85,15 @@ Render's default filesystem is ephemeral, so local uploads should not be treated
 - **Admin center:** admins can manage students, faculty, classes, notices, timetable, assignments, materials, exams, attendance, marks and events from the portal.
 - **Demo data:** run `npm run seed:demo` in a non-production environment to populate realistic IT-A/IT-B/IT-C sample records. Demo accounts are intentionally local-only and should be changed or removed before a real college rollout.
 
+
+## V8 security hardening
+- **Browser authentication:** the web portal uses an HttpOnly, Secure (production) and SameSite=Lax session cookie instead of storing JWT access tokens in localStorage.
+- **CSRF protection:** state-changing cookie-authenticated requests require a separate CSRF token; the frontend sends it automatically.
+- **Content Security Policy:** inline JavaScript was removed from the main page and the server now serves a restrictive script policy.
+- **Authentication controls:** login attempts and file uploads have dedicated rate limits, auth responses are marked non-cacheable, and the app trusts the first Render proxy hop.
+- **Admin password reset:** administrators can reset a user's password through a dedicated audited endpoint with a 12-character minimum.
+- **Security CI:** GitHub Actions runs npm audit --omit=dev --audit-level=high on pushes, pull requests and weekly.
+- **Legacy API clients:** Bearer-token authentication remains supported; setting RETURN_LEGACY_TOKEN=true exposes the login token for clients that still require it. The browser frontend does not use this compatibility mode.
+
 ## Validation
 `npm test` checks backend/database syntax and runs a database smoke test. `npm run test:integration` exercises authentication, CRUD and password-change flows. GitHub Actions runs SQLite and PostgreSQL validation on pushes and pull requests.

@@ -35,7 +35,7 @@ r=await call('/api/classes',{method:'POST',headers:{'content-type':'application/
 r=await call('/api/classes/'+classId,{method:'PUT',headers:{'content-type':'application/json'},body:JSON.stringify({code:'IT-Z',name:'Integration Test Class Updated'})});assert.strictEqual(r.status,200);
 
 r=await call('/api/users',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({name:'CI Student',email:'ci-student@example.com',password:'student-password-123',role:'STUDENT',class_code:'IT-Z',roll_no:'CI001',semester:'4'})});assert.strictEqual(r.status,201);const studentId=r.body.id;
-r=await call('/api/users/'+studentId+'/password-reset',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({new_password:'student-reset-123'})});assert.strictEqual(r.status,200);assert.strictEqual(r.body.success,true);
+r=await call('/api/users/'+studentId+'/password-reset',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({new_password:'student-reset-123'})});assert.strictEqual(r.status,200);assert.strictEqual(r.body.success,true);r=await call('/api/users/'+studentId+'/revoke-sessions',{method:'POST'});assert.strictEqual(r.status,200);assert.strictEqual(r.body.success,true);assert.strictEqual(typeof r.body.revoked,'number');
 
 r=await call('/api/attendance',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({student_id:studentId,subject:'Testing',date:'2026-09-25',present:true})});assert.strictEqual(r.status,201);const attendanceId=r.body.id;
 r=await call('/api/attendance/'+attendanceId,{method:'PUT',headers:{'content-type':'application/json'},body:JSON.stringify({student_id:studentId,subject:'Testing',date:'2026-09-25',present:false})});assert.strictEqual(r.status,200);
@@ -46,7 +46,7 @@ r=await call('/api/marks/'+marksId,{method:'PUT',headers:{'content-type':'applic
 r=await call('/api/marks/'+marksId,{method:'DELETE'});assert.strictEqual(r.status,200);
 
 r=await call('/api/classes/'+classId,{method:'DELETE'});assert.strictEqual(r.status,200);
-r=await call('/api/admin/stats');assert.strictEqual(r.status,200,JSON.stringify(r.body));
+r=await call('/api/admin/audit-logs?limit=10&entity=user');assert.strictEqual(r.status,200);assert(Array.isArray(r.body.items));assert(r.body.items.some(x=>x.action==='ADMIN_PASSWORD_RESET'));r=await call('/api/admin/audit-logs?limit=10&search=ci-admin');assert.strictEqual(r.status,200);r=await call('/api/admin/stats');assert.strictEqual(r.status,200,JSON.stringify(r.body));
 
-r=await call('/api/auth/logout',{method:'POST'});assert.strictEqual(r.status,200);console.log('V9 session management integration tests passed');
+r=await call('/api/auth/logout',{method:'POST'});assert.strictEqual(r.status,200);console.log('V10 audit and session-control integration tests passed');
 }catch(e){console.error(e);console.error(output);process.exitCode=1}finally{child.kill('SIGTERM')}})().catch(e=>{console.error(e);process.exitCode=1});

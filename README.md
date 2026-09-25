@@ -73,5 +73,10 @@ Render's default filesystem is ephemeral, so local uploads should not be treated
 - `/api/users`, `/api/students`, `/api/notifications`
 - `/api/uploads`
 
+## V6 college-ready operations
+- **Student dashboard:** signed-in students get a class-aware dashboard with attendance, marks, upcoming exams, upcoming assignments and latest notices.
+- **Admin center:** admins can manage students, faculty, classes, notices, timetable, assignments, materials, exams, attendance, marks and events from the portal.
+- **Demo data:** run `npm run seed:demo` in a non-production environment to populate realistic IT-A/IT-B/IT-C sample records. Demo accounts are intentionally local-only and should be changed or removed before a real college rollout.
+
 ## Validation
-`npm test` checks backend/database syntax and runs a database smoke test. GitHub Actions runs the same test suite on pushes and pull requests.
+`npm test` checks backend/database syntax and runs a database smoke test. `npm run test:integration` exercises authentication, CRUD and password-change flows. GitHub Actions runs SQLite and PostgreSQL validation on pushes and pull requests.

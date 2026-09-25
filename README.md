@@ -95,5 +95,15 @@ Render's default filesystem is ephemeral, so local uploads should not be treated
 - **Security CI:** GitHub Actions runs npm audit --omit=dev --audit-level=high on pushes, pull requests and weekly.
 - **Legacy API clients:** Bearer-token authentication remains supported; setting RETURN_LEGACY_TOKEN=true exposes the login token for clients that still require it. The browser frontend does not use this compatibility mode.
 
+
+## V9 session management
+- Persistent database-backed sessions with expiry and revocation.
+- Password changes, admin password resets, role changes and account deactivation revoke affected sessions.
+- Users can view active sessions and sign out other devices from the account panel.
+- Logout now revokes the server-side session.
+- Authenticated requests re-check current account state.
+- SQLite and PostgreSQL smoke tests cover the session store.
+- Portal version: 3.5.0.
+
 ## Validation
 `npm test` checks backend/database syntax and runs a database smoke test. `npm run test:integration` exercises authentication, CRUD and password-change flows. GitHub Actions runs SQLite and PostgreSQL validation on pushes and pull requests.

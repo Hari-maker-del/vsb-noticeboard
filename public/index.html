@@ -97,6 +97,38 @@ button{cursor:pointer}
 @media(max-width:720px){
   .dashboard-nav{top:auto;bottom:0;left:0;width:100%;height:68px;border-radius:18px 18px 0 0}.side-shell{flex-direction:row;align-items:center;padding:9px 10px}.side-brand{display:none}.side-group{display:none}.side-list{flex:1;display:flex;flex-direction:row;justify-content:space-around;gap:2px}.side-link{width:auto;min-width:47px;padding:8px 6px;border-radius:10px}.side-link span:not(.side-icon){display:none}.side-icon{margin:0}.side-spacer,.side-foot{display:none}.main-shell{margin-left:0;padding-bottom:68px}.topbar{height:72px;padding:0 13px}.search-box{width:42vw}.profile-copy,.class-pill{display:none}.page{padding:16px 12px 26px}.hero{padding:12px}.hero-welcome{padding:21px;min-height:205px}.hero-welcome h1{font-size:25px}.metric-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.metric{padding:13px}.metric .value{font-size:21px}.dashboard-grid{gap:12px}.panel-card{padding:15px}.notice-row{grid-template-columns:auto minmax(0,1fr)}.notice-date{display:none}
 }
+
+/* Reference-inspired landing treatment */
+.ref-hero{background:#e9f4ff;border:1px solid #d9eaf8;border-radius:4px;overflow:hidden;position:relative;box-shadow:0 8px 26px rgba(47,88,120,.06)}
+.ref-hero-inner{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(330px,.9fr);min-height:360px}
+.ref-copy{padding:44px 44px 34px 46px;position:relative;z-index:2}
+.ref-kicker{font-size:10px;color:#3f6c8a;font-weight:800;text-transform:uppercase;letter-spacing:.18em}
+.ref-title{font-size:42px;line-height:1.05;letter-spacing:-.045em;font-weight:800;color:#172532;max-width:650px;margin-top:13px}
+.ref-copy p{font-size:12px;line-height:1.85;color:#587080;max-width:555px;margin-top:15px}
+.ref-cta{display:flex;gap:10px;margin-top:20px;flex-wrap:wrap}
+.ref-cta .primary{background:#1f6fd1;border-radius:4px;padding:11px 17px}
+.ref-cta .secondary{border-radius:4px;background:#fff;border-color:#cbddea;color:#31556e}
+.ref-visual{position:relative;min-height:360px;display:flex;align-items:flex-end;justify-content:center;padding:20px 26px 0}
+.ref-orb{position:absolute;width:280px;height:280px;border-radius:50%;right:60px;top:40px;background:rgba(117,183,232,.24);border:1px solid rgba(95,159,209,.22)}
+.ref-person{position:relative;width:255px;height:300px;display:flex;align-items:flex-end;justify-content:center}
+.ref-head{position:absolute;top:15px;width:88px;height:102px;border-radius:48% 48% 44% 44%;background:linear-gradient(140deg,#f4c7a9,#c98269);box-shadow:inset -9px 0 0 rgba(151,79,63,.08)}
+.ref-hair{position:absolute;top:6px;width:92px;height:47px;border-radius:55% 55% 35% 35%;background:#2f363c}
+.ref-body{width:185px;height:176px;border-radius:95px 95px 26px 26px;background:linear-gradient(150deg,#b6c4cc,#74828c);box-shadow:inset -16px 0 0 rgba(53,67,76,.08)}
+.ref-shirt{position:absolute;width:78px;height:155px;bottom:0;border-radius:35px 35px 14px 14px;background:#1f2931}
+.ref-card{position:absolute;background:#fff;border:1px solid #d8e7f2;border-radius:10px;box-shadow:0 18px 35px rgba(56,96,130,.13);padding:12px}
+.ref-card.top{right:4px;top:24px;width:154px}.ref-card.bottom{right:18px;bottom:22px;width:180px}
+.ref-card .tiny{font-size:8px;text-transform:uppercase;letter-spacing:.12em;color:#8c9aa4;font-weight:800}
+.ref-card b{display:block;font-size:13px;color:#21313d;margin-top:4px}.ref-card p{font-size:9px;color:#7b8a94;line-height:1.5;margin-top:5px}
+.ref-feature-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-top:1px solid #d1e5f3}
+.ref-feature{padding:17px 20px;min-height:88px;background:#fff;border-right:1px solid #e4edf3}
+.ref-feature:last-child{border-right:0}.ref-feature.active{background:#1f6fd1;color:#fff}
+.ref-feature-icon{width:28px;height:28px;border-radius:8px;background:#edf6ff;color:#1f6fd1;display:grid;place-items:center;font-size:12px;font-weight:800;float:left;margin-right:10px}
+.ref-feature.active .ref-feature-icon{background:rgba(255,255,255,.16);color:#fff}
+.ref-feature b{font-size:11px}.ref-feature p{font-size:9px;line-height:1.5;color:#778893;margin-top:4px}.ref-feature.active p{color:rgba(255,255,255,.76)}
+.ref-section{margin-top:18px}
+.ref-mini{background:#fff;border:1px solid #e7ebef;border-radius:10px;padding:15px}
+@media(max-width:900px){.ref-hero-inner{grid-template-columns:1fr}.ref-visual{min-height:300px}.ref-copy{padding:34px 28px}.ref-title{font-size:34px}.ref-feature-row{grid-template-columns:1fr}.ref-feature{border-right:0;border-bottom:1px solid #e4edf3}.ref-feature:last-child{border-bottom:0}}
+@media(max-width:560px){.ref-copy{padding:28px 20px}.ref-title{font-size:29px}.ref-copy p{font-size:11px}.ref-visual{padding-top:8px}.ref-orb{width:230px;height:230px;right:18px}.ref-card.top{right:0}.ref-card.bottom{right:7px}}
 </style>
 </head>
 <body>
@@ -152,58 +184,54 @@ button{cursor:pointer}
 
 <main class="page">
 <section id="home" class="tab">
-  <div class="section-head">
-    <div><div class="eyebrow">V.S.B Engineering College · Information Technology</div><h1 class="section-title text-[28px]">Department dashboard</h1></div>
-    <div class="text-right"><div class="text-[10px] uppercase tracking-wider text-slate-400">Current class</div><div id="heroClass" class="text-sm font-extrabold mt-1">IT-A</div></div>
-  </div>
-
-  <div class="hero">
-    <div class="hero-grid">
-      <div class="hero-welcome">
-        <div class="hero-top"><div class="hero-badge">V</div><div><div class="text-[10px] uppercase tracking-widest text-vsb-600 font-extrabold">Student & Faculty Portal</div><div class="text-[11px] text-slate-400 mt-1">One place for department updates.</div></div></div>
-        <h1>Everything your IT department publishes, organized in one clean workspace.</h1>
-        <p>Check notices, academic schedules, faculty information, events, assignments, materials and examinations without moving between separate systems.</p>
-        <div class="hero-actions">
-          <button class="primary nav" data-tab="notices">View latest notices</button>
-          <button class="secondary nav" data-tab="timetable">Open timetable</button>
+  <div class="ref-hero">
+    <div class="ref-hero-inner">
+      <div class="ref-copy">
+        <div class="ref-kicker">Welcome to V.S.B Engineering College · IT Department</div>
+        <h1 class="ref-title">We keep your department connected.</h1>
+        <p>Official notices, academic schedules, faculty information, assignments, materials, exams and events — organized in one dependable digital workspace for IT students and staff.</p>
+        <div class="ref-cta">
+          <button class="primary nav" data-tab="notices">View notices</button>
+          <button class="secondary nav" data-tab="timetable">Explore academics</button>
+        </div>
+        <div class="flex flex-wrap gap-4 mt-6 text-[9px] font-semibold text-[#6d8190]">
+          <span>● Live department updates</span><span>● IT-A · IT-B · IT-C</span><span>● Student & faculty access</span>
         </div>
       </div>
-      <div class="live-panel">
-        <div class="flex items-start justify-between gap-4">
-          <div><div class="text-[10px] uppercase tracking-widest text-white/45">Portal status</div><div class="text-xl font-extrabold mt-2">Live workspace</div><p class="text-[10px] text-white/50 leading-5 mt-2 max-w-[180px]">Department information is loaded directly from the portal API.</p></div>
-          <div class="ring-wrap"><div class="ring"></div><span class="ring-label">LIVE</span></div>
+      <div class="ref-visual">
+        <div class="ref-orb"></div>
+        <div class="ref-person" aria-hidden="true">
+          <div class="ref-hair"></div><div class="ref-head"></div><div class="ref-body"></div><div class="ref-shirt"></div>
         </div>
-        <div class="flex justify-between items-end mt-5"><div><div class="text-[9px] uppercase tracking-widest text-white/40">Selected class</div><div id="liveClass" class="font-bold mt-1">IT-A</div></div><div class="text-[10px] text-white/50">Auto refreshed</div></div>
+        <div class="ref-card top"><span class="tiny">Department status</span><b>Portal is live</b><p>API-connected information, refreshed for your selected class.</p></div>
+        <div class="ref-card bottom"><span class="tiny">Current class</span><b id="heroClass">IT-A</b><p>Switch classes from the header to see class-specific notices and schedules.</p></div>
       </div>
     </div>
-
-    <div class="metric-grid">
-      <div class="metric"><div class="label">IT sections</div><div id="metricClasses" class="value">—</div><div class="sub">Active class groups</div></div>
-      <div class="metric"><div class="label">Notice feed</div><div id="metricNotices" class="value">—</div><div class="sub">Current published notices</div></div>
-      <div class="metric"><div class="label">Academic tools</div><div class="value">4</div><div class="sub">Assignments · materials · exams · academics</div></div>
-      <div class="metric"><div class="label">Portal status</div><div class="value">ON</div><div class="sub">API and department workspace</div></div>
+    <div class="ref-feature-row">
+      <button class="ref-feature nav" data-tab="notices"><span class="ref-feature-icon">!</span><b>Notices & Updates</b><p>Official department communication in one feed.</p></button>
+      <button class="ref-feature active nav" data-tab="timetable"><span class="ref-feature-icon">▦</span><b>Academic Planning</b><p>Timetable, exams and assignment tracking.</p></button>
+      <button class="ref-feature nav" data-tab="materials"><span class="ref-feature-icon">▤</span><b>Student Resources</b><p>Faculty, study materials and academic support.</p></button>
     </div>
   </div>
 
-  <div class="dashboard-grid">
+  <div class="dashboard-grid ref-section">
     <section class="card panel-card">
       <div class="flex items-start justify-between gap-3">
         <div><div class="eyebrow">Priority communication</div><div class="panel-title mt-1">Recent notices</div><div class="panel-sub">The latest updates for the selected class.</div></div>
-        <button class="text-[11px] font-bold text-vsb-600 nav" data-tab="notices">View all →</button>
+        <button class="text-[11px] font-bold text-[#1f6fd1] nav" data-tab="notices">View all →</button>
       </div>
       <div id="homeNotices" class="mt-4"></div>
     </section>
 
-    <section class="card panel-card">
-      <div class="eyebrow">Quick access</div>
-      <div class="panel-title mt-1">Jump into your workspace</div>
-      <div class="quick-grid">
-        <button class="quick nav" data-tab="timetable"><div class="qicon">▦</div><b>Timetable</b><span>Weekly schedule</span></button>
-        <button class="quick nav" data-tab="faculty"><div class="qicon">♙</div><b>Faculty</b><span>Department directory</span></button>
-        <button class="quick nav" data-tab="assignments"><div class="qicon">✓</div><b>Assignments</b><span>Due work</span></button>
-        <button class="quick nav" data-tab="materials"><div class="qicon">▤</div><b>Materials</b><span>Study resources</span></button>
+    <section class="ref-mini">
+      <div class="eyebrow">Department snapshot</div>
+      <div class="grid grid-cols-2 gap-2 mt-3">
+        <div class="soft-box p-3"><div class="text-[9px] uppercase tracking-wider text-slate-400">IT sections</div><div id="metricClasses" class="text-xl font-extrabold mt-1">—</div></div>
+        <div class="soft-box p-3"><div class="text-[9px] uppercase tracking-wider text-slate-400">Notices</div><div id="metricNotices" class="text-xl font-extrabold mt-1">—</div></div>
+        <div class="soft-box p-3"><div class="text-[9px] uppercase tracking-wider text-slate-400">Current class</div><div id="liveClass" class="text-xl font-extrabold mt-1">IT-A</div></div>
+        <div class="soft-box p-3"><div class="text-[9px] uppercase tracking-wider text-slate-400">Status</div><div class="text-xl font-extrabold mt-1 text-emerald-600">ON</div></div>
       </div>
-      <div class="insight"><strong>Tip for students</strong><p>Use the class selector above to switch between IT-A, IT-B and IT-C before opening notices or schedules.</p></div>
+      <div class="insight mt-3"><strong>Tip for students</strong><p>Use the class selector in the header to switch between IT-A, IT-B and IT-C before opening notices or schedules.</p></div>
     </section>
   </div>
 </section>

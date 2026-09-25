@@ -17,7 +17,7 @@ const page=await fetch(base+'/');assert.strictEqual(page.status,200);const csp=p
 
 r=await call('/api/auth/login',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({email:'ci-admin@example.com',password:'ci-password-123'})});assert.strictEqual(r.status,200);assert(r.body.user);assert(!r.body.token);assert(jar.vsb_session);assert(jar.vsb_csrf);
 
-r=await call('/api/me');assert.strictEqual(r.status,200);assert.strictEqual(r.body.user.role,'ADMIN');
+r=await call('/api/me');assert.strictEqual(r.status,200);assert.strictEqual(r.body.user.role,'ADMIN');r=await call('/api/auth/sessions');assert.strictEqual(r.status,200);assert.strictEqual(r.body.items.length,1);assert.strictEqual(r.body.items[0].current,true);
 r=await call('/api/notices',{method:'POST',skipCsrf:true,headers:{'content-type':'application/json'},body:JSON.stringify({title:'CSRF blocked notice',content:'Should not be created',category:'General',priority:'low'})});assert.strictEqual(r.status,403);
 
 r=await call('/api/notices',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({title:'CI integration notice',content:'Automated API test',category:'General',priority:'low'})});assert.strictEqual(r.status,201);assert(r.body.id);
@@ -26,11 +26,10 @@ r=await call('/api/assignments',{method:'POST',headers:{'content-type':'applicat
 r=await call('/api/assignments/'+assignmentId,{method:'PUT',headers:{'content-type':'application/json'},body:JSON.stringify({title:'CI Assignment Updated',subject:'Testing',due_at:new Date(Date.now()+172800000).toISOString()})});assert.strictEqual(r.status,200);
 r=await call('/api/assignments/'+assignmentId,{method:'DELETE'});assert.strictEqual(r.status,200);
 
-r=await call('/api/profile/password',{method:'PUT',headers:{'content-type':'application/json'},body:JSON.stringify({current_password:'ci-password-123',new_password:'ci-password-1234'})});assert.strictEqual(r.status,200);
-r=await call('/api/auth/logout',{method:'POST'});assert.strictEqual(r.status,200);assert(!jar.vsb_session&&!jar.vsb_csrf);
+r=await call('/api/profile/password',{method:'PUT',headers:{'content-type':'application/json'},body:JSON.stringify({current_password:'ci-password-123',new_password:'ci-password-1234'})});assert.strictEqual(r.status,200);assert.strictEqual(r.body.relogin_required,true);assert(!jar.vsb_session&&!jar.vsb_csrf);
 r=await call('/api/me');assert.strictEqual(r.status,401);
 
-r=await call('/api/auth/login',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({email:'ci-admin@example.com',password:'ci-password-1234'})});assert.strictEqual(r.status,200);assert(jar.vsb_session&&jar.vsb_csrf);
+r=await call('/api/auth/login',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({email:'ci-admin@example.com',password:'ci-password-1234'})});assert.strictEqual(r.status,200);assert(jar.vsb_session&&jar.vsb_csrf);r=await call('/api/auth/sessions/revoke-others',{method:'POST'});assert.strictEqual(r.status,200);assert.strictEqual(r.body.success,true);assert.strictEqual(r.body.revoked,0);
 
 r=await call('/api/classes',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({code:'IT-Z',name:'Integration Test Class'})});assert.strictEqual(r.status,201);const classId=r.body.id;
 r=await call('/api/classes/'+classId,{method:'PUT',headers:{'content-type':'application/json'},body:JSON.stringify({code:'IT-Z',name:'Integration Test Class Updated'})});assert.strictEqual(r.status,200);
@@ -49,5 +48,5 @@ r=await call('/api/marks/'+marksId,{method:'DELETE'});assert.strictEqual(r.statu
 r=await call('/api/classes/'+classId,{method:'DELETE'});assert.strictEqual(r.status,200);
 r=await call('/api/admin/stats');assert.strictEqual(r.status,200,JSON.stringify(r.body));
 
-r=await call('/api/auth/logout',{method:'POST'});assert.strictEqual(r.status,200);console.log('V8 security integration tests passed');
+r=await call('/api/auth/logout',{method:'POST'});assert.strictEqual(r.status,200);console.log('V9 session management integration tests passed');
 }catch(e){console.error(e);console.error(output);process.exitCode=1}finally{child.kill('SIGTERM')}})().catch(e=>{console.error(e);process.exitCode=1});

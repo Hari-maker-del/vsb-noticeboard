@@ -1,51 +1,320 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#0f172a"><title>VSB IT • Department Portal</title>
-<script src="https://cdn.tailwindcss.com"></script><script>tailwind.config={theme:{extend:{colors:{brand:{600:'#2563eb',700:'#1d4ed8'}}}}}</script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"><style>body{font-family:Inter,sans-serif}.card{border:1px solid #e5e7eb;box-shadow:0 10px 30px rgba(15,23,42,.05)}.fade{animation:f .2s ease-out}@keyframes f{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}</style></head>
-<body class="bg-slate-50 text-slate-900 min-h-screen">
-<header class="sticky top-0 z-40 bg-slate-950 text-white border-b border-slate-800"><div class="max-w-7xl mx-auto px-4 sm:px-6 h-18 py-4 flex justify-between items-center gap-4"><div class="flex items-center gap-3"><div class="h-11 w-11 rounded-xl bg-blue-600 grid place-items-center font-extrabold">V</div><div><b class="tracking-tight">V.S.B Engineering College</b><p class="text-xs text-slate-400">Information Technology • Department Portal</p></div></div><div class="flex gap-2 items-center"><select id="class" class="hidden sm:block bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm"><option>IT-A</option><option>IT-B</option><option>IT-C</option></select><button id="admin" class="bg-white text-slate-950 px-4 py-2 rounded-lg text-sm font-semibold">Staff Login</button></div></div></header>
-<nav class="bg-white border-b sticky top-[72px] z-30"><div class="max-w-7xl mx-auto px-4 sm:px-6 flex gap-1 overflow-x-auto"><button class="nav px-4 py-3 text-sm font-semibold text-blue-600 border-b-2 border-blue-600" data-tab="home">Overview</button><button class="nav px-4 py-3 text-sm font-medium text-slate-500" data-tab="notices">Notices</button><button class="nav px-4 py-3 text-sm font-medium text-slate-500" data-tab="timetable">Timetable</button><button class="nav px-4 py-3 text-sm font-medium text-slate-500" data-tab="faculty">Faculty</button><button class="nav px-4 py-3 text-sm font-medium text-slate-500" data-tab="events">Events</button></div></nav>
-<main class="max-w-7xl mx-auto px-4 sm:px-6 py-7">
-<section id="home" class="tab"><div class="rounded-3xl bg-gradient-to-br from-slate-950 via-slate-900 to-blue-950 text-white p-7 sm:p-10 mb-7"><span class="text-xs font-bold uppercase tracking-widest text-blue-300">Student & Faculty Portal</span><h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight mt-4 max-w-3xl">Your department information, organized in one place.</h1><p class="text-slate-300 mt-4 max-w-2xl leading-7">Official notices, academic schedules, faculty information, events and placement updates for the Information Technology department.</p><div class="grid grid-cols-2 md:grid-cols-4 gap-3 mt-8"><div class="bg-white/10 rounded-xl p-4"><p class="text-xs text-slate-400">Class</p><b id="heroClass">IT-A</b></div><div class="bg-white/10 rounded-xl p-4"><p class="text-xs text-slate-400">Portal</p><b>Active</b></div><div class="bg-white/10 rounded-xl p-4"><p class="text-xs text-slate-400">Updates</p><b>Live</b></div><div class="bg-white/10 rounded-xl p-4"><p class="text-xs text-slate-400">Access</p><b>Students</b></div></div></div>
-<div class="grid lg:grid-cols-3 gap-5"><div class="lg:col-span-2 card bg-white rounded-2xl p-5"><div class="flex justify-between items-center mb-4"><div><p class="text-xs uppercase tracking-wider text-blue-600 font-bold">Priority updates</p><h2 class="text-xl font-extrabold">Latest notices</h2></div><button onclick="go('notices')" class="text-sm text-blue-600 font-semibold">View all →</button></div><div id="homeNotices" class="space-y-3"></div></div><div class="card bg-white rounded-2xl p-5"><h2 class="font-extrabold">Quick access</h2><div class="grid grid-cols-2 gap-2 mt-4"><button onclick="go('timetable')" class="p-4 rounded-xl bg-slate-50 hover:bg-blue-50 text-left"><b>Timetable</b><p class="text-xs text-slate-500 mt-1">Weekly schedule</p></button><button onclick="go('faculty')" class="p-4 rounded-xl bg-slate-50 hover:bg-blue-50 text-left"><b>Faculty</b><p class="text-xs text-slate-500 mt-1">Directory</p></button><button onclick="go('events')" class="p-4 rounded-xl bg-slate-50 hover:bg-blue-50 text-left"><b>Events</b><p class="text-xs text-slate-500 mt-1">Department</p></button><button onclick="filterCat('Placement');go('notices')" class="p-4 rounded-xl bg-slate-50 hover:bg-blue-50 text-left"><b>Placements</b><p class="text-xs text-slate-500 mt-1">Opportunities</p></button></div></div></div></section>
-<section id="notices" class="tab hidden"><div class="flex flex-col sm:flex-row sm:items-end justify-between gap-3 mb-5"><div><p class="text-xs uppercase tracking-wider text-blue-600 font-bold">Department communication</p><h2 class="text-3xl font-extrabold">Notices</h2></div><span id="count" class="text-sm text-slate-500"></span></div><div class="card bg-white rounded-2xl p-4 mb-5 flex flex-col sm:flex-row gap-3"><input id="search" class="border rounded-xl px-4 py-3 flex-1" placeholder="Search notices..."><select id="cat" class="border rounded-xl px-4 py-3"><option value="">All categories</option><option>General</option><option>Academic</option><option>Exam</option><option>Event</option><option>Placement</option><option>Achievement</option></select></div><div id="noticeList" class="space-y-4"></div></section>
-<section id="timetable" class="tab hidden"><div class="mb-5"><p class="text-xs uppercase tracking-wider text-blue-600 font-bold">Academic schedule</p><h2 class="text-3xl font-extrabold">Weekly timetable</h2></div><div id="tableGrid" class="grid md:grid-cols-2 xl:grid-cols-3 gap-4"></div></section>
-<section id="faculty" class="tab hidden"><div class="mb-5"><p class="text-xs uppercase tracking-wider text-blue-600 font-bold">People</p><h2 class="text-3xl font-extrabold">Faculty directory</h2></div><div id="facultyGrid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4"></div></section>
-<section id="events" class="tab hidden"><div class="mb-5"><p class="text-xs uppercase tracking-wider text-blue-600 font-bold">Department activities</p><h2 class="text-3xl font-extrabold">Events & opportunities</h2></div><div class="grid md:grid-cols-3 gap-4"><div class="card bg-white rounded-2xl p-6"><div class="text-blue-600 text-sm font-bold">ACADEMIC</div><h3 class="font-bold text-lg mt-2">Workshops & Seminars</h3><p class="text-sm text-slate-500 mt-2 leading-6">Watch the notice feed for upcoming technical sessions and department workshops.</p></div><div class="card bg-white rounded-2xl p-6"><div class="text-emerald-600 text-sm font-bold">PLACEMENT</div><h3 class="font-bold text-lg mt-2">Career Opportunities</h3><p class="text-sm text-slate-500 mt-2 leading-6">Company drives, eligibility details and placement announcements appear in official notices.</p></div><div class="card bg-white rounded-2xl p-6"><div class="text-violet-600 text-sm font-bold">STUDENT LIFE</div><h3 class="font-bold text-lg mt-2">Activities & Achievements</h3><p class="text-sm text-slate-500 mt-2 leading-6">Find department achievements, competitions and student activities through the portal.</p></div></div></section>
-</main><footer class="border-t bg-white mt-8"><div class="max-w-7xl mx-auto px-4 sm:px-6 py-6 flex justify-between text-xs text-slate-500"><span>© V.S.B Engineering College • IT Department</span><span>Official Department Portal</span></div></footer>
-<div id="login" class="hidden fixed inset-0 bg-slate-950/70 z-50 items-center justify-center p-4"><form id="form" class="bg-white rounded-2xl p-7 w-full max-w-sm shadow-2xl space-y-4"><h2 class="text-2xl font-extrabold">Staff sign in</h2><p class="text-sm text-slate-500">Access notice management.</p><input id="email" type="email" required class="w-full border p-3 rounded-xl" placeholder="Email"><input id="pass" type="password" required class="w-full border p-3 rounded-xl" placeholder="Password"><button class="w-full bg-slate-950 text-white p-3 rounded-xl font-semibold">Sign in</button><p id="err" class="text-red-600 text-sm"></p><button type="button" onclick="login.classList.add('hidden')" class="w-full text-sm text-slate-500">Cancel</button></form></div>
-<div id="panel" class="hidden fixed inset-0 bg-slate-950/70 z-50 p-4 overflow-auto"><div class="bg-white max-w-5xl mx-auto rounded-2xl p-6 sm:p-8 my-4"><div class="flex justify-between items-start"><div><p class="text-xs uppercase tracking-wider text-blue-600 font-bold">Administration</p><h2 class="text-2xl font-extrabold">Department control center</h2></div><button onclick="panel.classList.add('hidden')" class="text-xl text-slate-400">✕</button></div><div class="grid md:grid-cols-4 gap-3 my-6" id="stats"></div><div class="grid lg:grid-cols-3 gap-5"><form id="noticeForm" class="lg:col-span-2 bg-slate-50 rounded-2xl p-5 space-y-3"><h3 class="font-bold">Publish announcement</h3><input id="title" required class="w-full border p-3 rounded-xl" placeholder="Notice title"><textarea id="content" required rows="5" class="w-full border p-3 rounded-xl" placeholder="Official announcement..."></textarea><div class="grid md:grid-cols-3 gap-3"><select id="priority" class="border p-3 rounded-xl"><option value="medium">Medium priority</option><option value="high">High priority</option><option value="low">Low priority</option></select><select id="ncat" class="border p-3 rounded-xl"><option>General</option><option>Academic</option><option>Exam</option><option>Event</option><option>Placement</option><option>Achievement</option></select><select id="nclass" class="border p-3 rounded-xl"><option>IT-A</option><option>IT-B</option><option>IT-C</option></select></div><input id="expiry" type="datetime-local" class="w-full border p-3 rounded-xl"><button class="w-full bg-blue-600 text-white p-3 rounded-xl font-semibold">Publish notice</button></form><div class="bg-slate-950 text-white rounded-2xl p-5"><p class="text-xs uppercase text-blue-300 font-bold">Administration</p><h3 class="font-bold text-lg mt-2">Control center</h3><p class="text-sm text-slate-400 mt-2 leading-6">Publish and remove official notices. Student-facing data is loaded from the API.</p><button onclick="logout()" class="mt-6 text-sm text-red-300">Sign out</button></div></div><div class="mt-7"><h3 class="font-bold mb-3">Active notices</h3><div id="manage" class="space-y-2"></div>
-<div class="mt-8 grid lg:grid-cols-2 gap-5">
-<section class="border rounded-2xl p-5"><div class="flex justify-between items-center mb-4"><h3 class="font-bold">Timetable management</h3><span class="text-xs text-slate-400">Admin</span></div>
-<form id="ttForm" class="grid md:grid-cols-2 gap-2">
-<select id="ttClass" class="border p-3 rounded-xl"><option>IT-A</option><option>IT-B</option><option>IT-C</option></select><select id="ttDay" class="border p-3 rounded-xl"><option>Monday</option><option>Tuesday</option><option>Wednesday</option><option>Thursday</option><option>Friday</option></select>
-<input id="ttPeriod" class="border p-3 rounded-xl" placeholder="Period e.g. 09:00 - 10:00" required><input id="ttSubject" class="border p-3 rounded-xl" placeholder="Subject" required>
-<input id="ttFaculty" class="border p-3 rounded-xl" placeholder="Faculty"><input id="ttRoom" class="border p-3 rounded-xl" placeholder="Room">
-<button class="md:col-span-2 bg-slate-950 text-white p-3 rounded-xl font-semibold">Add timetable entry</button></form>
-<div id="ttList" class="mt-4 space-y-2"></div></section>
-<section class="border rounded-2xl p-5"><div class="flex justify-between items-center mb-4"><h3 class="font-bold">Faculty management</h3><span class="text-xs text-slate-400">Admin</span></div>
-<form id="facultyForm" class="grid md:grid-cols-2 gap-2"><input id="fName" required class="border p-3 rounded-xl" placeholder="Faculty name"><input id="fSubject" class="border p-3 rounded-xl" placeholder="Subject"><input id="fRoom" class="border p-3 rounded-xl" placeholder="Room"><select id="fAvailability" class="border p-3 rounded-xl"><option>Available</option><option>Busy</option><option>On Leave</option></select><button class="md:col-span-2 bg-slate-950 text-white p-3 rounded-xl font-semibold">Add faculty</button></form>
-<div id="fList" class="mt-4 space-y-2"></div></section></div></div></div></div>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#d90f26">
+<meta name="description" content="V.S.B Engineering College Information Technology Department Portal">
+<link rel="manifest" href="/manifest.json">
+<title>VSB IT • Department Portal</title>
+<script src="https://cdn.tailwindcss.com"></script>
 <script>
-let token=localStorage.getItem('vsb_token')||'';const $=x=>document.getElementById(x),esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
-async function api(u,o={}){o.headers={...(o.headers||{}),...(token?{Authorization:'Bearer '+token}:{})};if(o.body)o.headers['Content-Type']='application/json';const r=await fetch(u,o),d=await r.json();if(!r.ok)throw Error(d.error||'Request failed');return d}
-function go(id){document.querySelectorAll('.tab').forEach(x=>x.classList.add('hidden'));$(id).classList.remove('hidden');document.querySelectorAll('.nav').forEach(x=>{const a=x.dataset.tab===id;x.classList.toggle('text-blue-600',a);x.classList.toggle('border-b-2',a);x.classList.toggle('border-blue-600',a);x.classList.toggle('text-slate-500',!a)});if(id==='notices')loadNotices();if(id==='timetable')loadTable();if(id==='faculty')loadFaculty()}
-document.querySelectorAll('.nav').forEach(x=>x.onclick=()=>go(x.dataset.tab));
-function filterCat(v){$('cat').value=v}
-async function loadNotices(){const q=new URLSearchParams({class_code:$('class').value});if($('cat').value)q.set('category',$('cat').value);if($('search').value)q.set('search',$('search').value);const n=await api('/api/notices?'+q);$('count').textContent=n.length+' notice'+(n.length===1?'':'s');const card=x=>'<article class="card bg-white rounded-2xl p-5 sm:p-6 fade border-l-4 '+(x.priority==='high'?'border-red-500':x.priority==='medium'?'border-amber-500':'border-blue-500')+'"><div class="flex justify-between gap-3"><div><span class="text-[11px] uppercase font-bold text-blue-600">'+esc(x.category)+'</span><h3 class="text-lg font-bold mt-2">'+esc(x.title)+'</h3></div><span class="text-xs text-slate-400">'+new Date(x.created_at).toLocaleDateString()+'</span></div><p class="text-slate-600 mt-3 leading-7 whitespace-pre-wrap">'+esc(x.content)+'</p><div class="mt-4 text-xs text-slate-500">'+esc(x.class_code||'All classes')+' • '+esc(x.creator_name||'Department')+'</div></article>'; $('noticeList').innerHTML=n.length?n.map(card).join(''):'<div class="card bg-white rounded-2xl p-12 text-center text-slate-500">No active notices found.</div>';$('homeNotices').innerHTML=n.slice(0,3).map(card).join('')||'<p class="text-sm text-slate-500">No current notices.</p>'}
-async function loadTable(){const n=await api('/api/timetable?class_code='+$('class').value);const days={};n.forEach(x=>(days[x.day]??=[]).push(x));$('tableGrid').innerHTML=Object.keys(days).length?Object.entries(days).map(([d,v])=>'<div class="card bg-white rounded-2xl p-5"><h3 class="font-bold mb-3">'+esc(d)+'</h3><div class="space-y-2">'+v.map(x=>'<div class="flex gap-3 p-3 rounded-xl bg-slate-50"><span class="w-16 text-xs font-bold text-blue-600">'+esc(x.period)+'</span><span class="text-sm font-medium">'+esc(x.subject)+'</span></div>').join('')+'</div></div>').join(''):'<div class="card bg-white rounded-2xl p-10 text-slate-500">No timetable data available.</div>'}
-async function loadFaculty(){const f=await api('/api/faculty');$('facultyGrid').innerHTML=f.length?f.map(x=>'<div class="card bg-white rounded-2xl p-5"><div class="flex gap-4 items-center"><div class="h-12 w-12 rounded-xl bg-blue-50 text-blue-700 grid place-items-center font-bold text-lg">'+esc(String(x.name||'?')[0])+'</div><div><h3 class="font-bold">'+esc(x.name)+'</h3><p class="text-sm text-slate-500">'+esc(x.subject||'Faculty')+'</p></div></div><div class="mt-4 pt-4 border-t text-xs text-slate-500">Room: '+esc(x.room||'—')+' • '+esc(x.availability||'Available')+'</div></div>').join(''):'<p class="text-slate-500">No faculty records available.</p>'}
-async function loadAdminData(){const n=await api('/api/notices');$('manage').innerHTML=n.map(x=>'<div class="border rounded-xl p-3 flex justify-between items-center"><div><b>'+esc(x.title)+'</b><div class="text-xs text-slate-500">'+esc(x.category)+' • '+esc(x.class_code||'All')+'</div></div><button class="text-red-600 text-sm font-semibold" onclick="delNotice(\\''+x.id+'\\')">Delete</button></div>').join('')||'<p class="text-sm text-slate-500">No active notices.</p>';const tt=await api('/api/timetable?class_code='+$('ttClass').value);$('ttList').innerHTML=tt.map(x=>'<div class="border rounded-xl p-3 flex justify-between gap-2"><div><b>'+esc(x.day)+' • '+esc(x.period)+'</b><div class="text-xs text-slate-500">'+esc(x.subject)+' · '+esc(x.faculty||'—')+' · '+esc(x.room||'—')+'</div></div><button class="text-red-600 text-xs font-semibold" onclick="delTT('+x.id+')">Delete</button></div>').join('')||'<p class="text-xs text-slate-500">No timetable entries.</p>';const f=await api('/api/faculty');$('fList').innerHTML=f.map(x=>'<div class="border rounded-xl p-3 flex justify-between gap-2"><div><b>'+esc(x.name)+'</b><div class="text-xs text-slate-500">'+esc(x.subject||'Faculty')+' · '+esc(x.room||'—')+' · '+esc(x.availability||'Available')+'</div></div><button class="text-red-600 text-xs font-semibold" onclick="delFaculty('+x.id+')">Delete</button></div>').join('')||'<p class="text-xs text-slate-500">No faculty entries.</p>'}
-async function adminOpen(){if(!token){login.classList.remove('hidden');login.classList.add('flex');return}try{const s=await api('/api/admin/stats');$('stats').innerHTML=Object.entries(s).map(([k,v])=>'<div class="bg-slate-50 border rounded-xl p-4"><span class="text-xs text-slate-500 uppercase">'+k+'</span><div class="text-2xl font-extrabold mt-1">'+v+'</div></div>').join('');await loadAdminData();panel.classList.remove('hidden')}catch{logout();adminOpen()}}
-admin.onclick=adminOpen;
-form.onsubmit=async e=>{e.preventDefault();try{const d=await api('/api/auth/login',{method:'POST',body:JSON.stringify({email:email.value,password:pass.value})});token=d.token;localStorage.setItem('vsb_token',token);login.classList.add('hidden');adminOpen()}catch(e){err.textContent=e.message}};
-noticeForm.onsubmit=async e=>{e.preventDefault();try{await api('/api/notices',{method:'POST',body:JSON.stringify({title:title.value,content:content.value,priority:priority.value,category:ncat.value,class_code:nclass.value,expires_at:expiry.value?new Date(expiry.value).toISOString():null})});e.target.reset();await loadNotices();adminOpen()}catch(e){alert(e.message)}};
-async function delNotice(id){if(confirm('Delete this notice?')){await api('/api/notices/'+id,{method:'DELETE'});await loadNotices();adminOpen()}}
-ttForm.onsubmit=async e=>{e.preventDefault();await api('/api/timetable',{method:'POST',body:JSON.stringify({class_code:ttClass.value,day:ttDay.value,period:ttPeriod.value,subject:ttSubject.value,faculty:ttFaculty.value,room:ttRoom.value})});e.target.reset();await loadTable();await loadAdminData()};
-facultyForm.onsubmit=async e=>{e.preventDefault();await api('/api/faculty',{method:'POST',body:JSON.stringify({name:fName.value,subject:fSubject.value,room:fRoom.value,availability:fAvailability.value})});e.target.reset();await loadFaculty();await loadAdminData()};
-async function delTT(id){if(confirm('Delete this timetable entry?')){await api('/api/timetable/'+id,{method:'DELETE'});await loadTable();await loadAdminData()}}
-async function delFaculty(id){if(confirm('Delete this faculty record?')){await api('/api/faculty/'+id,{method:'DELETE'});await loadFaculty();await loadAdminData()}}
-ttClass.onchange=()=>loadAdminData();
-function logout(){token='';localStorage.removeItem('vsb_token');panel.classList.add('hidden')}
-$('class').onchange=()=>{heroClass.textContent=$('class').value;loadNotices();loadTable()};$('cat').onchange=loadNotices;$('search').oninput=()=>{clearTimeout(window.t);window.t=setTimeout(loadNotices,250)};loadNotices();loadTable();loadFaculty();
-</script></body></html>
+tailwind.config={
+  theme:{extend:{colors:{
+    vsb:{50:'#fff1f2',100:'#ffe4e6',500:'#ef233c',600:'#d90f2a',700:'#b90b22',800:'#8f091b',900:'#6f0716'}
+  }}}
+}
+</script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --vsb:#1557c0;--vsb-dark:#0d3d8a;--ink:#1c2430;--muted:#737d89;--line:#e7ebf0;
+  --surface:#fff;--canvas:#ffffff;--soft:#eef5ff;--sidebar:#123f8f;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:Inter,system-ui,sans-serif;background:var(--canvas);color:var(--ink)}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+.dashboard-nav{position:fixed;z-index:70;left:0;top:0;bottom:0;width:248px;background:var(--sidebar);color:#fff;box-shadow:16px 0 32px rgba(31,41,55,.10)}
+.dashboard-nav .max-w-7xl{max-width:none;height:100%;margin:0;padding:0}
+.side-shell{height:100%;display:flex;flex-direction:column;padding:20px 14px}
+.side-brand{display:flex;align-items:center;gap:11px;padding:5px 10px 24px}
+.side-logo{width:42px;height:42px;border-radius:13px;background:#fff;color:var(--vsb);display:grid;place-items:center;font-weight:800;box-shadow:0 8px 20px rgba(0,0,0,.12)}
+.side-brand b{font-size:15px;letter-spacing:-.02em}.side-brand span{display:block;color:rgba(255,255,255,.68);font-size:10px;margin-top:2px}
+.side-group{font-size:10px;text-transform:uppercase;letter-spacing:.14em;color:rgba(255,255,255,.55);padding:0 12px 8px;margin-top:4px}
+.side-list{display:flex;flex-direction:column;gap:4px}
+.side-link{display:flex;align-items:center;gap:11px;width:100%;border:0;background:transparent;color:rgba(255,255,255,.80);padding:11px 12px;border-radius:11px;text-align:left;font-size:13px;font-weight:600;transition:.18s}
+.side-link:hover{background:rgba(255,255,255,.10);color:#fff}
+.side-link.text-blue-600{background:#fff;color:var(--vsb);box-shadow:0 7px 16px rgba(0,0,0,.10)}
+.side-icon{width:24px;height:24px;border-radius:7px;display:grid;place-items:center;font-size:12px;background:rgba(255,255,255,.12);flex:0 0 auto}
+.side-link.text-blue-600 .side-icon{background:var(--soft);color:var(--vsb)}
+.side-spacer{flex:1}
+.side-foot{padding:12px}
+.side-status{border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.08);border-radius:13px;padding:12px}
+.side-status .dot{width:8px;height:8px;border-radius:999px;background:#7df59b;box-shadow:0 0 0 4px rgba(125,245,155,.13)}
+.main-shell{margin-left:248px;min-height:100vh}
+.topbar{height:78px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:18px;padding:0 30px;position:sticky;top:0;z-index:50}
+.search-box{display:flex;align-items:center;gap:10px;width:min(430px,42vw);background:#f6f7f9;border:1px solid #eef0f2;border-radius:13px;padding:9px 13px}
+.search-box input{border:0;outline:0;background:transparent;width:100%;font-size:13px}
+.topbar-actions{display:flex;align-items:center;gap:10px}
+.class-pill{background:#f8f9fb;border:1px solid #eceef2;border-radius:12px;padding:9px 12px;font-size:12px;font-weight:700;color:#444}
+.profile-btn{display:flex;align-items:center;gap:9px;border:1px solid #eceef2;background:#fff;border-radius:12px;padding:7px 10px 7px 7px}
+.avatar{width:34px;height:34px;border-radius:11px;background:var(--soft);color:var(--vsb);display:grid;place-items:center;font-weight:800;font-size:12px}
+.profile-copy{line-height:1.1;text-align:left}.profile-copy b{display:block;font-size:12px}.profile-copy span{display:block;font-size:10px;color:#9aa0aa;margin-top:4px}
+.page{padding:28px 30px 38px;max-width:1500px;margin:0 auto}
+.section-head{display:flex;align-items:end;justify-content:space-between;gap:18px;margin-bottom:18px}
+.eyebrow{font-size:10px;text-transform:uppercase;letter-spacing:.14em;color:var(--vsb);font-weight:800}
+.section-title{font-size:22px;line-height:1.18;font-weight:800;letter-spacing:-.03em;margin-top:5px}
+.muted{color:var(--muted)}
+.card{background:#fff;border:1px solid var(--line);border-radius:18px;box-shadow:0 8px 26px rgba(31,41,55,.045)}
+.hero{background:#fff;border:1px solid var(--line);border-radius:21px;padding:24px;box-shadow:0 8px 30px rgba(31,41,55,.045)}
+.hero-grid{display:grid;grid-template-columns:minmax(0,1.65fr) minmax(280px,.85fr);gap:20px;align-items:stretch}
+.hero-welcome{background:linear-gradient(135deg,#fff 0%,#fff7f7 48%,#fff 100%);border-radius:16px;padding:28px;position:relative;overflow:hidden;min-height:220px}
+.hero-welcome:after{content:"";position:absolute;width:230px;height:230px;border-radius:50%;right:-90px;top:-100px;background:rgba(21,87,192,.08)}
+.hero-top{display:flex;align-items:center;gap:12px}.hero-badge{width:42px;height:42px;border-radius:50%;background:#fff;border:4px solid #cfe0ff;display:grid;place-items:center;color:var(--vsb);font-weight:800}
+.hero-welcome h1{font-size:30px;line-height:1.12;letter-spacing:-.04em;font-weight:800;margin-top:18px;max-width:620px}
+.hero-welcome p{font-size:13px;line-height:1.8;color:#777f89;max-width:600px;margin-top:12px}
+.hero-actions{display:flex;gap:9px;margin-top:20px;flex-wrap:wrap}.primary{background:var(--vsb);color:#fff;padding:10px 14px;border-radius:11px;font-size:12px;font-weight:700;border:0}.secondary{background:#fff;border:1px solid #e9ebee;color:#464b53;padding:10px 14px;border-radius:11px;font-size:12px;font-weight:700}
+.live-panel{background:#173f88;color:#fff;border-radius:16px;padding:22px;display:flex;flex-direction:column;justify-content:space-between;min-height:220px}
+.live-panel .ring{width:92px;height:92px;border-radius:50%;background:conic-gradient(#2c78e8 100%,#dbe7f7 0);display:grid;place-items:center}
+.live-panel .ring:before{content:"";width:68px;height:68px;border-radius:50%;background:#24272e;position:absolute}.ring-wrap{position:relative;width:92px;height:92px;display:grid;place-items:center}.ring-label{position:absolute;font-size:15px;font-weight:800}
+.metric-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:16px}
+.metric{padding:17px;border:1px solid var(--line);border-radius:15px;background:#fff;position:relative;overflow:hidden}
+.metric:after{content:"";position:absolute;right:-22px;bottom:-32px;width:90px;height:90px;border-radius:50%;background:var(--soft)}
+.metric .label{font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:#969ca5;font-weight:700}.metric .value{font-size:25px;font-weight:800;letter-spacing:-.03em;margin-top:7px}.metric .sub{font-size:10px;color:#959ba3;margin-top:4px}
+.dashboard-grid{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(320px,.85fr);gap:18px;margin-top:18px}
+.panel-card{padding:19px}.panel-title{font-size:14px;font-weight:800}.panel-sub{font-size:11px;color:#9aa0a8;margin-top:4px}
+.notice-row{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:12px;align-items:center;padding:13px 0;border-bottom:1px solid #f0f1f3}.notice-row:last-child{border-bottom:0}
+.notice-dot{width:10px;height:10px;border-radius:999px;background:#f59e0b;box-shadow:0 0 0 5px #fff4db}.notice-dot.high{background:#ef233c;box-shadow:0 0 0 5px #ffe7ea}.notice-dot.low{background:#6284ff;box-shadow:0 0 0 5px #edf1ff}
+.notice-title{font-size:12px;font-weight:700}.notice-meta{font-size:10px;color:#a0a5ad;margin-top:4px}.notice-date{font-size:10px;color:#9da3aa;white-space:nowrap}
+.quick-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:14px}
+.quick{padding:14px;border:1px solid var(--line);background:#fff;border-radius:13px;text-align:left;transition:.18s}.quick:hover{border-color:#b9d1f4;transform:translateY(-1px);box-shadow:0 7px 16px rgba(31,41,55,.05)}
+.quick .qicon{width:31px;height:31px;border-radius:9px;background:var(--soft);color:var(--vsb);display:grid;place-items:center;font-size:12px;font-weight:800}.quick b{font-size:12px;display:block;margin-top:9px}.quick span{font-size:10px;color:#989ea6;display:block;margin-top:3px}
+.insight{background:var(--soft);border:1px solid #d7e5f8;border-radius:15px;padding:15px;margin-top:14px}.insight strong{font-size:11px}.insight p{font-size:10px;color:#64748b;line-height:1.65;margin-top:5px}
+.footer{border-top:1px solid var(--line);margin-top:25px;background:#fff}
+.list-card{padding:19px}
+.tab.hidden{display:none}
+#events .card,#assignments .card,#materials .card,#exams .card,#academic .card{border-radius:16px}
+.modal-surface{background:#fff;border-radius:20px;border:1px solid var(--line);box-shadow:0 24px 60px rgba(0,0,0,.22)}
+.field{width:100%;border:1px solid #e5e7eb;background:#fff;border-radius:11px;padding:11px 12px;outline:none;font-size:12px}.field:focus{border-color:#f29aa6;box-shadow:0 0 0 3px rgba(217,15,42,.08)}
+.soft-box{background:#fafbfc;border:1px solid #eef0f2;border-radius:15px}
+@media(max-width:1050px){
+  .dashboard-nav{width:82px}.main-shell{margin-left:82px}.side-brand{justify-content:center}.side-brand>div:last-child,.side-group,.side-link span:not(.side-icon),.side-status{display:none}.side-link{justify-content:center;padding:12px}.side-list{gap:7px}.side-foot{display:none}
+  .hero-grid,.dashboard-grid{grid-template-columns:1fr}.metric-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .topbar{padding:0 18px}.page{padding:22px 18px 32px}
+}
+@media(max-width:720px){
+  .dashboard-nav{top:auto;bottom:0;left:0;width:100%;height:68px;border-radius:18px 18px 0 0}.side-shell{flex-direction:row;align-items:center;padding:9px 10px}.side-brand{display:none}.side-group{display:none}.side-list{flex:1;display:flex;flex-direction:row;justify-content:space-around;gap:2px}.side-link{width:auto;min-width:47px;padding:8px 6px;border-radius:10px}.side-link span:not(.side-icon){display:none}.side-icon{margin:0}.side-spacer,.side-foot{display:none}.main-shell{margin-left:0;padding-bottom:68px}.topbar{height:72px;padding:0 13px}.search-box{width:42vw}.profile-copy,.class-pill{display:none}.page{padding:16px 12px 26px}.hero{padding:12px}.hero-welcome{padding:21px;min-height:205px}.hero-welcome h1{font-size:25px}.metric-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.metric{padding:13px}.metric .value{font-size:21px}.dashboard-grid{gap:12px}.panel-card{padding:15px}.notice-row{grid-template-columns:auto minmax(0,1fr)}.notice-date{display:none}
+}
+
+/* Reference-inspired landing treatment */
+.ref-hero{background:#e9f4ff;border:1px solid #d9eaf8;border-radius:4px;overflow:hidden;position:relative;box-shadow:0 8px 26px rgba(47,88,120,.06)}
+.ref-hero-inner{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(330px,.9fr);min-height:360px}
+.ref-copy{padding:44px 44px 34px 46px;position:relative;z-index:2}
+.ref-kicker{font-size:10px;color:#3f6c8a;font-weight:800;text-transform:uppercase;letter-spacing:.18em}
+.ref-title{font-size:42px;line-height:1.05;letter-spacing:-.045em;font-weight:800;color:#172532;max-width:650px;margin-top:13px}
+.ref-copy p{font-size:12px;line-height:1.85;color:#587080;max-width:555px;margin-top:15px}
+.ref-cta{display:flex;gap:10px;margin-top:20px;flex-wrap:wrap}
+.ref-cta .primary{background:#1557c0;border-radius:4px;padding:11px 17px}
+.ref-cta .secondary{border-radius:4px;background:#fff;border-color:#cbddea;color:#1b4e84}
+.ref-visual{position:relative;min-height:360px;display:flex;align-items:flex-end;justify-content:center;padding:20px 26px 0}
+.ref-orb{position:absolute;width:280px;height:280px;border-radius:50%;right:60px;top:40px;background:rgba(117,183,232,.24);border:1px solid rgba(95,159,209,.22)}
+.ref-person{position:relative;width:255px;height:300px;display:flex;align-items:flex-end;justify-content:center}
+.ref-head{position:absolute;top:15px;width:88px;height:102px;border-radius:48% 48% 44% 44%;background:linear-gradient(140deg,#f4c7a9,#c98269);box-shadow:inset -9px 0 0 rgba(151,79,63,.08)}
+.ref-hair{position:absolute;top:6px;width:92px;height:47px;border-radius:55% 55% 35% 35%;background:#2f363c}
+.ref-body{width:185px;height:176px;border-radius:95px 95px 26px 26px;background:linear-gradient(150deg,#b6c4cc,#74828c);box-shadow:inset -16px 0 0 rgba(53,67,76,.08)}
+.ref-shirt{position:absolute;width:78px;height:155px;bottom:0;border-radius:35px 35px 14px 14px;background:#1f2931}
+.ref-card{position:absolute;background:#fff;border:1px solid #d8e7f2;border-radius:10px;box-shadow:0 18px 35px rgba(56,96,130,.13);padding:12px}
+.ref-card.top{right:4px;top:24px;width:154px}.ref-card.bottom{right:18px;bottom:22px;width:180px}
+.ref-card .tiny{font-size:8px;text-transform:uppercase;letter-spacing:.12em;color:#8c9aa4;font-weight:800}
+.ref-card b{display:block;font-size:13px;color:#21313d;margin-top:4px}.ref-card p{font-size:9px;color:#7b8a94;line-height:1.5;margin-top:5px}
+.ref-feature-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-top:1px solid #d1e5f3}
+.ref-feature{padding:17px 20px;min-height:88px;background:#fff;border-right:1px solid #e4edf3}
+.ref-feature:last-child{border-right:0}.ref-feature.active{background:#1557c0;color:#fff}
+.ref-feature-icon{width:28px;height:28px;border-radius:8px;background:#e7f0ff;color:#1f6fd1;display:grid;place-items:center;font-size:12px;font-weight:800;float:left;margin-right:10px}
+.ref-feature.active .ref-feature-icon{background:rgba(255,255,255,.16);color:#fff}
+.ref-feature b{font-size:11px}.ref-feature p{font-size:9px;line-height:1.5;color:#778893;margin-top:4px}.ref-feature.active p{color:rgba(255,255,255,.76)}
+.ref-section{margin-top:18px}
+.ref-mini{background:#fff;border:1px solid #e7ebef;border-radius:10px;padding:15px}
+@media(max-width:900px){.ref-hero-inner{grid-template-columns:1fr}.ref-visual{min-height:300px}.ref-copy{padding:34px 28px}.ref-title{font-size:34px}.ref-feature-row{grid-template-columns:1fr}.ref-feature{border-right:0;border-bottom:1px solid #e4edf3}.ref-feature:last-child{border-bottom:0}}
+@media(max-width:560px){.ref-copy{padding:28px 20px}.ref-title{font-size:29px}.ref-copy p{font-size:11px}.ref-visual{padding-top:8px}.ref-orb{width:230px;height:230px;right:18px}.ref-card.top{right:0}.ref-card.bottom{right:7px}}
+</style>
+</head>
+<body>
+<nav class="dashboard-nav">
+  <div class="max-w-7xl mx-auto">
+    <div class="side-shell">
+      <div class="side-brand">
+        <div class="side-logo">V</div>
+        <div><b>VSB IT</b><span>Department Portal</span></div>
+      </div>
+
+      <div class="side-group">Workspace</div>
+      <div class="side-list">
+        <button class="nav side-link text-blue-600" data-tab="home"><i class="side-icon">⌂</i><span>Dashboard</span></button>
+        <button class="nav side-link" data-tab="notices"><i class="side-icon">!</i><span>Notices</span></button>
+        <button class="nav side-link" data-tab="timetable"><i class="side-icon">▦</i><span>Timetable</span></button>
+        <button class="nav side-link" data-tab="faculty"><i class="side-icon">♙</i><span>Faculty</span></button>
+        <button class="nav side-link" data-tab="events"><i class="side-icon">◈</i><span>Events</span></button>
+        <button class="nav side-link" data-tab="assignments"><i class="side-icon">✓</i><span>Assignments</span></button>
+        <button class="nav side-link" data-tab="materials"><i class="side-icon">▤</i><span>Materials</span></button>
+        <button class="nav side-link" data-tab="exams"><i class="side-icon">◷</i><span>Exams</span></button>
+        <button class="nav side-link" data-tab="academic"><i class="side-icon">◎</i><span>My Academics</span></button>
+      </div>
+
+      <div class="side-spacer"></div>
+      <div class="side-foot">
+        <div class="side-status">
+          <div class="flex items-center gap-2"><span class="dot"></span><span class="text-[11px] font-semibold">Portal online</span></div>
+          <p class="text-[9px] text-white/55 mt-2 leading-5">Official IT department information hub.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<div class="main-shell">
+<header class="topbar">
+  <div class="search-box">
+    <span class="text-slate-400 text-sm">⌕</span>
+    <input id="globalSearch" placeholder="Search the portal" aria-label="Search the portal">
+  </div>
+  <div class="topbar-actions">
+    <select id="class" class="class-pill">
+      <option>IT-A</option><option>IT-B</option><option>IT-C</option>
+    </select>
+    <button id="noticeTop" type="button" class="hidden sm:flex h-10 w-10 items-center justify-center border border-slate-200 rounded-xl bg-white text-slate-500" title="Notifications">⌁</button>
+    <button id="admin" type="button" class="profile-btn">
+      <div class="avatar">VS</div>
+      <div class="profile-copy"><b>Staff Login</b><span>Account access</span></div>
+    </button>
+  </div>
+</header>
+
+<main class="page">
+<section id="home" class="tab">
+  <div class="ref-hero">
+    <div class="ref-hero-inner">
+      <div class="ref-copy">
+        <div class="ref-kicker">Welcome to V.S.B Engineering College · IT Department</div>
+        <h1 class="ref-title">We keep your department connected.</h1>
+        <p>Official notices, academic schedules, faculty information, assignments, materials, exams and events — organized in one dependable digital workspace for IT students and staff.</p>
+        <div class="ref-cta">
+          <button class="primary nav" data-tab="notices">View notices</button>
+          <button class="secondary nav" data-tab="timetable">Explore academics</button>
+        </div>
+        <div class="flex flex-wrap gap-4 mt-6 text-[9px] font-semibold text-[#6d8190]">
+          <span>● Live department updates</span><span>● IT-A · IT-B · IT-C</span><span>● Student & faculty access</span>
+        </div>
+      </div>
+      <div class="ref-visual">
+        <div class="ref-orb"></div>
+        <div class="ref-person" aria-hidden="true">
+          <div class="ref-hair"></div><div class="ref-head"></div><div class="ref-body"></div><div class="ref-shirt"></div>
+        </div>
+        <div class="ref-card top"><span class="tiny">Department status</span><b>Portal is live</b><p>API-connected information, refreshed for your selected class.</p></div>
+        <div class="ref-card bottom"><span class="tiny">Current class</span><b id="heroClass">IT-A</b><p>Switch classes from the header to see class-specific notices and schedules.</p></div>
+      </div>
+    </div>
+    <div class="ref-feature-row">
+      <button class="ref-feature nav" data-tab="notices"><span class="ref-feature-icon">!</span><b>Notices & Updates</b><p>Official department communication in one feed.</p></button>
+      <button class="ref-feature active nav" data-tab="timetable"><span class="ref-feature-icon">▦</span><b>Academic Planning</b><p>Timetable, exams and assignment tracking.</p></button>
+      <button class="ref-feature nav" data-tab="materials"><span class="ref-feature-icon">▤</span><b>Student Resources</b><p>Faculty, study materials and academic support.</p></button>
+    </div>
+  </div>
+
+  <div class="dashboard-grid ref-section">
+    <section class="card panel-card">
+      <div class="flex items-start justify-between gap-3">
+        <div><div class="eyebrow">Priority communication</div><div class="panel-title mt-1">Recent notices</div><div class="panel-sub">The latest updates for the selected class.</div></div>
+        <button class="text-[11px] font-bold text-[#1557c0] nav" data-tab="notices">View all →</button>
+      </div>
+      <div id="homeNotices" class="mt-4"></div>
+    </section>
+
+    <section class="ref-mini">
+      <div class="eyebrow">Department snapshot</div>
+      <div class="grid grid-cols-2 gap-2 mt-3">
+        <div class="soft-box p-3"><div class="text-[9px] uppercase tracking-wider text-slate-400">IT sections</div><div id="metricClasses" class="text-xl font-extrabold mt-1">—</div></div>
+        <div class="soft-box p-3"><div class="text-[9px] uppercase tracking-wider text-slate-400">Notices</div><div id="metricNotices" class="text-xl font-extrabold mt-1">—</div></div>
+        <div class="soft-box p-3"><div class="text-[9px] uppercase tracking-wider text-slate-400">Current class</div><div id="liveClass" class="text-xl font-extrabold mt-1">IT-A</div></div>
+        <div class="soft-box p-3"><div class="text-[9px] uppercase tracking-wider text-slate-400">Status</div><div class="text-xl font-extrabold mt-1 text-emerald-600">ON</div></div>
+      </div>
+      <div class="insight mt-3"><strong>Tip for students</strong><p>Use the class selector in the header to switch between IT-A, IT-B and IT-C before opening notices or schedules.</p></div>
+    </section>
+  </div>
+</section>
+
+<section id="notices" class="tab hidden">
+  <div class="section-head"><div><div class="eyebrow">Department communication</div><h2 class="section-title">Notices</h2></div><span id="count" class="text-[11px] text-slate-400"></span></div>
+  <div class="card p-4 mb-4 flex flex-col sm:flex-row gap-3"><input id="search" class="field flex-1" placeholder="Search notices..."><select id="cat" class="field sm:w-48"><option value="">All categories</option><option>General</option><option>Academic</option><option>Exam</option><option>Event</option><option>Placement</option><option>Achievement</option></select></div>
+  <div id="noticeList" class="space-y-3"></div>
+</section>
+
+<section id="timetable" class="tab hidden">
+  <div class="section-head"><div><div class="eyebrow">Academic schedule</div><h2 class="section-title">Weekly timetable</h2></div></div>
+  <div id="tableGrid" class="grid md:grid-cols-2 xl:grid-cols-3 gap-4"></div>
+</section>
+
+<section id="faculty" class="tab hidden">
+  <div class="section-head"><div><div class="eyebrow">People</div><h2 class="section-title">Faculty directory</h2></div></div>
+  <div id="facultyGrid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+</section>
+
+<section id="events" class="tab hidden">
+  <div class="section-head"><div><div class="eyebrow">Department activities</div><h2 class="section-title">Events & opportunities</h2></div></div>
+  <div class="grid md:grid-cols-3 gap-4"></div>
+</section>
+
+<section id="assignments" class="tab hidden">
+  <div class="section-head"><div><div class="eyebrow">Academic portal</div><h2 class="section-title">Assignments</h2></div></div>
+  <div id="assignmentsGrid" class="grid md:grid-cols-2 xl:grid-cols-3 gap-4"></div>
+</section>
+
+<section id="materials" class="tab hidden">
+  <div class="section-head"><div><div class="eyebrow">Academic portal</div><h2 class="section-title">Materials</h2></div></div>
+  <div id="materialsGrid" class="grid md:grid-cols-2 xl:grid-cols-3 gap-4"></div>
+</section>
+
+<section id="exams" class="tab hidden">
+  <div class="section-head"><div><div class="eyebrow">Academic portal</div><h2 class="section-title">Examinations</h2></div></div>
+  <div id="examsGrid" class="grid md:grid-cols-2 xl:grid-cols-3 gap-4"></div>
+</section>
+
+<section id="academic" class="tab hidden">
+  <div class="section-head"><div><div class="eyebrow">Student academics</div><h2 class="section-title">My Academics</h2></div></div>
+  <div id="academicGrid" class="grid lg:grid-cols-2 gap-4"></div>
+</section>
+</main>
+
+<footer class="footer">
+  <div class="max-w-[1500px] mx-auto px-[30px] py-5 flex flex-col sm:flex-row justify-between gap-2 text-[10px] text-slate-400">
+    <span>© V.S.B Engineering College · Information Technology Department</span><span>Official department portal</span>
+  </div>
+</footer>
+</div>
+
+<div id="login" class="hidden fixed inset-0 bg-slate-950/70 z-[90] items-center justify-center p-4">
+  <form id="form" class="modal-surface p-7 w-full max-w-sm">
+    <div class="eyebrow">Secure access</div><h2 class="text-2xl font-extrabold mt-2">Staff sign in</h2><p class="text-xs text-slate-500 mt-2 leading-5">Use your department account to access publishing and administration tools.</p>
+    <div class="space-y-3 mt-5">
+      <input id="email" type="email" required class="field" placeholder="Email">
+      <input id="pass" type="password" required class="field" placeholder="Password">
+      <button class="primary w-full py-3">Sign in</button>
+      <p id="err" class="text-red-600 text-xs min-h-4"></p>
+      <button type="button" onclick="document.getElementById('login').classList.add('hidden')" class="w-full text-xs text-slate-500">Cancel</button>
+    </div>
+  </form>
+</div>
+
+<script src="/app.js"></script>
+<script>
+(() => {
+  const cls = document.getElementById('class');
+  const hero = document.getElementById('heroClass');
+  const live = document.getElementById('liveClass');
+  const syncClass = () => { hero.textContent = cls.value; live.textContent = cls.value; };
+  cls.addEventListener('change', syncClass); syncClass();
+
+  Promise.all([
+    fetch('/api/classes').then(r=>r.json()),
+    fetch('/api/notices?class_code='+encodeURIComponent(cls.value)+'&limit=1').then(r=>r.json())
+  ]).then(([classes, notices]) => {
+    document.getElementById('metricClasses').textContent = Array.isArray(classes) ? classes.length : '—';
+    document.getElementById('metricNotices').textContent = typeof notices.total === 'number' ? notices.total : (Array.isArray(notices)?notices.length:'—');
+  }).catch(() => {});
+})();
+</script>
+</body>
+</html>

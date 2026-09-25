@@ -1,0 +1,51 @@
+name: Node.js CI
+on:
+  push:
+    branches: ["main","production-upgrade"]
+  pull_request:
+    branches: ["main"]
+jobs:
+  sqlite:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version: "22"
+      - run: npm install
+      - run: node --check server.js
+      - run: node --check database.js
+      - run: node --check storage.js
+      - run: node --check scripts/backup-postgres.js
+      - run: node --check scripts/migrate-sqlite-to-postgres.js
+      - run: node --check public/app.js
+      - run: npm test
+      - run: npm run test:integration
+  postgres:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_USER: vsb
+          POSTGRES_PASSWORD: vsb
+          POSTGRES_DB: vsb_noticeboard
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready -U vsb -d vsb_noticeboard"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+    env:
+      DATABASE_URL: postgresql://vsb:vsb@localhost:5432/vsb_noticeboard
+      DATABASE_SSL: "false"
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version: "22"
+      - run: npm install
+      - run: node --check database.js
+      - run: node test/postgres-smoke.js
+      - run: npm run test:integration

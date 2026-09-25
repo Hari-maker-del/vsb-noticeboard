@@ -6,3 +6,7 @@ node_modules/
 *.bak
 .DS_Store
 npm-debug.log*
+
+backups/
+data/
+public/uploads/

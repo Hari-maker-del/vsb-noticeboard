@@ -20,4 +20,4 @@ jobs:
         with:
           node-version: 22
       - run: npm install
-      - run: npm audit --omit=dev --audit-level=critical
+      - run: npm run security:audit

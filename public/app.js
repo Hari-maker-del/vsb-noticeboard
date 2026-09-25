@@ -243,7 +243,7 @@ async function adminEditUser(id,refreshTarget='students'){
     {name:'class_code',label:'Class code',value:u.class_code||'',placeholder:'IT-A'},
     {name:'roll_no',label:'Roll number',value:u.roll_no||''},
     {name:'semester',label:'Semester',value:u.semester||''},
-    {name:'active',label:'Active account',type:'checkbox',value:u.active!==false}
+    {name:'active',label:'Active account',type:'checkbox',value:u.active===true||u.active===1||u.active==='1'}
   ],submitLabel:'Save changes'});
   if(!v)return false;
   try{

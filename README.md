@@ -105,5 +105,13 @@ Render's default filesystem is ephemeral, so local uploads should not be treated
 - SQLite and PostgreSQL smoke tests cover the session store.
 - Portal version: 3.5.0.
 
+
+## V10 operations and audit center
+- **Audit API:** administrators can search and filter audit records with pagination limits.
+- **Security dashboard:** the admin control center includes a Security & Audit workspace for recent authentication and administration activity.
+- **Session control:** users can revoke individual other-device sessions; administrators can revoke all active sessions for a user.
+- **Operational indexing:** audit-log indexes support user/entity/time filtering on SQLite and PostgreSQL.
+- **Portal version:** 3.6.0.
+
 ## Validation
 `npm test` checks backend/database syntax and runs a database smoke test. `npm run test:integration` exercises authentication, CRUD and password-change flows. GitHub Actions runs SQLite and PostgreSQL validation on pushes and pull requests.

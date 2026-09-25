@@ -1,0 +1,29 @@
+name: Production Health Monitor
+on:
+  schedule:
+    - cron: "*/15 * * * *"
+  workflow_dispatch:
+jobs:
+  health:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check live service
+        env:
+          SERVICE_URL: https://vsb-noticeboard.onrender.com
+        run: |
+          set -euo pipefail
+          node <<'NODE'
+          const base=process.env.SERVICE_URL.replace(/\/$/,'');
+          const paths=['/api/health/live','/api/health'];
+          (async()=>{
+            for(const path of paths){
+              const started=Date.now();
+              const r=await fetch(base+path,{headers:{'user-agent':'github-actions-vsb-health-monitor/1.0'}});
+              const body=await r.json().catch(()=>({}));
+              if(!r.ok||body.ok!==true){
+                throw new Error(path+' returned HTTP '+r.status);
+              }
+              console.log(JSON.stringify({path,status:r.status,latency_ms:Date.now()-started,ok:body.ok,database:body.database||null,storage:body.storage||null,persistence_ready:body.persistence?.ready??null,timestamp:new Date().toISOString()}));
+            }
+          })().catch(err=>{console.error(err);process.exit(1)});
+          NODE

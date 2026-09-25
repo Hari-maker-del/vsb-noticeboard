@@ -174,10 +174,10 @@ button{cursor:pointer}
     <select id="class" class="class-pill">
       <option>IT-A</option><option>IT-B</option><option>IT-C</option>
     </select>
-    <button id="noticeTop" type="button" class="hidden sm:flex h-10 w-10 items-center justify-center border border-slate-200 rounded-xl bg-white text-slate-500" title="Notifications">⌁</button>
+    <button id="noticeTop" type="button" class="hidden sm:flex h-10 w-10 items-center justify-center border border-slate-200 rounded-xl bg-white text-slate-500 relative" title="Notifications"><span>🔔</span><span id="noticeTopCount" class="hidden absolute -top-1 -right-1 min-w-4 h-4 px-1 rounded-full bg-vsb-600 text-white text-[9px] leading-4 font-extrabold">0</span></button>
     <button id="admin" type="button" class="profile-btn">
       <div class="avatar">VS</div>
-      <div class="profile-copy"><b>Staff Login</b><span>Account access</span></div>
+      <div class="profile-copy"><b>Sign in</b><span>Account access</span></div>
     </button>
   </div>
 </header>
@@ -287,7 +287,7 @@ button{cursor:pointer}
 
 <div id="login" class="hidden fixed inset-0 bg-slate-950/70 z-[90] items-center justify-center p-4">
   <form id="form" class="modal-surface p-7 w-full max-w-sm">
-    <div class="eyebrow">Secure access</div><h2 class="text-2xl font-extrabold mt-2">Staff sign in</h2><p class="text-xs text-slate-500 mt-2 leading-5">Use your department account to access publishing and administration tools.</p>
+    <div class="eyebrow">Secure access</div><h2 class="text-2xl font-extrabold mt-2">Portal sign in</h2><p class="text-xs text-slate-500 mt-2 leading-5">Use your VSB account to access the portal. Staff members will see management tools automatically.</p>
     <div class="space-y-3 mt-5">
       <input id="email" type="email" required class="field" placeholder="Email">
       <input id="pass" type="password" required class="field" placeholder="Password">

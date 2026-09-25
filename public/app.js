@@ -5,6 +5,49 @@ const api=async(u,o={})=>{o={...o,credentials:'same-origin'};const method=String
 async function markRead(id){if(!me)return;try{await api('/api/notices/'+id+'/read',{method:'POST'});refreshNoticeBadge()}catch{}}
 async function refreshNoticeBadge(){if(!me)return;try{const n=await api('/api/notifications');let b=$('noticeBell');if(!b){b=document.createElement('button');b.id='noticeBell';b.className='fixed bottom-5 left-5 z-[80] bg-white border border-slate-200 px-4 py-3 rounded-xl shadow-lg text-sm font-semibold';document.body.append(b)}b.textContent='🔔 '+n.length+' unread';b.classList.toggle('text-red-600',n.length>0);const top=$('noticeTopCount');if(top){top.textContent=Math.min(n.length,99);top.classList.toggle('hidden',n.length===0)}b.onclick=()=>showNotifications(n)}catch{}}
 const msg=x=>{let t=$('proToast')||(()=>{const d=document.createElement('div');d.id='proToast';d.className='fixed bottom-5 right-5 z-[90] bg-slate-950 text-white px-4 py-3 rounded-xl shadow-xl text-sm';document.body.append(d);return d})();t.textContent=x;t.classList.remove('hidden');clearTimeout(window.tm);window.tm=setTimeout(()=>t.classList.add('hidden'),2600)};const showNotifications=n=>{let p=$('notificationPanel');if(!p){p=document.createElement('div');p.id='notificationPanel';p.className='fixed top-[84px] right-4 z-[95] w-[min(380px,calc(100vw-2rem))] bg-white border border-slate-200 rounded-2xl shadow-2xl overflow-hidden';document.body.append(p)}p.innerHTML='<div class="px-4 py-3 border-b flex justify-between items-center"><div><b class="text-sm">Notifications</b><p class="text-[10px] text-slate-400">'+n.length+' unread</p></div><button id="closeNotifications" class="text-slate-400">✕</button></div><div class="max-h-80 overflow-auto">'+(n.length?n.map(x=>'<button class="block w-full text-left px-4 py-3 border-b hover:bg-slate-50" data-notice-target="'+E(x.id)+'"><b class="text-xs">'+E(x.title)+'</b><span class="block text-[10px] text-slate-500 mt-1">'+E(x.category)+' • '+E(x.priority)+'</span></button>').join(''):'<div class="p-6 text-center text-sm text-slate-500">You are all caught up.</div>')+'</div>';p.classList.remove('hidden');$('closeNotifications').onclick=()=>p.remove();p.querySelectorAll('[data-notice-target]').forEach(x=>x.onclick=async()=>{await markRead(x.dataset.noticeTarget);p.remove();tab('notices')})};
+
+function closeModalNode(node){if(node)node.remove()}
+function fieldInput(f){
+  const id='modalField_'+f.name;
+  const req=f.required?' required':'';
+  const ro=f.readOnly?' readonly':'';
+  const ph=f.placeholder?' placeholder="'+E(f.placeholder)+'"':'';
+  const cls='w-full border border-slate-200 rounded-xl px-3 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-500'+(f.className?' '+f.className:'');
+  if(f.type==='textarea') return '<textarea id="'+id+'" name="'+E(f.name)+'" class="'+cls+' min-h-28 resize-y"'+req+ph+'>'+E(f.value??'')+'</textarea>';
+  if(f.type==='select') return '<select id="'+id+'" name="'+E(f.name)+'" class="'+cls+'"'+req+'>'+((f.options||[]).map(o=>{const v=typeof o==='string'?o:o.value,l=typeof o==='string'?o:(o.label??o.value);return '<option value="'+E(v)+'"'+(String(v)===String(f.value??'')?' selected':'')+'>'+E(l)+'</option>'}).join(''))+'</select>';
+  if(f.type==='checkbox') return '<label class="flex items-center gap-2 '+(f.className||'')+'"><input id="'+id+'" name="'+E(f.name)+'" type="checkbox" class="h-4 w-4 rounded border-slate-300"'+(f.value?' checked':'')+'><span class="text-sm text-slate-700">'+E(f.label||f.name)+'</span></label>';
+  const type=['text','email','number','date','datetime-local','password'].includes(f.type)?f.type:'text';
+  return '<input id="'+id+'" name="'+E(f.name)+'" type="'+type+'" class="'+cls+'" value="'+E(f.value??'')+'"'+req+ph+ro+(f.min!=null?' min="'+E(f.min)+'"':'')+(f.max!=null?' max="'+E(f.max)+'"':'')+(f.step!=null?' step="'+E(f.step)+'"':'')+'>';
+}
+async function formModal({title,description='',fields=[],submitLabel='Save',danger=false}){
+  return await new Promise(resolve=>{
+    const wrap=document.createElement('div');
+    wrap.className='fixed inset-0 z-[180] bg-slate-950/70 backdrop-blur-sm grid place-items-center p-4';
+    wrap.innerHTML='<div role="dialog" aria-modal="true" aria-labelledby="modalTitle" class="w-full max-w-2xl max-h-[90vh] overflow-auto bg-white rounded-2xl shadow-2xl border border-slate-200"><div class="sticky top-0 bg-white border-b px-5 py-4 flex items-start justify-between gap-3"><div><h2 id="modalTitle" class="text-lg font-extrabold text-slate-900">'+E(title)+'</h2>'+(description?'<p class="text-xs text-slate-500 mt-1">'+E(description)+'</p>':'')+'</div><button type="button" data-modal-close aria-label="Close" class="h-9 w-9 rounded-lg hover:bg-slate-100 text-slate-400 text-lg">✕</button></div><form id="activeModalForm" class="p-5"><div class="grid sm:grid-cols-2 gap-4">'+fields.map(f=>{const label=f.type==='checkbox'?'': '<label for="modalField_'+E(f.name)+'" class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">'+E(f.label||f.name)+'</label>';return '<div class="'+(f.full?'sm:col-span-2':'')+'">'+label+fieldInput(f)+'</div>'}).join('')+'</div><div class="flex justify-end gap-2 mt-6 pt-4 border-t"><button type="button" data-modal-cancel class="px-4 py-2.5 rounded-xl border border-slate-200 text-sm font-semibold text-slate-600">Cancel</button><button type="submit" class="px-4 py-2.5 rounded-xl text-sm font-semibold '+(danger?'bg-red-600 text-white':'bg-blue-600 text-white')+'">'+E(submitLabel)+'</button></div></form></div>';
+    document.body.append(wrap);
+    const form=$('activeModalForm');
+    const finish=v=>{document.removeEventListener('keydown',onKey);wrap.remove();resolve(v)};
+    const onKey=e=>{if(e.key==='Escape')finish(null)};
+    document.addEventListener('keydown',onKey);
+    wrap.querySelector('[data-modal-close]').onclick=()=>finish(null);
+    wrap.querySelector('[data-modal-cancel]').onclick=()=>finish(null);
+    wrap.onclick=e=>{if(e.target===wrap)finish(null)};
+    form.onsubmit=e=>{e.preventDefault();const value={};fields.forEach(f=>{const el=form.elements[f.name];if(!el)return;value[f.name]=f.type==='checkbox'?el.checked:el.value});finish(value)};
+    setTimeout(()=>form.querySelector('input,textarea,select,button')?.focus(),0);
+  });
+}
+async function confirmModal(message,{title='Confirm action',confirmLabel='Continue',danger=true}={}){
+  const result=await formModal({title,description:message,fields:[],submitLabel:confirmLabel,danger});
+  return !!result;
+}
+function localDateTime(value){
+  if(!value)return '';
+  const d=new Date(value);
+  if(Number.isNaN(d.getTime()))return String(value).slice(0,16);
+  const pad=n=>String(n).padStart(2,'0');
+  return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+'T'+pad(d.getHours())+':'+pad(d.getMinutes());
+}
+
 function shell(){const nav=document.querySelector('nav .max-w-7xl');[['assignments','Assignments'],['materials','Materials'],['exams','Exams'],['academic','My Academics']].forEach(([id,n])=>{if(document.querySelector('[data-tab="'+id+'"]'))return;const b=document.createElement('button');b.className='pro-nav px-4 py-3 text-sm font-medium text-slate-500';b.dataset.tab=id;b.textContent=n;nav.append(b);b.onclick=()=>tab(id)});[['assignments','Assignments'],['materials','Materials'],['exams','Exams'],['academic','My Academics']].forEach(([id,n])=>{if($(id))return;const s=document.createElement('section');s.id=id;s.className='tab hidden';s.innerHTML='<div class="mb-5"><p class="text-xs uppercase tracking-wider text-blue-600 font-bold">Academic portal</p><h2 class="text-3xl font-extrabold">'+n+'</h2></div><div id="'+id+'Grid" class="grid md:grid-cols-2 xl:grid-cols-3 gap-4"></div>';document.querySelector('main').append(s)})}
 function tab(id){document.querySelectorAll('.tab').forEach(x=>x.classList.add('hidden'));$(id)?.classList.remove('hidden');document.querySelectorAll('[data-tab]').forEach(x=>x.classList.toggle('text-blue-600',x.dataset.tab===id));({home:home,notices:notices,timetable:timetable,faculty:faculty,events:events,assignments:assignments,materials:materials,exams:exams,academic:academic}[id]||home)()}
 async function notices(){const q=new URLSearchParams({class_code:$('class').value,limit:100});if($('cat')?.value)q.set('category',$('cat').value);if($('search')?.value)q.set('search',$('search').value);const d=await api('/api/notices?'+q);const html=d.items.map(n=>'<article data-notice-id="'+E(n.id)+'" class="card bg-white dark:bg-slate-900 rounded-2xl p-5 border-l-4 '+(n.priority==='high'?'border-red-500':n.priority==='medium'?'border-amber-500':'border-blue-500')+'"><div class="flex justify-between gap-2"><div><span class="text-[11px] uppercase font-bold text-blue-600">'+E(n.category)+(n.pinned?' • PINNED':'')+'</span><h3 class="text-lg font-bold mt-2">'+E(n.title)+'</h3></div><span class="text-xs text-slate-400">'+new Date(n.created_at).toLocaleDateString()+'</span></div><p class="mt-3 leading-7 text-slate-600 dark:text-slate-300 whitespace-pre-wrap">'+E(n.content)+'</p><div class="text-xs text-slate-500 mt-4">'+E(n.class_code||'All classes')+' • '+E(n.creator_name||'Department')+(n.attachment_url?' • <a class="text-blue-600" href="'+E(n.attachment_url)+'" target="_blank" rel="noopener">Attachment</a>':'')+'</div></article>').join('')||'<div class="card bg-white rounded-2xl p-10 text-center text-slate-500">No notices.</div>';if($('noticeList')){$('noticeList').innerHTML=html;document.querySelectorAll('#noticeList article[data-notice-id]').forEach(x=>x.onclick=()=>markRead(x.dataset.noticeId))}if($('homeNotices'))$('homeNotices').innerHTML=d.items.slice(0,3).map(n=>'<div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800"><b>'+E(n.title)+'</b><p class="text-xs text-slate-500 mt-1">'+E(n.category)+' • '+E(n.class_code||'All')+'</p></div>').join('')||'<p class="text-sm text-slate-500">No current notices.</p>';if($('count'))$('count').textContent=d.total+' notices'}
@@ -102,7 +145,7 @@ async function adminLoad(section){
       const rows=await api('/api/faculty');
       $('adminContent').innerHTML='<div class="grid lg:grid-cols-[330px_1fr] gap-4"><form id="facultyAdminFormV6" class="card p-5 space-y-2"><div class="eyebrow">Directory</div><h3 class="font-extrabold">Add faculty</h3><input id="fvName" class="field" placeholder="Faculty name" required><input id="fvSubject" class="field" placeholder="Subject"><input id="fvRoom" class="field" placeholder="Room"><input id="fvAvail" class="field" placeholder="Availability"><button class="primary w-full">Add faculty</button></form><div class="card p-5"><div class="font-extrabold">Faculty records</div><div class="mt-4 space-y-2">'+(rows.map(x=>'<div class="border rounded-xl p-3 flex justify-between gap-3"><div><b class="text-sm">'+E(x.name)+'</b><div class="text-xs text-slate-500 mt-1">'+E(x.subject||'Faculty')+' • '+E(x.room||'—')+'</div></div><div class="flex gap-2"><button class="text-xs text-blue-600" data-fedit="'+x.id+'">Edit</button><button class="text-xs text-red-600" data-fdel="'+x.id+'">Delete</button></div></div>').join('')||'<p class="text-sm text-slate-500">No faculty records.</p>')+'</div></div></div>';
       $('facultyAdminFormV6').onsubmit=async e=>{e.preventDefault();try{await api('/api/faculty',{method:'POST',body:JSON.stringify({name:$('fvName').value,subject:$('fvSubject').value,room:$('fvRoom').value,availability:$('fvAvail').value})});msg('Faculty added');adminLoad('faculty')}catch(err){msg(err.message)}};
-      p.querySelectorAll('[data-fdel]').forEach(b=>b.onclick=async()=>{if(!confirm('Delete faculty record?'))return;try{await api('/api/faculty/'+b.dataset.fdel,{method:'DELETE'});msg('Faculty deleted');adminLoad('faculty')}catch(e){msg(e.message)}});
+      p.querySelectorAll('[data-fdel]').forEach(b=>b.onclick=async()=>{if(!await confirmModal('Delete faculty record?'))return;try{await api('/api/faculty/'+b.dataset.fdel,{method:'DELETE'});msg('Faculty deleted');adminLoad('faculty')}catch(e){msg(e.message)}});
       p.querySelectorAll('[data-fedit]').forEach(b=>b.onclick=async()=>adminEditFaculty(b.dataset.fedit));
       return;
     }
@@ -111,7 +154,7 @@ async function adminLoad(section){
       const rows=await api('/api/classes');
       $('adminContent').innerHTML='<div class="grid lg:grid-cols-[330px_1fr] gap-4"><form id="classAdminV6" class="card p-5 space-y-2"><div class="eyebrow">Structure</div><h3 class="font-extrabold">Add class</h3><input id="cvCode" class="field" placeholder="IT-D" required><input id="cvName" class="field" placeholder="Information Technology D" required><button class="primary w-full">Create class</button></form><div class="card p-5"><div class="font-extrabold">Class groups</div><div class="mt-4 space-y-2">'+rows.map(x=>'<div class="border rounded-xl p-3 flex justify-between"><div><b>'+E(x.code)+'</b><div class="text-xs text-slate-500 mt-1">'+E(x.name)+'</div></div><div class="flex gap-2"><button class="text-xs text-blue-600" data-cedit="'+x.id+'">Edit</button><button class="text-xs text-red-600" data-cdel="'+x.id+'">Delete</button></div></div>').join('')+'</div></div></div>';
       $('classAdminV6').onsubmit=async e=>{e.preventDefault();try{await api('/api/classes',{method:'POST',body:JSON.stringify({code:$('cvCode').value.trim(),name:$('cvName').value.trim()})});msg('Class created');adminLoad('classes')}catch(err){msg(err.message)}};
-      p.querySelectorAll('[data-cdel]').forEach(b=>b.onclick=async()=>{if(!confirm('Delete class?'))return;try{await api('/api/classes/'+b.dataset.cdel,{method:'DELETE'});msg('Class deleted');adminLoad('classes')}catch(e){msg(e.message)}});
+      p.querySelectorAll('[data-cdel]').forEach(b=>b.onclick=async()=>{if(!await confirmModal('Delete class?'))return;try{await api('/api/classes/'+b.dataset.cdel,{method:'DELETE'});msg('Class deleted');adminLoad('classes')}catch(e){msg(e.message)}});
       p.querySelectorAll('[data-cedit]').forEach(b=>b.onclick=async()=>adminEditClass(b.dataset.cedit));
       return;
     }
@@ -133,7 +176,7 @@ async function adminLoad(section){
       };
       p.querySelectorAll('[data-ndel]').forEach(function(button){
         button.onclick=async function(){
-          if(!confirm('Delete notice?'))return;
+          if(!await confirmModal('Delete notice?'))return;
           try{await api('/api/notices/'+button.dataset.ndel,{method:'DELETE'});msg('Notice deleted');adminLoad('notices')}catch(err){msg(err.message)}
         };
       });
@@ -161,7 +204,7 @@ async function adminLoad(section){
     if(contentMap[section]){
       const cfg=contentMap[section],rows=await api(cfg.url);
       $('adminContent').innerHTML='<div class="grid lg:grid-cols-[330px_1fr] gap-4"><form id="genericAdminV6" class="card p-5 space-y-2"><div class="eyebrow">Academic content</div><h3 class="font-extrabold">Add '+cfg.label+'</h3><input id="gvTitle" class="field" placeholder="Title / subject" required><input id="gvSubject" class="field" placeholder="Subject / type"><input id="gvClass" class="field" placeholder="Class code"><input id="gvDate" type="datetime-local" class="field"><input id="gvLocation" class="field" placeholder="Location / room"><input id="gvFile" type="file" class="field" accept=".pdf,.png,.jpg,.jpeg,.webp,.doc,.docx,.ppt,.pptx,.xls,.xlsx"><textarea id="gvDesc" class="field" placeholder="Description"></textarea><button class="primary w-full">Create '+cfg.label.toLowerCase()+'</button></form><div class="card p-5"><div class="font-extrabold">'+cfg.label+'</div><div class="mt-4 space-y-2">'+(rows.map(x=>'<div class="border rounded-xl p-3 flex justify-between gap-3"><div><b class="text-sm">'+E(x.title||x.subject)+'</b><div class="text-xs text-slate-500 mt-1">'+E(x.subject||x.exam_type||'')+' '+(x.class_code?'• '+E(x.class_code):'')+(x.event_date?' • '+new Date(x.event_date).toLocaleDateString():'')+(x.due_at?' • Due '+new Date(x.due_at).toLocaleDateString():'')+'</div></div><div class="flex gap-2"><button class="text-xs text-blue-600" data-cedit="'+section+'" data-id="'+x.id+'">Edit</button><button class="text-xs text-red-600" data-cdelete="'+section+'" data-id="'+x.id+'">Delete</button></div></div>').join('')||'<p class="text-sm text-slate-500">No records.</p>')+'</div></div></div>';
-      $('genericAdminV6').onsubmit=async e=>{e.preventDefault();try{const file=$('gvFile').files[0];const uploaded=file?await uploadFile(file):null;const b={};if(section==='events')Object.assign(b,{title:$('gvTitle').value,event_date:new Date($('gvDate').value).toISOString(),location:$('gvLocation').value,description:$('gvDesc').value});else if(section==='exams')Object.assign(b,{subject:$('gvTitle').value,exam_type:$('gvSubject').value||'Internal',class_code:$('gvClass').value,exam_date:new Date($('gvDate').value).toISOString(),room:$('gvLocation').value});else if(section==='assignments')Object.assign(b,{title:$('gvTitle').value,subject:$('gvSubject').value,class_code:$('gvClass').value,due_at:new Date($('gvDate').value).toISOString(),description:$('gvDesc').value,attachment_url:uploaded});else Object.assign(b,{title:$('gvTitle').value,subject:$('gvSubject').value,class_code:$('gvClass').value,description:$('gvDesc').value,file_url:uploaded});await api(cfg.post,{method:'POST',body:JSON.stringify(b)});msg(cfg.label.slice(0,-1)+' created');adminLoad(section)}catch(err){msg(err.message)}};p.querySelectorAll('[data-cdelete]').forEach(b=>b.onclick=async()=>{if(!confirm('Delete this record?'))return;try{await api('/api/'+section+'/'+b.dataset.id,{method:'DELETE'});msg('Record deleted');adminLoad(section)}catch(e){msg(e.message)}});p.querySelectorAll('[data-cedit]').forEach(b=>b.onclick=()=>adminEditContent(section,b.dataset.id));return;
+      $('genericAdminV6').onsubmit=async e=>{e.preventDefault();try{const file=$('gvFile').files[0];const uploaded=file?await uploadFile(file):null;const b={};if(section==='events')Object.assign(b,{title:$('gvTitle').value,event_date:new Date($('gvDate').value).toISOString(),location:$('gvLocation').value,description:$('gvDesc').value});else if(section==='exams')Object.assign(b,{subject:$('gvTitle').value,exam_type:$('gvSubject').value||'Internal',class_code:$('gvClass').value,exam_date:new Date($('gvDate').value).toISOString(),room:$('gvLocation').value});else if(section==='assignments')Object.assign(b,{title:$('gvTitle').value,subject:$('gvSubject').value,class_code:$('gvClass').value,due_at:new Date($('gvDate').value).toISOString(),description:$('gvDesc').value,attachment_url:uploaded});else Object.assign(b,{title:$('gvTitle').value,subject:$('gvSubject').value,class_code:$('gvClass').value,description:$('gvDesc').value,file_url:uploaded});await api(cfg.post,{method:'POST',body:JSON.stringify(b)});msg(cfg.label.slice(0,-1)+' created');adminLoad(section)}catch(err){msg(err.message)}};p.querySelectorAll('[data-cdelete]').forEach(b=>b.onclick=async()=>{if(!await confirmModal('Delete this record?'))return;try{await api('/api/'+section+'/'+b.dataset.id,{method:'DELETE'});msg('Record deleted');adminLoad(section)}catch(e){msg(e.message)}});p.querySelectorAll('[data-cedit]').forEach(b=>b.onclick=async()=>{const ok=await adminEditContent(section,b.dataset.id);if(ok)adminLoad(section)});return;
     }
 
     if(section==='timetable'){
@@ -169,7 +212,7 @@ async function adminLoad(section){
       $('adminContent').innerHTML='<div class="grid lg:grid-cols-[330px_1fr] gap-4"><form id="tv6" class="card p-5 space-y-2"><div class="eyebrow">Schedule</div><h3 class="font-extrabold">Add timetable entry</h3><input id="tvClass" class="field" placeholder="Class" value="'+E($('class').value)+'"><select id="tvDay" class="field"><option>Monday</option><option>Tuesday</option><option>Wednesday</option><option>Thursday</option><option>Friday</option></select><input id="tvPeriod" class="field" placeholder="Period"><input id="tvSubject" class="field" placeholder="Subject"><input id="tvFaculty" class="field" placeholder="Faculty"><input id="tvRoom" class="field" placeholder="Room"><button class="primary w-full">Add entry</button></form><div class="card p-5"><div class="font-extrabold">Timetable — '+E($('class').value)+'</div><div id="timetableAdminList" class="mt-4 space-y-2"></div></div></div>';
       $('timetableAdminList').innerHTML=rows.map(function(x){return '<div class="border rounded-xl p-3 flex justify-between"><div><b class="text-sm">'+E(x.day)+' • '+E(x.period)+'</b><div class="text-xs text-slate-500 mt-1">'+E(x.subject)+' • '+E(x.faculty||'—')+' • '+E(x.room||'—')+'</div></div><div class="flex gap-2"><button class="text-xs text-blue-600" data-tvedit="'+x.id+'">Edit</button><button class="text-xs text-red-600" data-tvdel="'+x.id+'">Delete</button></div></div>'}).join('')||'<p class="text-sm text-slate-500">No timetable entries.</p>';
       $('tv6').onsubmit=async function(e){e.preventDefault();try{await api('/api/timetable',{method:'POST',body:JSON.stringify({class_code:$('tvClass').value,day:$('tvDay').value,period:$('tvPeriod').value,subject:$('tvSubject').value,faculty:$('tvFaculty').value,room:$('tvRoom').value})});msg('Timetable entry added');adminLoad('timetable')}catch(err){msg(err.message)}};
-      p.querySelectorAll('[data-tvdel]').forEach(function(button){button.onclick=async function(){if(!confirm('Delete timetable entry?'))return;try{await api('/api/timetable/'+button.dataset.tvdel,{method:'DELETE'});msg('Entry deleted');adminLoad('timetable')}catch(err){msg(err.message)}}});
+      p.querySelectorAll('[data-tvdel]').forEach(function(button){button.onclick=async function(){if(!await confirmModal('Delete timetable entry?'))return;try{await api('/api/timetable/'+button.dataset.tvdel,{method:'DELETE'});msg('Entry deleted');adminLoad('timetable')}catch(err){msg(err.message)}}});
       p.querySelectorAll('[data-tvedit]').forEach(function(button){button.onclick=function(){adminEditTimetable(button.dataset.tvedit)}});
       return;
     }
@@ -184,39 +227,146 @@ async function adminLoad(section){
         const score=section==='attendance'?E(x.status):E((x.marks||0)+'/'+(x.max_marks||100));
         return '<tr class="border-b last:border-0"><td class="py-3">'+E(x.student_name||x.student_id)+'</td><td>'+E(x.subject)+'</td><td>'+E(x.date||x.exam_date||'—')+'</td><td>'+score+'</td><td class="text-right"><button class="text-xs text-blue-600" data-rec-edit="'+section+'" data-id="'+x.id+'">Edit</button> <button class="text-xs text-red-600" data-rec-delete="'+section+'" data-id="'+x.id+'">Delete</button></td></tr>';
       }).join('')||'<tr><td colspan="5" class="py-8 text-center text-slate-500">No records for this class.</td></tr>';
-      p.querySelectorAll('[data-rec-delete]').forEach(function(button){button.onclick=async function(){if(!confirm('Delete record?'))return;try{await api('/api/'+section+'/'+button.dataset.id,{method:'DELETE'});msg('Record deleted');adminLoad(section)}catch(err){msg(err.message)}}});
+      p.querySelectorAll('[data-rec-delete]').forEach(function(button){button.onclick=async function(){if(!await confirmModal('Delete record?'))return;try{await api('/api/'+section+'/'+button.dataset.id,{method:'DELETE'});msg('Record deleted');adminLoad(section)}catch(err){msg(err.message)}}});
       p.querySelectorAll('[data-rec-edit]').forEach(function(button){button.onclick=function(){adminEditRecord(section,button.dataset.id)}});
       return;
     }
   }catch(e){msg(e.message)}
 }
 
-async function adminEditUser(id){
-  const users=await api('/api/users'),u=users.find(x=>String(x.id)===String(id));if(!u)return;
-  const name=prompt('Name',u.name);if(name===null)return;const role=prompt('Role',u.role);if(role===null)return;const cls=prompt('Class',u.class_code||'');if(cls===null)return;const roll=prompt('Roll number',u.roll_no||'');if(roll===null)return;
-  try{await api('/api/users/'+id,{method:'PUT',body:JSON.stringify({name,role:role.toUpperCase(),class_code:cls,roll_no:roll})});msg('Student updated');adminLoad('students')}catch(e){msg(e.message)}
-}
-async function adminEditFaculty(id){const rows=await api('/api/faculty'),u=rows.find(x=>String(x.id)===String(id));if(!u)return;const name=prompt('Faculty name',u.name);if(name===null)return;const subject=prompt('Subject',u.subject||'');if(subject===null)return;try{await api('/api/faculty/'+id,{method:'PUT',body:JSON.stringify({...u,name,subject})});msg('Faculty updated');adminLoad('faculty')}catch(e){msg(e.message)}}
-async function adminEditClass(id){const rows=await api('/api/classes'),u=rows.find(x=>String(x.id)===String(id));if(!u)return;const code=prompt('Class code',u.code);if(code===null)return;const name=prompt('Class name',u.name);if(name===null)return;try{await api('/api/classes/'+id,{method:'PUT',body:JSON.stringify({...u,code,name})});msg('Class updated');adminLoad('classes')}catch(e){msg(e.message)}}
-async function adminEditNotice(id){const d=await api('/api/notices?limit=200&includeScheduled=1'),u=d.items.find(x=>String(x.id)===String(id));if(!u)return;const title=prompt('Title',u.title);if(title===null)return;const content=prompt('Content',u.content);if(content===null)return;try{await api('/api/notices/'+id,{method:'PUT',body:JSON.stringify({...u,title,content})});msg('Notice updated');adminLoad('notices')}catch(e){msg(e.message)}}
-async function adminEditTimetable(id){const rows=await api('/api/timetable?class_code='+encodeURIComponent($('class').value)),u=rows.find(x=>String(x.id)===String(id));if(!u)return;const subject=prompt('Subject',u.subject);if(subject===null)return;const facultyName=prompt('Faculty',u.faculty||'');if(facultyName===null)return;try{await api('/api/timetable/'+id,{method:'PUT',body:JSON.stringify({...u,subject,faculty:facultyName})});msg('Timetable updated');adminLoad('timetable')}catch(e){msg(e.message)}}
-async function adminEditContent(type,id){
-  const url={assignments:'/api/assignments?class_code=',materials:'/api/materials?class_code=',exams:'/api/exams?class_code=',events:'/api/events'}[type],rows=await api(url),u=rows.find(x=>String(x.id)===String(id));if(!u)return;
+
+async function adminEditUser(id,refreshTarget='students'){
+  const users=await api('/api/users'),u=users.find(x=>String(x.id)===String(id));if(!u)return false;
+  const v=await formModal({title:'Edit user',description:'Update account identity, role and academic details.',fields:[
+    {name:'name',label:'Full name',value:u.name,required:true},
+    {name:'role',label:'Role',type:'select',value:u.role,options:['ADMIN','FACULTY','STUDENT']},
+    {name:'class_code',label:'Class code',value:u.class_code||'',placeholder:'IT-A'},
+    {name:'roll_no',label:'Roll number',value:u.roll_no||''},
+    {name:'semester',label:'Semester',value:u.semester||''},
+    {name:'active',label:'Active account',type:'checkbox',value:u.active!==false}
+  ],submitLabel:'Save changes'});
+  if(!v)return false;
   try{
-    if(type==='assignments'){const title=prompt('Assignment title',u.title);if(title===null)return;const due=prompt('Due date/time (ISO)',u.due_at);if(due===null)return;await api('/api/assignments/'+id,{method:'PUT',body:JSON.stringify({...u,title,due_at:due})})}
-    else if(type==='materials'){const title=prompt('Material title',u.title);if(title===null)return;await api('/api/materials/'+id,{method:'PUT',body:JSON.stringify({...u,title})})}
-    else if(type==='exams'){const subject=prompt('Subject',u.subject);if(subject===null)return;const date=prompt('Exam date/time',u.exam_date);if(date===null)return;await api('/api/exams/'+id,{method:'PUT',body:JSON.stringify({...u,subject,exam_date:date})})}
-    else{const title=prompt('Event title',u.title);if(title===null)return;const date=prompt('Event date/time (ISO)',u.event_date);if(date===null)return;await api('/api/events/'+id,{method:'PUT',body:JSON.stringify({...u,title,event_date:date})})}
-    msg('Record updated');adminLoad(type);
-  }catch(e){msg(e.message)}
+    await api('/api/users/'+id,{method:'PUT',body:JSON.stringify({...u,name:v.name,role:String(v.role).toUpperCase(),class_code:v.class_code,roll_no:v.roll_no,semester:v.semester,active:v.active})});
+    msg('User updated');
+    if(refreshTarget==='students')adminLoad('students');else if(refreshTarget==='tools')loadAdminTools();
+    return true;
+  }catch(e){msg(e.message);return false}
+}
+async function adminEditFaculty(id){
+  const rows=await api('/api/faculty'),u=rows.find(x=>String(x.id)===String(id));if(!u)return;
+  const v=await formModal({title:'Edit faculty',description:'Keep the faculty directory consistent for students and staff.',fields:[
+    {name:'name',label:'Faculty name',value:u.name,required:true},
+    {name:'subject',label:'Primary subject',value:u.subject||''},
+    {name:'room',label:'Room',value:u.room||''},
+    {name:'availability',label:'Availability',value:u.availability||''}
+  ]});
+  if(!v)return;
+  try{await api('/api/faculty/'+id,{method:'PUT',body:JSON.stringify({...u,...v})});msg('Faculty updated');adminLoad('faculty')}catch(e){msg(e.message)}
+}
+async function adminEditClass(id){
+  const rows=await api('/api/classes'),u=rows.find(x=>String(x.id)===String(id));if(!u)return;
+  const v=await formModal({title:'Edit class',description:'Update the class code and display name.',fields:[
+    {name:'code',label:'Class code',value:u.code,required:true,placeholder:'IT-D'},
+    {name:'name',label:'Class name',value:u.name,required:true,placeholder:'Information Technology D'}
+  ]});
+  if(!v)return;
+  try{await api('/api/classes/'+id,{method:'PUT',body:JSON.stringify({...u,...v})});msg('Class updated');adminLoad('classes')}catch(e){msg(e.message)}
+}
+async function adminEditNotice(id){
+  const d=await api('/api/notices?limit=200&includeScheduled=1'),u=d.items.find(x=>String(x.id)===String(id));if(!u)return;
+  const v=await formModal({title:'Edit notice',description:'Update the notice without leaving the admin workspace.',fields:[
+    {name:'title',label:'Title',value:u.title,required:true},
+    {name:'content',label:'Content',type:'textarea',value:u.content,required:true,full:true},
+    {name:'category',label:'Category',type:'select',value:u.category||'General',options:['General','Academic','Exam','Event','Placement','Achievement']},
+    {name:'priority',label:'Priority',type:'select',value:u.priority||'medium',options:['low','medium','high']},
+    {name:'class_code',label:'Class code',value:u.class_code||'',placeholder:'Leave blank for all classes'},
+    {name:'pinned',label:'Pinned notice',type:'checkbox',value:!!u.pinned}
+  ],submitLabel:'Save notice'});
+  if(!v)return;
+  try{await api('/api/notices/'+id,{method:'PUT',body:JSON.stringify({...u,title:v.title,content:v.content,category:v.category,priority:v.priority,class_code:v.class_code||null,pinned:v.pinned})});msg('Notice updated');adminLoad('notices')}catch(e){msg(e.message)}
+}
+async function adminEditTimetable(id){
+  const rows=await api('/api/timetable?class_code='+encodeURIComponent($('class').value)),u=rows.find(x=>String(x.id)===String(id));if(!u)return;
+  const v=await formModal({title:'Edit timetable entry',description:'Update schedule details used by the student timetable.',fields:[
+    {name:'class_code',label:'Class code',value:u.class_code||$('class').value,required:true},
+    {name:'day',label:'Day',type:'select',value:u.day,options:['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']},
+    {name:'period',label:'Period',value:u.period,required:true},
+    {name:'subject',label:'Subject',value:u.subject,required:true},
+    {name:'faculty',label:'Faculty',value:u.faculty||''},
+    {name:'room',label:'Room',value:u.room||''}
+  ]});
+  if(!v)return;
+  try{await api('/api/timetable/'+id,{method:'PUT',body:JSON.stringify({...u,...v})});msg('Timetable updated');adminLoad('timetable')}catch(e){msg(e.message)}
+}
+async function adminEditContent(type,id){
+  const url={assignments:'/api/assignments?class_code=',materials:'/api/materials?class_code=',exams:'/api/exams?class_code=',events:'/api/events'}[type];
+  const rows=await api(url),u=rows.find(x=>String(x.id)===String(id));if(!u)return false;
+  let fields,title;
+  if(type==='assignments'){
+    title='Edit assignment';fields=[
+      {name:'title',label:'Title',value:u.title,required:true},
+      {name:'subject',label:'Subject',value:u.subject||''},
+      {name:'class_code',label:'Class code',value:u.class_code||''},
+      {name:'due_at',label:'Due date & time',type:'datetime-local',value:localDateTime(u.due_at)},
+      {name:'description',label:'Description',type:'textarea',value:u.description||'',full:true}
+    ];
+  }else if(type==='materials'){
+    title='Edit material';fields=[
+      {name:'title',label:'Title',value:u.title,required:true},
+      {name:'subject',label:'Subject',value:u.subject||''},
+      {name:'class_code',label:'Class code',value:u.class_code||''},
+      {name:'description',label:'Description',type:'textarea',value:u.description||'',full:true}
+    ];
+  }else if(type==='exams'){
+    title='Edit exam';fields=[
+      {name:'subject',label:'Subject',value:u.subject,required:true},
+      {name:'exam_type',label:'Exam type',value:u.exam_type||'Internal'},
+      {name:'class_code',label:'Class code',value:u.class_code||''},
+      {name:'exam_date',label:'Exam date & time',type:'datetime-local',value:localDateTime(u.exam_date)},
+      {name:'room',label:'Room',value:u.room||''}
+    ];
+  }else{
+    title='Edit event';fields=[
+      {name:'title',label:'Title',value:u.title,required:true},
+      {name:'event_date',label:'Event date & time',type:'datetime-local',value:localDateTime(u.event_date)},
+      {name:'location',label:'Location',value:u.location||''},
+      {name:'description',label:'Description',type:'textarea',value:u.description||'',full:true},
+      {name:'registration_url',label:'Registration URL',value:u.registration_url||''}
+    ];
+  }
+  const v=await formModal({title,description:'Use a structured form instead of browser dialogs.',fields});
+  if(!v)return false;
+  try{
+    if(type==='assignments')await api('/api/assignments/'+id,{method:'PUT',body:JSON.stringify({...u,title:v.title,subject:v.subject,class_code:v.class_code,due_at:v.due_at?new Date(v.due_at).toISOString():u.due_at,description:v.description})});
+    else if(type==='materials')await api('/api/materials/'+id,{method:'PUT',body:JSON.stringify({...u,title:v.title,subject:v.subject,class_code:v.class_code,description:v.description})});
+    else if(type==='exams')await api('/api/exams/'+id,{method:'PUT',body:JSON.stringify({...u,subject:v.subject,exam_type:v.exam_type,class_code:v.class_code,exam_date:v.exam_date?new Date(v.exam_date).toISOString():u.exam_date,room:v.room})});
+    else await api('/api/events/'+id,{method:'PUT',body:JSON.stringify({...u,title:v.title,event_date:v.event_date?new Date(v.event_date).toISOString():u.event_date,location:v.location,description:v.description,registration_url:v.registration_url})});
+    msg('Record updated');return true;
+  }catch(e){msg(e.message);return false}
 }
 async function adminEditRecord(type,id){
   const rows=await api(type==='attendance'?'/api/attendance?class_code='+encodeURIComponent($('class').value):'/api/marks?class_code='+encodeURIComponent($('class').value)),u=rows.find(x=>String(x.id)===String(id));if(!u)return;
-  try{
-    if(type==='attendance'){const subject=prompt('Subject',u.subject);if(subject===null)return;const status=prompt('Status (Present/Absent)',u.status);if(status===null)return;await api('/api/attendance/'+id,{method:'PUT',body:JSON.stringify({...u,subject,present:status.toLowerCase()==='present'})})}
-    else{const score=prompt('Marks',u.marks);if(score===null)return;await api('/api/marks/'+id,{method:'PUT',body:JSON.stringify({...u,marks:Number(score)})})}
-    msg('Record updated');adminLoad(type);
-  }catch(e){msg(e.message)}
+  if(type==='attendance'){
+    const v=await formModal({title:'Edit attendance',description:'Correct the attendance entry and remarks.',fields:[
+      {name:'subject',label:'Subject',value:u.subject,required:true},
+      {name:'date',label:'Date',type:'date',value:String(u.date||'').slice(0,10),required:true},
+      {name:'status',label:'Status',type:'select',value:String(u.status).toLowerCase().includes('present')?'Present':'Absent',options:['Present','Absent']},
+      {name:'remarks',label:'Remarks',value:u.remarks||''}
+    ]});
+    if(!v)return;
+    try{await api('/api/attendance/'+id,{method:'PUT',body:JSON.stringify({...u,subject:v.subject,date:v.date,present:v.status==='Present',remarks:v.remarks})});msg('Attendance updated');adminLoad(type)}catch(e){msg(e.message)}
+  }else{
+    const v=await formModal({title:'Edit marks',description:'Update assessment score and exam metadata.',fields:[
+      {name:'subject',label:'Subject',value:u.subject,required:true},
+      {name:'marks',label:'Marks',type:'number',step:'0.01',value:u.marks,required:true,min:0},
+      {name:'max_marks',label:'Max marks',type:'number',step:'0.01',value:u.max_marks||100,required:true,min:1},
+      {name:'exam_type',label:'Exam type',value:u.exam_type||'Internal'},
+      {name:'exam_date',label:'Exam date',type:'date',value:String(u.exam_date||'').slice(0,10)}
+    ]});
+    if(!v)return;
+    try{await api('/api/marks/'+id,{method:'PUT',body:JSON.stringify({...u,subject:v.subject,marks:Number(v.marks),max_marks:Number(v.max_marks),exam_type:v.exam_type,exam_date:v.exam_date})});msg('Marks updated');adminLoad(type)}catch(e){msg(e.message)}
+  }
 }
 
 async function workspace(){if(!me||!['ADMIN','FACULTY'].includes(me.role))return;let p=$('proPanel');if(!p){p=document.createElement('div');p.id='proPanel';p.className='fixed inset-0 z-[80] bg-slate-950/80 p-3 sm:p-6 overflow-auto';document.body.append(p)}p.innerHTML='<div class="max-w-6xl mx-auto bg-white dark:bg-slate-900 rounded-2xl p-5 sm:p-7"><div class="flex justify-between"><div><p class="text-xs uppercase tracking-widest text-blue-600 font-bold">'+me.role+' workspace</p><h2 class="text-2xl font-extrabold">Department management</h2></div><div class="flex items-center gap-2"><button id="openContentManager" class="hidden sm:inline-flex border border-slate-200 px-3 py-2 rounded-xl text-xs font-semibold text-blue-600">Manage content</button><button id="closePro" class="text-slate-400 text-xl">✕</button></div></div><div class="grid lg:grid-cols-2 gap-4 mt-6"><form id="wn" class="bg-slate-50 dark:bg-slate-800 rounded-xl p-4 space-y-2"><b>Publish notice</b><input id="wt" required class="w-full border dark:border-slate-700 bg-transparent p-2 rounded" placeholder="Title"><textarea id="wc" required class="w-full border dark:border-slate-700 bg-transparent p-2 rounded" placeholder="Content"></textarea><div class="grid grid-cols-2 gap-2"><select id="wp" class="border dark:border-slate-700 bg-transparent p-2 rounded"><option>medium</option><option>high</option><option>low</option></select><select id="wcat" class="border dark:border-slate-700 bg-transparent p-2 rounded"><option>General</option><option>Academic</option><option>Exam</option><option>Event</option><option>Placement</option></select></div><input id="wclass" class="w-full border dark:border-slate-700 bg-transparent p-2 rounded" placeholder="Class, e.g. IT-A"><div class="grid grid-cols-2 gap-2"><input id="wpub" type="datetime-local" class="border dark:border-slate-700 bg-transparent p-2 rounded"><input id="wexp" type="datetime-local" class="border dark:border-slate-700 bg-transparent p-2 rounded"></div><label class="text-sm"><input id="wpin" type="checkbox"> Pin notice</label><button class="w-full bg-blue-600 text-white p-2 rounded">Publish</button></form><form id="we" class="bg-slate-50 dark:bg-slate-800 rounded-xl p-4 space-y-2"><b>Create assignment</b><input id="at" required class="w-full border dark:border-slate-700 bg-transparent p-2 rounded" placeholder="Title"><input id="as" required class="w-full border dark:border-slate-700 bg-transparent p-2 rounded" placeholder="Subject"><input id="ac" class="w-full border dark:border-slate-700 bg-transparent p-2 rounded" placeholder="Class"><input id="ad" required type="datetime-local" class="w-full border dark:border-slate-700 bg-transparent p-2 rounded"><textarea id="ax" class="w-full border dark:border-slate-700 bg-transparent p-2 rounded" placeholder="Description"></textarea><button class="w-full bg-blue-600 text-white p-2 rounded">Create assignment</button></form><form id="wm" class="bg-slate-50 dark:bg-slate-800 rounded-xl p-4 space-y-2"><b>Create material</b><input id="mt" required class="w-full border dark:border-slate-700 bg-transparent p-2 rounded" placeholder="Title"><input id="ms" required class="w-full border dark:border-slate-700 bg-transparent p-2 rounded" placeholder="Subject"><input id="mc" class="w-full border dark:border-slate-700 bg-transparent p-2 rounded" placeholder="Class"><input id="mu" class="w-full border dark:border-slate-700 bg-transparent p-2 rounded" placeholder="File URL"><button class="w-full bg-blue-600 text-white p-2 rounded">Create material</button></form><form id="wv" class="bg-slate-50 dark:bg-slate-800 rounded-xl p-4 space-y-2"><b>Create event</b><input id="vt" required class="w-full border dark:border-slate-700 bg-transparent p-2 rounded" placeholder="Event title"><input id="vd" required type="datetime-local" class="w-full border dark:border-slate-700 bg-transparent p-2 rounded"><input id="vl" class="w-full border dark:border-slate-700 bg-transparent p-2 rounded" placeholder="Location"><input id="vu" class="w-full border dark:border-slate-700 bg-transparent p-2 rounded" placeholder="Registration URL"><textarea id="vx" class="w-full border dark:border-slate-700 bg-transparent p-2 rounded" placeholder="Description"></textarea><button class="w-full bg-blue-600 text-white p-2 rounded">Create event</button></form></div><div id="adminOnly" class="'+(me.role==='ADMIN'?'':'hidden')+' mt-4"><form id="wu" class="bg-slate-50 dark:bg-slate-800 rounded-xl p-4 space-y-2"><b>Create student/faculty/admin</b><div class="grid md:grid-cols-3 gap-2"><input id="un" required class="border dark:border-slate-700 bg-transparent p-2 rounded" placeholder="Name"><input id="ue" required type="email" class="border dark:border-slate-700 bg-transparent p-2 rounded" placeholder="Email"><input id="up" required minlength="8" class="border dark:border-slate-700 bg-transparent p-2 rounded" placeholder="Password"></div><div class="grid md:grid-cols-3 gap-2"><select id="ur" class="border dark:border-slate-700 bg-transparent p-2 rounded"><option>STUDENT</option><option>FACULTY</option><option>ADMIN</option></select><input id="uc" class="border dark:border-slate-700 bg-transparent p-2 rounded" placeholder="Class"><input id="ux" class="border dark:border-slate-700 bg-transparent p-2 rounded" placeholder="Roll number"></div><button class="bg-slate-950 text-white p-2 rounded">Create user</button></form></div><div id="adminTools" class="mt-5 grid lg:grid-cols-2 gap-4"><section class="border dark:border-slate-700 rounded-xl p-4"><div class="flex justify-between"><b>User management</b><button type="button" id="refreshUsers" class="text-xs text-blue-600">Refresh</button></div><div id="userAdminList" class="mt-3 space-y-2 max-h-72 overflow-auto"></div></section><section class="border dark:border-slate-700 rounded-xl p-4"><b>Class management</b><form id="classAdminForm" class="grid grid-cols-2 gap-2 mt-3"><input id="classCodeAdmin" class="border dark:border-slate-700 bg-transparent p-2 rounded" placeholder="Code e.g. IT-D" required><input id="classNameAdmin" class="border dark:border-slate-700 bg-transparent p-2 rounded" placeholder="Name" required><button class="col-span-2 bg-slate-950 text-white p-2 rounded">Add class</button></form><div id="classAdminList" class="mt-3 space-y-2"></div></section><section class="border dark:border-slate-700 rounded-xl p-4"><b>Attendance entry</b><form id="attendanceAdminForm" class="grid grid-cols-2 gap-2 mt-3"><input id="attStudent" type="number" class="border dark:border-slate-700 bg-transparent p-2 rounded" placeholder="Student ID" required><input id="attSubject" class="border dark:border-slate-700 bg-transparent p-2 rounded" placeholder="Subject" required><input id="attDate" type="date" class="border dark:border-slate-700 bg-transparent p-2 rounded" required><select id="attStatus" class="border dark:border-slate-700 bg-transparent p-2 rounded"><option value="true">Present</option><option value="false">Absent</option></select><button class="col-span-2 bg-blue-600 text-white p-2 rounded">Save attendance</button></form></section><section class="border dark:border-slate-700 rounded-xl p-4"><b>Marks entry</b><form id="marksAdminForm" class="grid grid-cols-2 gap-2 mt-3"><input id="markStudent" type="number" class="border dark:border-slate-700 bg-transparent p-2 rounded" placeholder="Student ID" required><input id="markSubject" class="border dark:border-slate-700 bg-transparent p-2 rounded" placeholder="Subject" required><input id="markScore" type="number" step="0.01" class="border dark:border-slate-700 bg-transparent p-2 rounded" placeholder="Marks" required><input id="markMax" type="number" step="0.01" value="100" class="border dark:border-slate-700 bg-transparent p-2 rounded"><input id="markExam" class="col-span-2 border dark:border-slate-700 bg-transparent p-2 rounded" placeholder="Exam type e.g. Internal"><button class="col-span-2 bg-blue-600 text-white p-2 rounded">Save marks</button></form></section></div><div class="mt-5"><h3 class="font-bold">Current notices</h3><div id="wmng" class="space-y-2 mt-2"></div></div></div>';p.classList.remove('hidden');$('closePro').onclick=()=>p.remove();$('openContentManager').onclick=contentManager;$('wn').onsubmit=async e=>{e.preventDefault();try{await api('/api/notices',{method:'POST',body:JSON.stringify({title:$('wt').value,content:$('wc').value,priority:$('wp').value,category:$('wcat').value,class_code:$('wclass').value||null,publish_at:$('wpub').value?new Date($('wpub').value).toISOString():null,expires_at:$('wexp').value?new Date($('wexp').value).toISOString():null,pinned:$('wpin').checked})});msg('Notice published');e.target.reset();loadWorkspaceNotices();loadAdminTools();if($('classAdminForm'))$('classAdminForm').onsubmit=async e=>{e.preventDefault();try{await api('/api/classes',{method:'POST',body:JSON.stringify({code:$('classCodeAdmin').value,name:$('classNameAdmin').value})});msg('Class added');e.target.reset();loadAdminTools()}catch(e){msg(e.message)}};if($('refreshUsers'))$('refreshUsers').onclick=loadAdminTools;if($('attendanceAdminForm'))$('attendanceAdminForm').onsubmit=async e=>{e.preventDefault();try{await api('/api/attendance',{method:'POST',body:JSON.stringify({student_id:$('attStudent').value,subject:$('attSubject').value,date:$('attDate').value,present:$('attStatus').value==='true'})});msg('Attendance saved');e.target.reset()}catch(e){msg(e.message)}};if($('marksAdminForm'))$('marksAdminForm').onsubmit=async e=>{e.preventDefault();try{await api('/api/marks',{method:'POST',body:JSON.stringify({student_id:$('markStudent').value,subject:$('markSubject').value,marks:$('markScore').value,max_marks:$('markMax').value,exam_type:$('markExam').value||'Internal'})});msg('Marks saved');e.target.reset()}catch(e){msg(e.message)}};}catch(e){msg(e.message)}};$('we').onsubmit=async e=>{e.preventDefault();try{await api('/api/assignments',{method:'POST',body:JSON.stringify({title:$('at').value,subject:$('as').value,class_code:$('ac').value,due_at:new Date($('ad').value).toISOString(),description:$('ax').value})});msg('Assignment created');e.target.reset()}catch(e){msg(e.message)}};$('wm').onsubmit=async e=>{e.preventDefault();try{await api('/api/materials',{method:'POST',body:JSON.stringify({title:$('mt').value,subject:$('ms').value,class_code:$('mc').value,file_url:$('mu').value})});msg('Material created');e.target.reset()}catch(e){msg(e.message)}};$('wv').onsubmit=async e=>{e.preventDefault();try{await api('/api/events',{method:'POST',body:JSON.stringify({title:$('vt').value,event_date:new Date($('vd').value).toISOString(),location:$('vl').value,registration_url:$('vu').value,description:$('vx').value})});msg('Event created');e.target.reset();events()}catch(e){msg(e.message)}};if($('wu'))$('wu').onsubmit=async e=>{e.preventDefault();try{await api('/api/users',{method:'POST',body:JSON.stringify({name:$('un').value,email:$('ue').value,password:$('up').value,role:$('ur').value,class_code:$('uc').value,roll_no:$('ux').value})});msg('User created');e.target.reset()}catch(e){msg(e.message)}};loadWorkspaceNotices()}
@@ -257,7 +407,7 @@ async function contentManager(){
 
   m.querySelectorAll('[data-content-delete]').forEach(button=>{
     button.onclick=async()=>{
-      if(!confirm('Delete this record?'))return;
+      if(!await confirmModal('Delete this record?'))return;
       const base={event:'/api/events/',assignment:'/api/assignments/',material:'/api/materials/',exam:'/api/exams/'}[button.dataset.contentDelete];
       try{
         await api(base+button.dataset.id,{method:'DELETE'});
@@ -268,49 +418,37 @@ async function contentManager(){
   });
 
   m.querySelectorAll('[data-content-edit]').forEach(button=>{
-    button.onclick=async()=>{
-      const type=button.dataset.contentEdit,id=button.dataset.id;
-      try{
-        const urls={event:'/api/events',assignment:'/api/assignments?class_code=',material:'/api/materials?class_code=',exam:'/api/exams?class_code='};
-        const rows=await api(urls[type]);
-        const record=rows.find(x=>String(x.id)===String(id));
-        if(!record)return;
-
-        if(type==='event'){
-          const title=prompt('Event title',record.title);
-          if(title===null)return;
-          const date=prompt('Event date/time (ISO)',record.event_date);
-          if(date===null)return;
-          await api('/api/events/'+id,{method:'PUT',body:JSON.stringify({...record,title,event_date:date})});
-        }else if(type==='assignment'){
-          const title=prompt('Assignment title',record.title);
-          if(title===null)return;
-          const due=prompt('Due date/time (ISO)',record.due_at);
-          if(due===null)return;
-          await api('/api/assignments/'+id,{method:'PUT',body:JSON.stringify({...record,title,due_at:due})});
-        }else if(type==='material'){
-          const title=prompt('Material title',record.title);
-          if(title===null)return;
-          await api('/api/materials/'+id,{method:'PUT',body:JSON.stringify({...record,title})});
-        }else{
-          const subject=prompt('Exam subject',record.subject);
-          if(subject===null)return;
-          const date=prompt('Exam date/time',record.exam_date);
-          if(date===null)return;
-          await api('/api/exams/'+id,{method:'PUT',body:JSON.stringify({...record,subject,exam_date:date})});
-        }
-        msg('Record updated');
-        await contentManager();
-        events();assignments();materials();exams();
-      }catch(e){msg(e.message)}
-    };
+    button.onclick=async()=>{const ok=await adminEditContent(button.dataset.contentEdit,button.dataset.id);if(ok){await contentManager();events();assignments();materials();exams()}};
   });
 }
-async function loadAdminTools(){if(me?.role!=='ADMIN')return;try{const [u,c]=await Promise.all([api('/api/users'),api('/api/classes')]);$('userAdminList').innerHTML=u.map(x=>'<div class="flex items-center justify-between gap-2 p-2 rounded bg-slate-50 dark:bg-slate-800 text-sm"><span><b>'+E(x.name)+'</b><small class="block text-slate-500">'+E(x.role)+' • '+E(x.email)+'</small></span><div class="flex gap-2"><button class="text-xs text-blue-600" data-edit-user="'+x.id+'">Edit</button><button class="text-xs text-amber-600" data-revoke-user="'+x.id+'">Revoke sessions</button><button class="text-xs '+(x.active?'text-red-600':'text-emerald-600')+'" data-toggle-user="'+x.id+'" data-active="'+x.active+'">'+(x.active?'Deactivate':'Activate')+'</button></div></div>').join('')||'<p class="text-sm text-slate-500">No users.</p>';document.querySelectorAll('[data-toggle-user]').forEach(b=>b.onclick=async()=>{try{await api('/api/users/'+b.dataset.toggleUser,{method:'PUT',body:JSON.stringify({active:b.dataset.active!=='1'})});msg('User status updated');loadAdminTools()}catch(e){msg(e.message)}});document.querySelectorAll('[data-revoke-user]').forEach(b=>b.onclick=async()=>{if(!confirm('Revoke all active sessions for this user?'))return;try{const d=await api('/api/users/'+b.dataset.revokeUser+'/revoke-sessions',{method:'POST'});msg((d.revoked||0)+' session(s) revoked');loadAdminTools()}catch(e){msg(e.message)}});document.querySelectorAll('[data-edit-user]').forEach(b=>b.onclick=async()=>{try{const users=await api('/api/users');const u=users.find(x=>String(x.id)===String(b.dataset.editUser));if(!u)return;const name=prompt('Name',u.name);if(name===null)return;const role=prompt('Role (ADMIN/FACULTY/STUDENT)',u.role);if(role===null)return;const classCode=prompt('Class code',u.class_code||'');if(classCode===null)return;const roll=prompt('Roll number',u.roll_no||'');if(roll===null)return;await api('/api/users/'+u.id,{method:'PUT',body:JSON.stringify({name,role:role.toUpperCase(),class_code:classCode,roll_no:roll})});msg('User updated');loadAdminTools()}catch(e){msg(e.message)}});$('classAdminList').innerHTML=c.map(x=>'<div class="flex justify-between p-2 rounded bg-slate-50 dark:bg-slate-800 text-sm"><span><b>'+E(x.code)+'</b> '+E(x.name)+'</span><button class="text-xs text-red-600" data-delete-class="'+x.id+'">Delete</button></div>').join('');document.querySelectorAll('[data-delete-class]').forEach(b=>b.onclick=async()=>{if(!confirm('Delete class?'))return;try{await api('/api/classes/'+b.dataset.deleteClass,{method:'DELETE'});msg('Class deleted');loadAdminTools()}catch(e){msg(e.message)}})}catch(e){msg(e.message)}}
+async function loadAdminTools(){
+  if(me?.role!=='ADMIN')return;
+  try{
+    const [u,c]=await Promise.all([api('/api/users'),api('/api/classes')]);
+    $('userAdminList').innerHTML=u.map(x=>'<div class="flex items-center justify-between gap-2 p-2 rounded bg-slate-50 dark:bg-slate-800 text-sm"><span><b>'+E(x.name)+'</b><small class="block text-slate-500">'+E(x.role)+' • '+E(x.email)+'</small></span><div class="flex gap-2"><button class="text-xs text-blue-600" data-edit-user="'+x.id+'">Edit</button><button class="text-xs text-amber-600" data-revoke-user="'+x.id+'">Revoke sessions</button><button class="text-xs '+(x.active?'text-red-600':'text-emerald-600')+'" data-toggle-user="'+x.id+'" data-active="'+x.active+'">'+(x.active?'Deactivate':'Activate')+'</button></div></div>').join('')||'<p class="text-sm text-slate-500">No users.</p>';
+    document.querySelectorAll('[data-toggle-user]').forEach(b=>b.onclick=async()=>{try{await api('/api/users/'+b.dataset.toggleUser,{method:'PUT',body:JSON.stringify({active:b.dataset.active!=='1'})});msg('User status updated');loadAdminTools()}catch(e){msg(e.message)}});
+    document.querySelectorAll('[data-revoke-user]').forEach(b=>b.onclick=async()=>{if(!await confirmModal('This will revoke every active session for the selected user. They will need to sign in again.'))return;try{const d=await api('/api/users/'+b.dataset.revokeUser+'/revoke-sessions',{method:'POST'});msg((d.revoked||0)+' session(s) revoked');loadAdminTools()}catch(e){msg(e.message)}});
+    document.querySelectorAll('[data-edit-user]').forEach(b=>b.onclick=()=>adminEditUser(b.dataset.editUser,'tools'));
+    $('classAdminList').innerHTML=c.map(x=>'<div class="flex justify-between p-2 rounded bg-slate-50 dark:bg-slate-800 text-sm"><span><b>'+E(x.code)+'</b> '+E(x.name)+'</span><button class="text-xs text-red-600" data-delete-class="'+x.id+'">Delete</button></div>').join('');
+    document.querySelectorAll('[data-delete-class]').forEach(b=>b.onclick=async()=>{if(!await confirmModal('Deleting a class can affect the records associated with it. Continue?'))return;try{await api('/api/classes/'+b.dataset.deleteClass,{method:'DELETE'});msg('Class deleted');loadAdminTools()}catch(e){msg(e.message)}});
+  }catch(e){msg(e.message)}
+}
 async function loadWorkspaceNotices(){const d=await api('/api/notices?limit=100&includeScheduled=1');$('wmng').innerHTML=d.items.map(x=>'<div class="border dark:border-slate-700 rounded-xl p-3 flex justify-between"><span><b>'+E(x.title)+'</b><small class="block text-slate-500">'+E(x.category)+' • '+E(x.class_code||'All')+'</small></span><span class="flex gap-2"><button class="text-blue-600 text-xs" data-edit-notice="'+E(x.id)+'">Edit</button>'+(me.role==='ADMIN'?'<button class="text-red-600 text-xs" data-delete-notice="'+E(x.id)+'">Delete</button>':'')+'</span></div>').join('')||'<p class="text-sm text-slate-500">No notices.</p>';document.querySelectorAll('[data-edit-notice]').forEach(b=>b.onclick=()=>editN(b.dataset.editNotice));document.querySelectorAll('[data-delete-notice]').forEach(b=>b.onclick=()=>delN(b.dataset.deleteNotice))}
 
-async function editN(id){const x=(await api('/api/notices?limit=100&includeScheduled=1')).items.find(n=>n.id===id);if(!x)return;const title=prompt('Title',x.title),content=title===null?null:prompt('Content',x.content);if(content===null)return;try{await api('/api/notices/'+id,{method:'PUT',body:JSON.stringify({...x,title,content})});msg('Notice updated');loadWorkspaceNotices();notices()}catch(e){msg(e.message)}}
-async function delN(id){if(!confirm('Delete notice?'))return;try{await api('/api/notices/'+id,{method:'DELETE'});msg('Notice deleted');loadWorkspaceNotices();notices()}catch(e){msg(e.message)}}
+async function editN(id){
+  const x=(await api('/api/notices?limit=100&includeScheduled=1')).items.find(n=>String(n.id)===String(id));if(!x)return;
+  const v=await formModal({title:'Edit notice',description:'Update the notice with a full form.',fields:[
+    {name:'title',label:'Title',value:x.title,required:true},
+    {name:'content',label:'Content',type:'textarea',value:x.content,required:true,full:true},
+    {name:'category',label:'Category',type:'select',value:x.category||'General',options:['General','Academic','Exam','Event','Placement','Achievement']},
+    {name:'priority',label:'Priority',type:'select',value:x.priority||'medium',options:['low','medium','high']},
+    {name:'class_code',label:'Class code',value:x.class_code||''},
+    {name:'pinned',label:'Pinned notice',type:'checkbox',value:!!x.pinned}
+  ]});
+  if(!v)return;
+  try{await api('/api/notices/'+id,{method:'PUT',body:JSON.stringify({...x,title:v.title,content:v.content,category:v.category,priority:v.priority,class_code:v.class_code||null,pinned:v.pinned})});msg('Notice updated');loadWorkspaceNotices();notices()}catch(e){msg(e.message)}
+}
+async function delN(id){if(!await confirmModal('Delete this notice permanently?'))return;try{await api('/api/notices/'+id,{method:'DELETE'});msg('Notice deleted');loadWorkspaceNotices();notices()}catch(e){msg(e.message)}}
 async function hydrateSession(){if(!me)return;try{const d=await api('/api/me');me=d.user;localStorage.setItem('vsb_user',JSON.stringify(me))}catch{me=null;localStorage.removeItem('vsb_user')}}
 async function refresh(){await hydrateSession();shell();authUI();if(me?.class_code&&$('class'))$('class').value=me.class_code;await Promise.all([notices(),timetable(),faculty(),events(),assignments(),materials(),exams()]);if(me?.role==='STUDENT')academic();if(me)refreshNoticeBadge();}
 if($('form'))$('form').onsubmit=async e=>{e.preventDefault();try{const d=await api('/api/auth/login',{method:'POST',body:JSON.stringify({email:$('email').value,password:$('pass').value})});me=d.user;localStorage.setItem('vsb_user',JSON.stringify(me));$('login').classList.add('hidden');authUI();msg('Signed in');await refresh();if(me.role==='ADMIN')adminDashboard();else if(me.role==='FACULTY')workspace();else tab('academic')}catch(e){$('err').textContent=e.message}};

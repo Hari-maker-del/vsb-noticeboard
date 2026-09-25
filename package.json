@@ -12,7 +12,8 @@
     "migrate:postgres": "node scripts/migrate-sqlite-to-postgres.js",
     "seed:demo": "node scripts/seed-demo.js",
     "ops:health-check": "node scripts/health-check.js",
-    "ops:backup": "node scripts/backup-postgres.js"
+    "ops:backup": "node scripts/backup-postgres.js",
+    "security:audit": "node scripts/security-audit.js"
   },
   "dependencies": {
     "cors": "^2.8.5",

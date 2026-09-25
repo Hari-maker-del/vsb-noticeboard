@@ -18,4 +18,4 @@ CREATE INDEX IF NOT EXISTS idx_timetable_class ON timetable(class_code);
 CREATE INDEX IF NOT EXISTS idx_attendance_student_date ON attendance(student_id,date);
 CREATE INDEX IF NOT EXISTS idx_marks_student ON marks(student_id);
 CREATE INDEX IF NOT EXISTS idx_audit_created ON audit_logs(created_at);
-INSERT INTO classes(code,name) VALUES ('IT-A','IT-A'),('IT-B','IT-B'),('IT-C','IT-C') ON CONFLICT (code) DO NOTHING;
+CREATE INDEX IF NOT EXISTS idx_audit_created_user ON audit_logs(user_id,created_at); CREATE INDEX IF NOT EXISTS idx_audit_entity ON audit_logs(entity,entity_id,created_at); INSERT INTO classes(code,name) VALUES ('IT-A','IT-A'),('IT-B','IT-B'),('IT-C','IT-C') ON CONFLICT (code) DO NOTHING;

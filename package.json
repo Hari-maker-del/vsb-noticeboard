@@ -1,6 +1,6 @@
 {
   "name": "vsb-noticeboard",
-  "version": "3.5.0",
+  "version": "3.6.0",
   "description": "Professional full-stack V.S.B Engineering College IT Department portal",
   "main": "server.js",
   "scripts": {

@@ -73,6 +73,13 @@ Render's default filesystem is ephemeral, so local uploads should not be treated
 - `/api/users`, `/api/students`, `/api/notifications`
 - `/api/uploads`
 
+## V7 operations and monitoring
+- **Health endpoints:** `/api/health/live` checks process availability, `/api/health` checks the database, and `/api/health/ready` verifies durable PostgreSQL + object-storage readiness.
+- **Automated monitor:** `scripts/health-check.js` performs an HTTP check against the deployed service and exits non-zero on failure. `render.yaml` schedules it every 15 minutes.
+- **Backups:** `npm run backup:postgres` creates a PostgreSQL dump. When S3 credentials are configured it copies the dump to object storage and removes objects older than `BACKUP_RETENTION_DAYS` from the configured backup prefix.
+- **Durability gate:** set `REQUIRE_DURABLE_PERSISTENCE=true` for the monitor only after PostgreSQL and S3 are configured; otherwise the monitor checks application/database availability without treating the current SQLite/local-upload fallback as an outage.
+- **Operational logs:** request IDs, structured HTTP logs and Render metrics remain enabled for troubleshooting and capacity checks.
+
 ## V6 college-ready operations
 - **Student dashboard:** signed-in students get a class-aware dashboard with attendance, marks, upcoming exams, upcoming assignments and latest notices.
 - **Admin center:** admins can manage students, faculty, classes, notices, timetable, assignments, materials, exams, attendance, marks and events from the portal.

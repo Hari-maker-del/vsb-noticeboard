@@ -1,6 +1,6 @@
 # VSB IT Department Portal
 
-A professional full-stack academic portal for the V.S.B Engineering College Information Technology Department. Version 3 adds personalized student access, academic management, file uploads, PWA support and production-oriented security.
+A professional full-stack academic portal for the V.S.B Engineering College Information Technology Department. Version 4 adds durable-persistence tooling, production migration verification, and object-storage readiness.
 
 ## Features
 
@@ -36,8 +36,8 @@ A professional full-stack academic portal for the V.S.B Engineering College Info
 Node.js, Express, SQLite/PostgreSQL, JWT, bcrypt, Multer, AWS S3-compatible object storage and the existing lightweight Tailwind frontend.
 
 ## Production architecture
-- **Database:** SQLite remains the zero-setup local default; set `DATABASE_URL` to switch to PostgreSQL. The PostgreSQL schema is in `database/postgres.sql` and CI validates it against PostgreSQL 17.
-- **Uploads:** local disk is the development default. Set `STORAGE_PROVIDER=s3` plus `S3_BUCKET`, `S3_REGION` and credentials for S3-compatible object storage. The upload API uses memory buffering and writes the object only after validation.
+- **Database:** SQLite remains the zero-setup local default; setting `DATABASE_URL` switches the application to PostgreSQL. V12 adds a transactional SQLite→PostgreSQL migration with row-count verification and intentionally skips active authentication sessions so users re-authenticate after cutover. The PostgreSQL schema is in `database/postgres.sql`.
+- **Uploads:** local disk is the development default. Set `STORAGE_PROVIDER=s3` plus `S3_BUCKET`, `S3_REGION` and credentials for S3-compatible object storage. The upload API uses memory buffering and writes the object only after validation. V12 adds `npm run persistence:audit` to verify the database schema and durable-storage configuration before a production cutover.
 - **Deployment:** `render.yaml` provisions a Node web service and managed Render Postgres with an HTTP health check at `/api/health`. Render web services require binding to `0.0.0.0`; the app does this automatically.
 - **Monitoring:** every request receives an `X-Request-ID`, structured JSON request/error logs, database-aware health status and admin operational counters. Render also exposes service CPU, memory, disk and HTTP metrics.
 - **Backups:** `npm run backup:postgres` creates a PostgreSQL dump when `DATABASE_URL` and `pg_dump` are available. Render Postgres also provides managed recovery/backups.
@@ -55,9 +55,12 @@ The database is created at `data/vsb-noticeboard.sqlite` unless `DATABASE_URL` i
 
 ## Production checklist
 1. Provision PostgreSQL and set `DATABASE_URL`.
-2. Set `NODE_ENV=production`, a generated 32+ character `JWT_SECRET`, unique admin credentials and explicit `CORS_ORIGIN`.
-3. Configure `STORAGE_PROVIDER=s3` and the S3-compatible bucket credentials.
-4. Run `npm test`, `npm run test:integration`, and the CI PostgreSQL smoke test before release.
+2. Run `npm run migrate:postgres -- --dry-run` against a copy/maintenance environment to review source/destination counts.
+3. Run `npm run migrate:postgres` during the cutover window; existing authentication sessions are intentionally skipped.
+4. Run `npm run persistence:audit` and require a clean result before switching the production health monitor to durable mode.
+5. Set `NODE_ENV=production`, a generated 32+ character `JWT_SECRET`, unique admin credentials and explicit `CORS_ORIGIN`.
+6. Configure `STORAGE_PROVIDER=s3` and the S3-compatible bucket credentials.
+7. Run `npm test` and `npm run test:integration` before release.
 5. Configure Render's HTTP health check to `/api/health` (already represented in `render.yaml`).
 6. Monitor request logs/metrics and schedule PostgreSQL backups according to your retention requirements.
 7. Never commit `.env`, database files, private uploads, backup files or credentials.
@@ -105,6 +108,13 @@ Render's default filesystem is ephemeral, so local uploads should not be treated
 - SQLite and PostgreSQL smoke tests cover the session store.
 - Portal version: 3.5.0.
 
+
+## V12 durable persistence
+- **Migration safety:** `scripts/migrate-sqlite-to-postgres.js` now creates the PostgreSQL schema, migrates relational data inside a transaction, verifies destination row counts, repairs identity sequences and reports skipped conflicts.
+- **Session cutover:** `auth_sessions` is intentionally excluded from migration so no pre-cutover browser session is carried into the new database.
+- **Persistence audit:** `scripts/persistence-audit.js` verifies `DATABASE_URL`, required PostgreSQL tables and S3 configuration; `REQUIRE_DURABLE_PERSISTENCE=true` turns missing object storage into a hard failure.
+- **Production storage:** the application is already capable of PostgreSQL + S3, but Render requires the actual database connection and object-storage credentials to be attached before durable mode can be enabled.
+- **Portal version:** 4.0.0.
 
 ## V10 operations and audit center
 - **Audit API:** administrators can search and filter audit records with pagination limits.

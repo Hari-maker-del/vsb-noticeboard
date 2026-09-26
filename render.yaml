@@ -10,9 +10,11 @@ services:
       - key: NODE_ENV
         value: production
       - key: DATABASE_URL
-        fromDatabase:
-          name: vsb-noticeboard-db
-          property: connectionString
+        sync: false
+      - key: DATABASE_SSL
+        value: "true"
+      - key: DATABASE_POOL_SIZE
+        value: "10"
       - key: JWT_SECRET
         generateValue: true
       - key: ADMIN_EMAIL
@@ -21,12 +23,18 @@ services:
         sync: false
       - key: CORS_ORIGIN
         sync: false
+      - key: REQUIRE_DURABLE_PERSISTENCE
+        value: "true"
       - key: STORAGE_PROVIDER
         value: s3
       - key: S3_BUCKET
         sync: false
       - key: S3_REGION
         sync: false
+      - key: S3_ENDPOINT
+        sync: false
+      - key: S3_FORCE_PATH_STYLE
+        value: "true"
       - key: S3_ACCESS_KEY_ID
         sync: false
       - key: S3_SECRET_ACCESS_KEY
@@ -37,23 +45,3 @@ services:
         value: "14"
       - key: BACKUP_S3_PREFIX
         value: vsb-noticeboard/backups
-databases:
-  - name: vsb-noticeboard-db
-    plan: basic-256mb
-
-  - type: cron
-    name: vsb-noticeboard-health-monitor
-    runtime: node
-    plan: starter
-    buildCommand: npm install
-    startCommand: node scripts/health-check.js
-    schedule: "*/15 * * * *"
-    envVars:
-      - key: SERVICE_URL
-        value: https://vsb-noticeboard.onrender.com
-      - key: HEALTHCHECK_PATH
-        value: /api/health
-      - key: HEALTHCHECK_TIMEOUT_MS
-        value: "10000"
-      - key: REQUIRE_DURABLE_PERSISTENCE
-        value: "false"

@@ -14,16 +14,17 @@ jobs:
           set -euo pipefail
           node <<'NODE'
           const base=process.env.SERVICE_URL.replace(/\/$/,'');
-          const paths=['/api/health/live','/api/health'];
+          const paths=['/api/health/live','/api/health','/api/health/ready'];
           (async()=>{
             for(const path of paths){
               const started=Date.now();
               const r=await fetch(base+path,{headers:{'user-agent':'github-actions-vsb-health-monitor/1.0'}});
               const body=await r.json().catch(()=>({}));
-              if(!r.ok||body.ok!==true){
-                throw new Error(path+' returned HTTP '+r.status);
+              const requiresReady=path==='/api/health/ready';
+              if(!r.ok||body.ok!==true||(requiresReady&&body.ready!==true)){
+                throw new Error(path+' returned HTTP '+r.status+' with ready='+String(body.ready));
               }
-              console.log(JSON.stringify({path,status:r.status,latency_ms:Date.now()-started,ok:body.ok,database:body.database||null,storage:body.storage||null,persistence_ready:body.persistence?.ready??null,timestamp:new Date().toISOString()}));
+              console.log(JSON.stringify({path,status:r.status,latency_ms:Date.now()-started,ok:body.ok,database:body.database||null,storage:body.storage||null,persistence_ready:body.persistence?.ready??body.ready??null,timestamp:new Date().toISOString()}));
             }
           })().catch(err=>{console.error(err);process.exit(1)});
           NODE

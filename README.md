@@ -38,9 +38,9 @@ Node.js, Express, SQLite/PostgreSQL, JWT, bcrypt, Multer, AWS S3-compatible obje
 ## Production architecture
 - **Database:** SQLite remains the zero-setup local default; setting `DATABASE_URL` switches the application to PostgreSQL. V12 adds a transactional SQLite→PostgreSQL migration with row-count verification and intentionally skips active authentication sessions so users re-authenticate after cutover. The PostgreSQL schema is in `database/postgres.sql`.
 - **Uploads:** local disk is the development default. Set `STORAGE_PROVIDER=s3` plus `S3_BUCKET`, `S3_REGION` and credentials for S3-compatible object storage. The upload API uses memory buffering and writes the object only after validation. V12 adds `npm run persistence:audit` to verify the database schema and durable-storage configuration before a production cutover.
-- **Deployment:** `render.yaml` provisions a Node web service and managed Render Postgres with an HTTP health check at `/api/health`. Render web services require binding to `0.0.0.0`; the app does this automatically.
+- **Deployment:** Render runs the Node web service; production relational data is hosted in the configured Supabase PostgreSQL project and uploads use Supabase S3-compatible Storage. `DATABASE_URL` and S3 secrets are intentionally dashboard-managed (`sync: false`) rather than embedded in the blueprint.
 - **Monitoring:** every request receives an `X-Request-ID`, structured JSON request/error logs, database-aware health status and admin operational counters. Render also exposes service CPU, memory, disk and HTTP metrics.
-- **Backups:** `npm run backup:postgres` creates a PostgreSQL dump when `DATABASE_URL` and `pg_dump` are available. Render Postgres also provides managed recovery/backups.
+- **Backups:** `npm run backup:postgres` creates a PostgreSQL dump when `DATABASE_URL` and `pg_dump` are available; configured S3 storage is used for durable backup retention.
 
 ## Local setup
 1. Copy `.env.example` to `.env`.
@@ -78,9 +78,9 @@ Render's default filesystem is ephemeral, so local uploads should not be treated
 
 ## V7 operations and monitoring
 - **Health endpoints:** `/api/health/live` checks process availability, `/api/health` checks the database, and `/api/health/ready` verifies durable PostgreSQL + object-storage readiness.
-- **Automated monitor:** `scripts/health-check.js` performs an HTTP check against the deployed service and exits non-zero on failure. `render.yaml` schedules it every 15 minutes.
+- **Automated monitor:** `.github/workflows/health-monitor.yml` checks `/api/health/live`, `/api/health`, and `/api/health/ready` every 15 minutes. Durable readiness must remain true in production.
 - **Backups:** `npm run backup:postgres` creates a PostgreSQL dump. When S3 credentials are configured it copies the dump to object storage and removes objects older than `BACKUP_RETENTION_DAYS` from the configured backup prefix.
-- **Durability gate:** set `REQUIRE_DURABLE_PERSISTENCE=true` for the monitor only after PostgreSQL and S3 are configured; otherwise the monitor checks application/database availability without treating the current SQLite/local-upload fallback as an outage.
+- **Durability gate:** production sets `REQUIRE_DURABLE_PERSISTENCE=true`; the readiness monitor therefore fails when PostgreSQL or S3-backed storage is unavailable.
 - **Operational logs:** request IDs, structured HTTP logs and Render metrics remain enabled for troubleshooting and capacity checks.
 
 ## V6 college-ready operations
@@ -113,7 +113,7 @@ Render's default filesystem is ephemeral, so local uploads should not be treated
 - **Migration safety:** `scripts/migrate-sqlite-to-postgres.js` now creates the PostgreSQL schema, migrates relational data inside a transaction, verifies destination row counts, repairs identity sequences and reports skipped conflicts.
 - **Session cutover:** `auth_sessions` is intentionally excluded from migration so no pre-cutover browser session is carried into the new database.
 - **Persistence audit:** `scripts/persistence-audit.js` verifies `DATABASE_URL`, required PostgreSQL tables and S3 configuration; `REQUIRE_DURABLE_PERSISTENCE=true` turns missing object storage into a hard failure.
-- **Production storage:** the application is already capable of PostgreSQL + S3, but Render requires the actual database connection and object-storage credentials to be attached before durable mode can be enabled.
+- **Production storage:** the application now runs with PostgreSQL + S3 configuration attached in Render; local SQLite/local uploads remain development-only fallbacks.
 - **Portal version:** 4.0.0.
 
 ## V10 operations and audit center

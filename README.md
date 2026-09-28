@@ -109,12 +109,10 @@ Render's default filesystem is ephemeral, so local uploads should not be treated
 - Portal version: 3.5.0.
 
 
-## V15 production verification
-- **Durable readiness:** `/api/health/ready` now verifies PostgreSQL availability and performs a live S3 bucket connectivity check instead of trusting configuration flags alone.
-- **Operational health check:** `npm run ops:health-check` automatically uses `/api/health/ready` when `REQUIRE_DURABLE_PERSISTENCE=true`.
-- **Persistence audit:** `npm run persistence:audit` now verifies that the configured S3-compatible bucket is reachable with the production credentials.
-- **Monitoring:** the GitHub health monitor continues checking live, database and durable-readiness endpoints every 15 minutes.
-- **Portal version:** 4.2.0.
+## V16.6.6 quality hardening
+- Extended integration coverage to verify authenticated academic-file upload and protected download behavior.
+- Removed duplicate CI configuration in favor of the existing Node.js CI matrix for SQLite and PostgreSQL.
+- Portal version: 4.6.6.
 
 ## V14 UI/UX polish
 - Unified the portal's primary color system around the same VSB blue used across navigation, buttons, focus states and browser theme color.

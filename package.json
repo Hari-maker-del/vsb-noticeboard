@@ -1,6 +1,6 @@
 {
   "name": "vsb-noticeboard",
-  "version": "4.6.6",
+  "version": "4.7.0",
   "description": "Professional full-stack V.S.B Engineering College IT Department portal",
   "main": "server.js",
   "scripts": {
@@ -21,8 +21,6 @@
     "dotenv": "^16.4.7",
     "express": "^5.2.1",
     "express-rate-limit": "^7.5.0",
-    "helmet": "^8.1.0",
-    "jsonwebtoken": "^9.0.3",
     "multer": "^2.0.2",
     "sqlite3": "^5.1.7",
     "uuid": "^11.0.5",

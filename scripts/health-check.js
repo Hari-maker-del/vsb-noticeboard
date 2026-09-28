@@ -1,7 +1,6 @@
 const base=String(process.env.SERVICE_URL||'http://127.0.0.1:5000').replace(/\/$/,'');
 const endpoint=process.env.HEALTHCHECK_PATH||'/api/health';
 const timeoutMs=Math.max(1000,Number(process.env.HEALTHCHECK_TIMEOUT_MS||10000));
-const requireDurable=String(process.env.REQUIRE_DURABLE_PERSISTENCE||'false').toLowerCase()==='true';
 const controller=new AbortController();
 const timer=setTimeout(()=>controller.abort(),timeoutMs);
 (async()=>{

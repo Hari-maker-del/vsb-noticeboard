@@ -31,6 +31,17 @@ r=await call('/api/me');assert.strictEqual(r.status,401);
 
 r=await call('/api/auth/login',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({email:'ci-admin@example.com',password:'ci-password-1234'})});assert.strictEqual(r.status,200);assert(jar.vsb_session&&jar.vsb_csrf);r=await call('/api/auth/sessions/revoke-others',{method:'POST'});assert.strictEqual(r.status,200);assert.strictEqual(r.body.success,true);assert.strictEqual(r.body.revoked,0);
 
+const pdfBlob=new Blob([Buffer.from('%PDF-1.4\\nCI upload test\\n')],{type:'application/pdf'});
+const uploadForm=new FormData();
+uploadForm.append('file',pdfBlob,'ci-upload.pdf');
+r=await call('/api/uploads',{method:'POST',body:uploadForm});
+assert.strictEqual(r.status,201,JSON.stringify(r.body));
+assert(r.body.key&&r.body.provider);
+assert.strictEqual(r.body.provider,'local');
+r=await call('/api/uploads/'+r.body.key);
+assert.strictEqual(r.status,200);
+
+
 r=await call('/api/classes',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({code:'IT-Z',name:'Integration Test Class'})});assert.strictEqual(r.status,201);const classId=r.body.id;
 r=await call('/api/classes/'+classId,{method:'PUT',headers:{'content-type':'application/json'},body:JSON.stringify({code:'IT-Z',name:'Integration Test Class Updated'})});assert.strictEqual(r.status,200);
 

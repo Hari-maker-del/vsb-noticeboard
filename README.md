@@ -1,6 +1,6 @@
 # VSB IT Department Portal
 
-A professional full-stack academic portal for the V.S.B Engineering College Information Technology Department. Version 4 adds durable-persistence tooling, production migration verification, and object-storage readiness.
+A professional full-stack academic portal for the V.S.B Engineering College Information Technology Department. Version 4 adds durable-persistence tooling, production migration verification, object-storage readiness, and production dependency verification.
 
 ## Features
 
@@ -108,6 +108,13 @@ Render's default filesystem is ephemeral, so local uploads should not be treated
 - SQLite and PostgreSQL smoke tests cover the session store.
 - Portal version: 3.5.0.
 
+
+## V15 production verification
+- **Durable readiness:** `/api/health/ready` now verifies PostgreSQL availability and performs a live S3 bucket connectivity check instead of trusting configuration flags alone.
+- **Operational health check:** `npm run ops:health-check` automatically uses `/api/health/ready` when `REQUIRE_DURABLE_PERSISTENCE=true`.
+- **Persistence audit:** `npm run persistence:audit` now verifies that the configured S3-compatible bucket is reachable with the production credentials.
+- **Monitoring:** the GitHub health monitor continues checking live, database and durable-readiness endpoints every 15 minutes.
+- **Portal version:** 4.2.0.
 
 ## V14 UI/UX polish
 - Unified the portal's primary color system around the same VSB blue used across navigation, buttons, focus states and browser theme color.

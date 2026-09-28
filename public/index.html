@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#d90f26">
+<meta name="theme-color" content="#1557c0">
 <meta name="description" content="V.S.B Engineering College Information Technology Department Portal">
 <link rel="manifest" href="/manifest.json">
 <title>VSB IT • Department Portal</title>
@@ -11,7 +11,7 @@
 <script>
 tailwind.config={
   theme:{extend:{colors:{
-    vsb:{50:'#fff1f2',100:'#ffe4e6',500:'#ef233c',600:'#d90f2a',700:'#b90b22',800:'#8f091b',900:'#6f0716'}
+    vsb:{50:'#eef5ff',100:'#dbeafe',500:'#2563eb',600:'#1557c0',700:'#0d3d8a',800:'#123f8f',900:'#0f2f68'}
   }}}
 }
 </script>
@@ -87,7 +87,7 @@ button{cursor:pointer}
 .tab.hidden{display:none}
 #events .card,#assignments .card,#materials .card,#exams .card,#academic .card{border-radius:16px}
 .modal-surface{background:#fff;border-radius:20px;border:1px solid var(--line);box-shadow:0 24px 60px rgba(0,0,0,.22)}
-.field{width:100%;border:1px solid #e5e7eb;background:#fff;border-radius:11px;padding:11px 12px;outline:none;font-size:12px}.field:focus{border-color:#f29aa6;box-shadow:0 0 0 3px rgba(217,15,42,.08)}
+.field{width:100%;border:1px solid #e5e7eb;background:#fff;border-radius:11px;padding:11px 12px;outline:none;font-size:12px}.field:focus{border-color:#7aa7e8;box-shadow:0 0 0 3px rgba(21,87,192,.10)}
 .soft-box{background:#fafbfc;border:1px solid #eef0f2;border-radius:15px}
 @media(max-width:1050px){
   .dashboard-nav{width:82px}.main-shell{margin-left:82px}.side-brand{justify-content:center}.side-brand>div:last-child,.side-group,.side-link span:not(.side-icon),.side-status{display:none}.side-link{justify-content:center;padding:12px}.side-list{gap:7px}.side-foot{display:none}
@@ -95,7 +95,7 @@ button{cursor:pointer}
   .topbar{padding:0 18px}.page{padding:22px 18px 32px}
 }
 @media(max-width:720px){
-  .dashboard-nav{top:auto;bottom:0;left:0;width:100%;height:68px;border-radius:18px 18px 0 0}.side-shell{flex-direction:row;align-items:center;padding:9px 10px}.side-brand{display:none}.side-group{display:none}.side-list{flex:1;display:flex;flex-direction:row;justify-content:space-around;gap:2px}.side-link{width:auto;min-width:47px;padding:8px 6px;border-radius:10px}.side-link span:not(.side-icon){display:none}.side-icon{margin:0}.side-spacer,.side-foot{display:none}.main-shell{margin-left:0;padding-bottom:68px}.topbar{height:72px;padding:0 13px}.search-box{width:42vw}.profile-copy,.class-pill{display:none}.page{padding:16px 12px 26px}.hero{padding:12px}.hero-welcome{padding:21px;min-height:205px}.hero-welcome h1{font-size:25px}.metric-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.metric{padding:13px}.metric .value{font-size:21px}.dashboard-grid{gap:12px}.panel-card{padding:15px}.notice-row{grid-template-columns:auto minmax(0,1fr)}.notice-date{display:none}
+  .dashboard-nav{top:auto;bottom:0;left:0;width:100%;height:68px;border-radius:18px 18px 0 0}.side-shell{flex-direction:row;align-items:center;padding:9px 10px}.side-brand{display:none}.side-group{display:none}.side-list{flex:1;display:flex;flex-direction:row;justify-content:flex-start;gap:4px;overflow-x:auto;scrollbar-width:none}.side-list::-webkit-scrollbar{display:none}.side-link{width:auto;min-width:50px;padding:8px 6px;border-radius:10px}.side-link span:not(.side-icon){display:none}.side-icon{margin:0}.side-spacer,.side-foot{display:none}.main-shell{margin-left:0;padding-bottom:68px}.topbar{height:72px;padding:0 13px}.search-box{width:42vw}.profile-copy,.class-pill{display:none}.page{padding:16px 12px 26px}.hero{padding:12px}.hero-welcome{padding:21px;min-height:205px}.hero-welcome h1{font-size:25px}.metric-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.metric{padding:13px}.metric .value{font-size:21px}.dashboard-grid{gap:12px}.panel-card{padding:15px}.notice-row{grid-template-columns:auto minmax(0,1fr)}.notice-date{display:none}
 }
 
 /* Reference-inspired landing treatment */
@@ -142,15 +142,15 @@ button{cursor:pointer}
 
       <div class="side-group">Workspace</div>
       <div class="side-list">
-        <button class="nav side-link text-blue-600" data-tab="home"><i class="side-icon">⌂</i><span>Dashboard</span></button>
-        <button class="nav side-link" data-tab="notices"><i class="side-icon">!</i><span>Notices</span></button>
-        <button class="nav side-link" data-tab="timetable"><i class="side-icon">▦</i><span>Timetable</span></button>
-        <button class="nav side-link" data-tab="faculty"><i class="side-icon">♙</i><span>Faculty</span></button>
-        <button class="nav side-link" data-tab="events"><i class="side-icon">◈</i><span>Events</span></button>
-        <button class="nav side-link" data-tab="assignments"><i class="side-icon">✓</i><span>Assignments</span></button>
-        <button class="nav side-link" data-tab="materials"><i class="side-icon">▤</i><span>Materials</span></button>
-        <button class="nav side-link" data-tab="exams"><i class="side-icon">◷</i><span>Exams</span></button>
-        <button class="nav side-link" data-tab="academic"><i class="side-icon">◎</i><span>My Academics</span></button>
+        <button class="nav side-link text-blue-600" data-tab="home" aria-label="Dashboard"><i class="side-icon">⌂</i><span>Dashboard</span></button>
+        <button class="nav side-link" data-tab="notices" aria-label="Notices"><i class="side-icon" aria-hidden="true">!</i><span>Notices</span></button>
+        <button class="nav side-link" data-tab="timetable" aria-label="Timetable"><i class="side-icon" aria-hidden="true">▦</i><span>Timetable</span></button>
+        <button class="nav side-link" data-tab="faculty" aria-label="Faculty"><i class="side-icon" aria-hidden="true">♙</i><span>Faculty</span></button>
+        <button class="nav side-link" data-tab="events" aria-label="Events"><i class="side-icon" aria-hidden="true">◈</i><span>Events</span></button>
+        <button class="nav side-link" data-tab="assignments" aria-label="Assignments"><i class="side-icon" aria-hidden="true">✓</i><span>Assignments</span></button>
+        <button class="nav side-link" data-tab="materials" aria-label="Materials"><i class="side-icon" aria-hidden="true">▤</i><span>Materials</span></button>
+        <button class="nav side-link" data-tab="exams" aria-label="Exams"><i class="side-icon" aria-hidden="true">◷</i><span>Exams</span></button>
+        <button class="nav side-link" data-tab="academic" aria-label="My Academics"><i class="side-icon" aria-hidden="true">◎</i><span>My Academics</span></button>
       </div>
 
       <div class="side-spacer"></div>
@@ -168,13 +168,13 @@ button{cursor:pointer}
 <header class="topbar">
   <div class="search-box">
     <span class="text-slate-400 text-sm">⌕</span>
-    <input id="globalSearch" placeholder="Search the portal" aria-label="Search the portal">
+    <input id="globalSearch" placeholder="Search notices..." aria-label="Search notices">
   </div>
   <div class="topbar-actions">
     <select id="class" class="class-pill">
       <option>IT-A</option><option>IT-B</option><option>IT-C</option>
     </select>
-    <button id="noticeTop" type="button" class="hidden sm:flex h-10 w-10 items-center justify-center border border-slate-200 rounded-xl bg-white text-slate-500 relative" title="Notifications"><span>🔔</span><span id="noticeTopCount" class="hidden absolute -top-1 -right-1 min-w-4 h-4 px-1 rounded-full bg-vsb-600 text-white text-[9px] leading-4 font-extrabold">0</span></button>
+    <button id="noticeTop" type="button" aria-label="Notifications" class="hidden sm:flex h-10 w-10 items-center justify-center border border-slate-200 rounded-xl bg-white text-slate-500 relative" title="Notifications"><span>🔔</span><span id="noticeTopCount" class="hidden absolute -top-1 -right-1 min-w-4 h-4 px-1 rounded-full bg-vsb-600 text-white text-[9px] leading-4 font-extrabold">0</span></button>
     <button id="admin" type="button" class="profile-btn">
       <div class="avatar">VS</div>
       <div class="profile-copy"><b>Sign in</b><span>Account access</span></div>
@@ -209,7 +209,7 @@ button{cursor:pointer}
     </div>
     <div class="ref-feature-row">
       <button class="ref-feature nav" data-tab="notices"><span class="ref-feature-icon">!</span><b>Notices & Updates</b><p>Official department communication in one feed.</p></button>
-      <button class="ref-feature active nav" data-tab="timetable"><span class="ref-feature-icon">▦</span><b>Academic Planning</b><p>Timetable, exams and assignment tracking.</p></button>
+      <button class="ref-feature nav" data-tab="timetable"><span class="ref-feature-icon">▦</span><b>Academic Planning</b><p>Timetable, exams and assignment tracking.</p></button>
       <button class="ref-feature nav" data-tab="materials"><span class="ref-feature-icon">▤</span><b>Student Resources</b><p>Faculty, study materials and academic support.</p></button>
     </div>
   </div>
@@ -289,10 +289,10 @@ button{cursor:pointer}
   <form id="form" class="modal-surface p-7 w-full max-w-sm">
     <div class="eyebrow">Secure access</div><h2 class="text-2xl font-extrabold mt-2">Portal sign in</h2><p class="text-xs text-slate-500 mt-2 leading-5">Use your VSB account to access the portal. Staff members will see management tools automatically.</p>
     <div class="space-y-3 mt-5">
-      <input id="email" type="email" required class="field" placeholder="Email">
-      <input id="pass" type="password" required class="field" placeholder="Password">
+      <input id="email" type="email" required autocomplete="email" class="field" placeholder="Email">
+      <input id="pass" type="password" required autocomplete="current-password" class="field" placeholder="Password">
       <button class="primary w-full py-3">Sign in</button>
-      <p id="err" class="text-red-600 text-xs min-h-4"></p>
+      <p id="err" aria-live="polite" class="text-red-600 text-xs min-h-4"></p>
       <button type="button" onclick="document.getElementById('login').classList.add('hidden')" class="w-full text-xs text-slate-500">Cancel</button>
     </div>
   </form>

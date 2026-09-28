@@ -109,6 +109,14 @@ Render's default filesystem is ephemeral, so local uploads should not be treated
 - Portal version: 3.5.0.
 
 
+## V14 UI/UX polish
+- Unified the portal's primary color system around the same VSB blue used across navigation, buttons, focus states and browser theme color.
+- Made the class selector data-driven from `/api/classes`, so newly created classes appear without a frontend hardcode change.
+- Improved mobile navigation accessibility with labels on icon-only navigation controls and horizontal overflow instead of squeezing every destination into the viewport.
+- Moved the mobile unread-notification control above the bottom navigation and removed the redundant floating desktop badge.
+- Synced the landing feature highlight with the active tab and added accessible status/error announcements.
+- Portal version: 4.1.0.
+
 ## V12 durable persistence
 - **Migration safety:** `scripts/migrate-sqlite-to-postgres.js` now creates the PostgreSQL schema, migrates relational data inside a transaction, verifies destination row counts, repairs identity sequences and reports skipped conflicts.
 - **Session cutover:** `auth_sessions` is intentionally excluded from migration so no pre-cutover browser session is carried into the new database.

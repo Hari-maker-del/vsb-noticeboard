@@ -3,8 +3,27 @@ const localDir=process.env.UPLOAD_DIR||path.join(__dirname,'public','uploads');
 const provider=(process.env.STORAGE_PROVIDER||'local').toLowerCase();
 let s3=null;
 if(provider==='s3'){
-  const {S3Client,PutObjectCommand,GetObjectCommand}=require('@aws-sdk/client-s3');
-  s3=new S3Client({region:process.env.S3_REGION||'us-east-1',endpoint:process.env.S3_ENDPOINT||undefined,forcePathStyle:process.env.S3_FORCE_PATH_STYLE==='true',credentials:process.env.S3_ACCESS_KEY_ID?{accessKeyId:process.env.S3_ACCESS_KEY_ID,secretAccessKey:process.env.S3_SECRET_ACCESS_KEY||''}:undefined});
+  const {S3Client,PutObjectCommand,GetObjectCommand,HeadBucketCommand}=require('@aws-sdk/client-s3');
+  s3=new S3Client({
+    region:process.env.S3_REGION||'us-east-1',
+    endpoint:process.env.S3_ENDPOINT||undefined,
+    forcePathStyle:process.env.S3_FORCE_PATH_STYLE==='true',
+    credentials:process.env.S3_ACCESS_KEY_ID?{accessKeyId:process.env.S3_ACCESS_KEY_ID,secretAccessKey:process.env.S3_SECRET_ACCESS_KEY||''}:undefined
+  });
+}
+async function checkStorageHealth(){
+  if(provider!=='s3')return {ok:false,provider,reason:'Durable S3 storage is not configured'};
+  if(!process.env.S3_BUCKET)return {ok:false,provider,reason:'S3_BUCKET is not configured'};
+  if(!process.env.S3_ACCESS_KEY_ID||!process.env.S3_SECRET_ACCESS_KEY)return {ok:false,provider,reason:'S3 credentials are not configured'};
+  const controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),5000);
+  try{
+    await s3.send(new HeadBucketCommand({Bucket:process.env.S3_BUCKET}),{abortSignal:controller.signal});
+    return {ok:true,provider};
+  }catch(e){
+    return {ok:false,provider,reason:e?.name==='AbortError'?'S3 storage check timed out':'S3 storage connectivity check failed'};
+  }finally{
+    clearTimeout(timeout);
+  }
 }
 async function getUploadUrl(key){
   if(provider==='s3'){
@@ -29,4 +48,4 @@ async function saveUpload(file){
   fs.writeFileSync(full,file.buffer);
   return {url:'/uploads/'+filename,key:filename,provider:'local'};
 }
-module.exports={saveUpload,getUploadUrl,provider};
+module.exports={saveUpload,getUploadUrl,checkStorageHealth,provider};

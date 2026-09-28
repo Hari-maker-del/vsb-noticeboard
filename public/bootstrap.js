@@ -1,4 +1,4 @@
-(()=>{const css=document.createElement('link');css.rel='stylesheet';css.href='/responsive.css?v=16.6.7';document.head.appendChild(css);const modern=document.createElement('link');modern.rel='stylesheet';modern.href='/modern-ui.css?v=17.0.0';document.head.appendChild(modern);const cls=document.getElementById('class');const hero=document.getElementById('heroClass');const live=document.getElementById('liveClass');if(cls){const sync=()=>{if(hero)hero.textContent=cls.value;if(live)live.textContent=cls.value};cls.addEventListener('change',sync);sync();Promise.all([fetch('/api/classes').then(r=>r.json()),fetch('/api/notices?class_code='+encodeURIComponent(cls.value)+'&limit=1').then(r=>r.json())]).then(([classes,notices])=>{const mc=document.getElementById('metricClasses'),mn=document.getElementById('metricNotices');if(mc)mc.textContent=Array.isArray(classes)?classes.length:'—';if(mn)mn.textContent=typeof notices.total==='number'?notices.total:Array.isArray(notices)?notices.length:'—'}).catch(()=>{})}
+(()=>{const css=document.createElement('link');css.rel='stylesheet';css.href='/responsive.css?v=17.0.1';document.head.appendChild(css);const modern=document.createElement('link');modern.rel='stylesheet';modern.href='/modern-ui.css?v=17.0.1';document.head.appendChild(modern);const cls=document.getElementById('class');const hero=document.getElementById('heroClass');const live=document.getElementById('liveClass');if(cls){const sync=()=>{if(hero)hero.textContent=cls.value;if(live)live.textContent=cls.value};cls.addEventListener('change',sync);sync();Promise.all([fetch('/api/classes').then(r=>r.json()),fetch('/api/notices?class_code='+encodeURIComponent(cls.value)+'&limit=1').then(r=>r.json())]).then(([classes,notices])=>{const mc=document.getElementById('metricClasses'),mn=document.getElementById('metricNotices');if(mc)mc.textContent=Array.isArray(classes)?classes.length:'—';if(mn)mn.textContent=typeof notices.total==='number'?notices.total:Array.isArray(notices)?notices.length:'—'}).catch(()=>{})}
 
 const logo='/vsb-logo.webp';
 const applyVsbBranding=()=>{
@@ -22,5 +22,19 @@ const applyVsbBranding=()=>{
   if(!favicon){favicon=document.createElement('link');favicon.rel='icon';favicon.dataset.vsbFavicon='true';document.head.appendChild(favicon)}
   favicon.type='image/webp';favicon.href=logo;
 };
-if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',applyVsbBranding);else applyVsbBranding();
+
+const polishV17=()=>{
+  document.querySelectorAll('.side-link').forEach(link=>{
+    if(!link.getAttribute('aria-label')){
+      const text=link.textContent.replace(/\s+/g,' ').trim();
+      if(text)link.setAttribute('aria-label',text);
+    }
+  });
+  document.querySelectorAll('.search-box input').forEach(input=>{
+    if(!input.getAttribute('aria-label'))input.setAttribute('aria-label','Search notices and portal content');
+  });
+  document.documentElement.dataset.v17='true';
+};
+
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>{applyVsbBranding();polishV17()});else{applyVsbBranding();polishV17()}
 })();

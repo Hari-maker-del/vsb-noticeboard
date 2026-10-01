@@ -208,3 +208,53 @@ tbody tr:hover td{background:#fffdf5}
 
 /* Preserve the existing application structure while making every surface feel like one product */
 #dashboard,#notices,#timetable,#faculty,#events,#assignments,#materials,#exams,#academic{scroll-margin-top:90px}
+
+
+/* Stitch Academic Signal design tokens */
+:root{
+ --stitch-primary:#0F2942; --stitch-secondary:#DD6B20; --stitch-tertiary:#2A4365;
+ --stitch-canvas:#F8FAFC; --stitch-surface:#FFFFFF; --stitch-line:#E2E8F0;
+ --stitch-muted:#64748B; --stitch-ink:#0F172A; --stitch-soft:#EBF3FA;
+ --stitch-success:#059669; --stitch-warning:#D97706; --stitch-danger:#DC2626;
+}
+body{background:var(--stitch-canvas);color:var(--stitch-ink);font-family:"Plus Jakarta Sans",system-ui,sans-serif}
+.dashboard-nav{background:var(--stitch-surface);border-right:1px solid var(--stitch-line);box-shadow:8px 0 24px rgba(15,23,42,.04)}
+.side-logo{border-radius:10px!important;background:#fff!important;border:1px solid var(--stitch-line)!important}
+.side-brand b{color:var(--stitch-primary)}
+.side-link{color:#475569;border-radius:8px}
+.side-link:hover{background:#F1F5F9;color:var(--stitch-primary)}
+.side-link.text-blue-600{background:var(--stitch-primary);color:#fff;border-left:0;padding-left:12px}
+.side-link.text-blue-600 .side-icon{background:rgba(255,255,255,.14);color:#fff}
+.side-icon{background:#F1F5F9;color:#64748B}
+.side-status{background:#F8FAFC;border:1px solid var(--stitch-line);color:#475569}
+.side-group{color:#94A3B8}
+.topbar{background:rgba(255,255,255,.98);border-bottom:1px solid var(--stitch-line)}
+.search-box{background:#fff;border:1px solid var(--stitch-line);border-radius:8px}
+.search-box:focus-within{border-color:var(--stitch-primary);box-shadow:0 0 0 2px rgba(15,41,66,.08)}
+.class-pill{background:#fff;border-color:var(--stitch-line);color:var(--stitch-primary);border-radius:8px}
+.profile-btn{border-radius:8px}
+.avatar{background:var(--stitch-soft);color:var(--stitch-primary);border-radius:8px}
+.page{padding:32px;max-width:1440px}
+.card,.hero,.ref-hero,.ref-mini{border-radius:10px;border-color:var(--stitch-line);box-shadow:0 1px 3px rgba(15,23,42,.05)}
+.card:hover{border-color:#CBD5E1;box-shadow:0 4px 6px rgba(15,23,42,.06)}
+.ref-hero{background:var(--stitch-surface)}
+.ref-hero-inner{min-height:350px}
+.ref-copy{padding:44px}
+.ref-kicker,.eyebrow{color:var(--stitch-tertiary)}
+.ref-title{color:var(--stitch-ink);font-size:clamp(34px,3.2vw,46px)}
+.ref-copy p{color:#475569}
+.ref-visual{background:#F8FAFC}
+.ref-orb{background:rgba(42,67,101,.08);border-color:rgba(42,67,101,.16)}
+.ref-card{border-radius:8px;border-color:var(--stitch-line);box-shadow:0 10px 15px rgba(15,23,42,.06)}
+.ref-cta .primary,.primary{background:var(--stitch-primary);border-radius:6px}
+.ref-cta .primary:hover,.primary:hover{background:#1A365D}
+.ref-cta .secondary,.secondary{border-radius:6px;border-color:var(--stitch-line)}
+.metric{border-radius:8px}
+.notice-row:hover{background:#F8FAFC}
+.notice-title{color:var(--stitch-ink)}
+.field{border-radius:6px;border-color:var(--stitch-line)}
+.status-badge.warning,[data-status="pending"]{background:#FEF3C7;border-color:#FDE68A;color:var(--stitch-warning)}
+.status-badge.danger,[data-status="urgent"]{background:#FEF2F2;border-color:#FECACA;color:var(--stitch-danger)}
+.status-badge.success,[data-status="published"],[data-status="active"]{background:#ECFDF5;border-color:#A7F3D0;color:var(--stitch-success)}
+thead th{background:#F8FAFC}
+@media(max-width:720px){.page{padding:16px}.side-link.text-blue-600{border-bottom:0;background:var(--stitch-primary)}}

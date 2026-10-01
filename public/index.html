@@ -15,7 +15,7 @@ tailwind.config={
   }}}
 }
 </script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{
   --vsb:#1557c0;--vsb-dark:#0d3d8a;--ink:#1c2430;--muted:#737d89;--line:#e7ebf0;
@@ -23,7 +23,7 @@ tailwind.config={
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{font-family:Inter,system-ui,sans-serif;background:var(--canvas);color:var(--ink)}
+body{font-family:"Plus Jakarta Sans",system-ui,sans-serif;background:var(--canvas);color:var(--ink)}
 button,input,select,textarea{font:inherit}
 button{cursor:pointer}
 .dashboard-nav{position:fixed;z-index:70;left:0;top:0;bottom:0;width:248px;background:var(--sidebar);color:#fff;box-shadow:16px 0 32px rgba(31,41,55,.10)}
@@ -136,8 +136,8 @@ button{cursor:pointer}
   <div class="max-w-7xl mx-auto">
     <div class="side-shell">
       <div class="side-brand">
-        <div class="side-logo">V</div>
-        <div><b>VSB IT</b><span>Department Portal</span></div>
+        <img class="side-logo object-contain p-1" src="/vsb-logo.webp" alt="V.S.B Engineering College">
+        <div><b>V.S.B IT</b><span>Smart Notice Board</span></div>
       </div>
 
       <div class="side-group">Workspace</div>
@@ -168,7 +168,7 @@ button{cursor:pointer}
 <header class="topbar">
   <div class="search-box">
     <span class="text-slate-400 text-sm">⌕</span>
-    <input id="globalSearch" placeholder="Search notices..." aria-label="Search notices">
+    <input id="globalSearch" placeholder="Search notices, events, departments..." aria-label="Search notices">
   </div>
   <div class="topbar-actions">
     <select id="class" class="class-pill">
@@ -187,9 +187,9 @@ button{cursor:pointer}
   <div class="ref-hero">
     <div class="ref-hero-inner">
       <div class="ref-copy">
-        <div class="ref-kicker">Welcome to V.S.B Engineering College · IT Department</div>
-        <h1 class="ref-title">We keep your department connected.</h1>
-        <p>Official notices, academic schedules, faculty information, assignments, materials, exams and events — organized in one dependable digital workspace for IT students and staff.</p>
+        <div class="ref-kicker">V.S.B Engineering College · Department of Information Technology</div>
+        <h1 class="ref-title">Everything your department needs, in one place.</h1>
+        <p>Official notices, academic schedules, faculty information, assignments, materials, examinations and campus events — organized in one dependable digital workspace for V.S.B IT students and staff.</p>
         <div class="ref-cta">
           <button class="primary nav" data-tab="notices">View notices</button>
           <button class="secondary nav" data-tab="timetable">Explore academics</button>
@@ -203,7 +203,7 @@ button{cursor:pointer}
         <div class="ref-person" aria-hidden="true">
           <div class="ref-hair"></div><div class="ref-head"></div><div class="ref-body"></div><div class="ref-shirt"></div>
         </div>
-        <div class="ref-card top"><span class="tiny">Department status</span><b>Portal is live</b><p>API-connected information, refreshed for your selected class.</p></div>
+        <div class="ref-card top"><span class="tiny">Department status</span><b>Noticeboard is live</b><p>API-connected information, refreshed for your selected class.</p></div>
         <div class="ref-card bottom"><span class="tiny">Current class</span><b id="heroClass">IT-A</b><p>Switch classes from the header to see class-specific notices and schedules.</p></div>
       </div>
     </div>
@@ -280,7 +280,7 @@ button{cursor:pointer}
 
 <footer class="footer">
   <div class="max-w-[1500px] mx-auto px-[30px] py-5 flex flex-col sm:flex-row justify-between gap-2 text-[10px] text-slate-400">
-    <span>© V.S.B Engineering College · Information Technology Department</span><span>Official department portal</span>
+    <span>© V.S.B Engineering College · Department of Information Technology</span><span>Official Smart Notice Board</span>
   </div>
 </footer>
 </div>

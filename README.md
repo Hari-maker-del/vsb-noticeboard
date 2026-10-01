@@ -1,5 +1,10 @@
 # VSB IT Department Portal
 
+[![Live Site](https://img.shields.io/badge/Live%20Site-vsb--noticeboard.onrender.com-0F2942?style=for-the-badge&logo=render&logoColor=white)](https://vsb-noticeboard.onrender.com) [![GitHub](https://img.shields.io/badge/GitHub-Source%20Code-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Hari-maker-del/vsb-noticeboard)
+
+**Live Site:** https://vsb-noticeboard.onrender.com  
+**Source Code:** https://github.com/Hari-maker-del/vsb-noticeboard
+
 A professional full-stack academic portal for the V.S.B Engineering College Information Technology Department. Version 4 adds durable-persistence tooling, production migration verification, object-storage readiness, and production dependency verification.
 
 ## Features
@@ -49,7 +54,7 @@ Node.js, Express, SQLite/PostgreSQL, JWT, bcrypt, Multer, AWS S3-compatible obje
 4. Run `npm test`.
 5. Run `npm run test:integration`.
 6. Run `npm start`.
-6. Open `http://localhost:5000`.
+7. Open `http://localhost:5000`.
 
 The database is created at `data/vsb-noticeboard.sqlite` unless `DATABASE_URL` is set. Uploaded files are stored in `public/uploads` unless S3 storage is enabled.
 
@@ -61,9 +66,9 @@ The database is created at `data/vsb-noticeboard.sqlite` unless `DATABASE_URL` i
 5. Set `NODE_ENV=production`, a generated 32+ character `JWT_SECRET`, unique admin credentials and explicit `CORS_ORIGIN`.
 6. Configure `STORAGE_PROVIDER=s3` and the S3-compatible bucket credentials.
 7. Run `npm test` and `npm run test:integration` before release.
-5. Configure Render's HTTP health check to `/api/health` (already represented in `render.yaml`).
-6. Monitor request logs/metrics and schedule PostgreSQL backups according to your retention requirements.
-7. Never commit `.env`, database files, private uploads, backup files or credentials.
+8. Configure Render's HTTP health check to `/api/health` (already represented in `render.yaml`).
+9. Monitor request logs/metrics and schedule PostgreSQL backups according to your retention requirements.
+10. Never commit `.env`, database files, private uploads, backup files or credentials.
 
 Render's default filesystem is ephemeral, so local uploads should not be treated as durable production storage; managed Postgres is preferred for relational data and object storage for arbitrary files.
 
@@ -88,7 +93,6 @@ Render's default filesystem is ephemeral, so local uploads should not be treated
 - **Admin center:** admins can manage students, faculty, classes, notices, timetable, assignments, materials, exams, attendance, marks and events from the portal.
 - **Demo data:** run `npm run seed:demo` in a non-production environment to populate realistic IT-A/IT-B/IT-C sample records. Demo accounts are intentionally local-only and should be changed or removed before a real college rollout.
 
-
 ## V8 security hardening
 - **Browser authentication:** the web portal uses an HttpOnly, Secure (production) and SameSite=Lax session cookie instead of storing JWT access tokens in localStorage.
 - **CSRF protection:** state-changing cookie-authenticated requests require a separate CSRF token; the frontend sends it automatically.
@@ -98,7 +102,6 @@ Render's default filesystem is ephemeral, so local uploads should not be treated
 - **Security CI:** GitHub Actions runs npm audit --omit=dev --audit-level=high on pushes, pull requests and weekly.
 - **Legacy API clients:** Bearer-token authentication remains supported; setting RETURN_LEGACY_TOKEN=true exposes the login token for clients that still require it. The browser frontend does not use this compatibility mode.
 
-
 ## V9 session management
 - Persistent database-backed sessions with expiry and revocation.
 - Password changes, admin password resets, role changes and account deactivation revoke affected sessions.
@@ -107,7 +110,6 @@ Render's default filesystem is ephemeral, so local uploads should not be treated
 - Authenticated requests re-check current account state.
 - SQLite and PostgreSQL smoke tests cover the session store.
 - Portal version: 3.5.0.
-
 
 ## V16.6.6 quality hardening
 - Extended integration coverage to verify authenticated academic-file upload and protected download behavior.

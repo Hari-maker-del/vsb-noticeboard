@@ -1,1 +1,9 @@
-(function(){function esc(s){return String(s||'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}function verifyUrl(id){return location.origin+'/?notice='+encodeURIComponent(id)}function makeQrUrl(id){return 'https://api.qrserver.com/v1/create-qr-code/?size=240x240&data='+encodeURIComponent(verifyUrl(id))}window.VSBNoticeQR={verificationUrl:verifyUrl,qrUrl:makeQrUrl,render:function(target,id){const el=typeof target==='string'?document.querySelector(target):target;if(!el||!id)return;el.innerHTML='<div style="display:inline-flex;flex-direction:column;align-items:center;gap:8px"><img width="180" height="180" loading="lazy" alt="QR code for official notice '+esc(id)+'" src="'+makeQrUrl(id)+'"><strong>Scan to verify</strong><small>'+esc(verifyUrl(id))+'</small></div>'}}})();
+(function(){
+  function esc(s){return String(s||'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+  function verificationUrl(id){return new URL('/?notice='+encodeURIComponent(id),location.origin).toString()}
+  window.VSBNoticeQR={verificationUrl,render:function(target,id){
+    const el=typeof target==='string'?document.querySelector(target):target;if(!el||!id)return;
+    if(window.VSBLocalQR){return window.VSBLocalQR.render(el,id)}
+    el.innerHTML='<div style="padding:14px;border:1px solid #eee;border-radius:14px">QR module loading…</div>';
+  }};
+})();

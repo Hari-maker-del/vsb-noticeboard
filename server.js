@@ -6,7 +6,7 @@ const app=express(),PORT=Number(process.env.PORT||5000),NODE_ENV=process.env.NOD
 if(NODE_ENV==='production'&&JWT_SECRET.length<32)throw new Error('JWT_SECRET must be at least 32 characters in production.');
 const allowedOrigins=(process.env.CORS_ORIGIN||'').split(',').map(x=>x.trim()).filter(Boolean);if(NODE_ENV==='production'&&!allowedOrigins.length)throw new Error('CORS_ORIGIN must be configured in production.');
 app.set('trust proxy',1);app.disable('x-powered-by');
-app.use(helmet({contentSecurityPolicy:{useDefaults:true,directives:{scriptSrc:["'self'"],styleSrc:["'self'","'unsafe-inline'"],imgSrc:["'self'","data:","blob:"],connectSrc:["'self'"],objectSrc:["'none'"],frameAncestors:["'self'"],baseUri:["'self'"],formAction:["'self'"]}}}));
+app.use(helmet({contentSecurityPolicy:{useDefaults:true,directives:{scriptSrc:["'self'","https://cdn.tailwindcss.com"],styleSrc:["'self'","'unsafe-inline'","https://fonts.googleapis.com"],fontSrc:["'self'","data:","https://fonts.gstatic.com"],imgSrc:["'self'","data:","blob:"],connectSrc:["'self'"],objectSrc:["'none'"],frameAncestors:["'self'"],baseUri:["'self'"],formAction:["'self'"]}}}));
 app.use(cors({origin:allowedOrigins.length?allowedOrigins:true,credentials:true}));app.use(express.json({limit:'2mb'}));
 app.use(express.urlencoded({extended:true,limit:'2mb'}));
 app.use(rateLimit({windowMs:900000,limit:300,standardHeaders:true,legacyHeaders:false}));

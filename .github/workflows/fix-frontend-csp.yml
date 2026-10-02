@@ -1,0 +1,48 @@
+name: Fix frontend CSP
+on:
+  push:
+    branches: [main]
+permissions:
+  contents: write
+jobs:
+  fix:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fix Tailwind CSP and move config out of inline script
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+          p=Path('server.js')
+          s=p.read_text()
+          old="scriptSrc:[\"'self'\"],styleSrc:[\"'self'\",\"'unsafe-inline'\"],imgSrc:[\"'self'\",\"data:\",\"blob:\"],connectSrc:[\"'self'\"]"
+          new="scriptSrc:[\"'self'\",\"https://cdn.tailwindcss.com\"],styleSrc:[\"'self'\",\"'unsafe-inline'\",\"https://fonts.googleapis.com\"],fontSrc:[\"'self'\",\"data:\",\"https://fonts.gstatic.com\"],imgSrc:[\"'self'\",\"data:\",\"blob:\"],connectSrc:[\"'self'\"]"
+          if old not in s:
+              raise SystemExit('CSP pattern not found')
+          p.write_text(s.replace(old,new,1))
+
+          p=Path('public/index.html')
+          s=p.read_text()
+          m=re.search(r'<script>tailwind\.config=(.*?)</script>',s)
+          if not m:
+              raise SystemExit('Tailwind config block not found')
+          cfg=m.group(1)
+          Path('public/tailwind-config.js').write_text("window.tailwind = window.tailwind || {}; window.tailwind.config="+cfg+";\n")
+          s=s[:m.start()]+s[m.end():]
+          s=s.replace('<script src="https://cdn.tailwindcss.com"></script>','<script src="/tailwind-config.js"></script><script src="https://cdn.tailwindcss.com"></script>',1)
+          p.write_text(s)
+          PY
+      - name: Verify
+        run: |
+          node --check server.js
+          test -s public/tailwind-config.js
+          grep -q 'cdn.tailwindcss.com' public/index.html
+      - name: Commit fix
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add server.js public/index.html public/tailwind-config.js
+          git commit -m 'fix: restore Tailwind styles in production' || exit 0
+          git push

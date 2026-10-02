@@ -1,0 +1,8 @@
+(function(){
+const css=document.createElement('style');css.textContent='.prod-status{position:fixed;left:16px;bottom:16px;z-index:110;background:#fff;border:1px solid #eee;border-radius:12px;padding:8px 12px;box-shadow:0 6px 24px #0001;font:600 11px system-ui}.prod-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:#22c55e;margin-right:6px}.prod-dot.off{background:#dc2626}.kiosk-toggle{position:fixed;right:20px;bottom:20px;z-index:110;border:0;border-radius:12px;background:#f5c400;color:#171717;padding:10px 14px;font-weight:800;display:none}.kiosk-mode header,.kiosk-mode aside{display:none!important}.kiosk-mode main{padding:0!important;min-height:100vh!important}.kiosk-mode .kiosk-toggle{display:block}';document.head.appendChild(css);
+const status=document.createElement('div');status.className='prod-status';status.innerHTML='<span class="prod-dot"></span><span>Online • Campus Sync</span>';document.body.appendChild(status);
+function net(){const on=navigator.onLine;status.innerHTML='<span class="prod-dot '+(on?'':'off')+'"></span><span>'+(on?'Online • Campus Sync':'Offline • Cached View')+'</span>'}window.addEventListener('online',net);window.addEventListener('offline',net);net();
+const btn=document.createElement('button');btn.className='kiosk-toggle';btn.textContent='Exit Display Mode';document.body.appendChild(btn);btn.onclick=()=>document.body.classList.remove('kiosk-mode');
+window.addEventListener('keydown',e=>{if(e.key==='F11'&&e.shiftKey){e.preventDefault();document.body.classList.toggle('kiosk-mode')}});
+if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('/sw.js').catch(()=>{}))}
+})();

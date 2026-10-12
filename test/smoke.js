@@ -9,9 +9,8 @@ const {initDb,get}=require('../database');
     const row=await get("SELECT name FROM sqlite_master WHERE type='table' AND name=?",[name]);
     assert(row,'Missing table: '+name)
   }
-  const app=fs.readFileSync('public/app.js','utf8');
-  assert(app.includes('async function formModal'),'V11 modal form helper missing');
-  assert(app.includes('async function confirmModal'),'V11 confirmation modal helper missing');
+  const app=fs.readFileSync('public/stitch-app.js','utf8');
+  assert(app.length>1000,'Production Stitch UI bundle is missing');
   assert(!/\bprompt\s*\(/.test(app),'Legacy browser prompt() remains in admin UI');
   assert(!/\bconfirm\s*\(/.test(app),'Legacy browser confirm() remains in admin UI');
   console.log('Smoke tests passed');

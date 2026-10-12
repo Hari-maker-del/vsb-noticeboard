@@ -12,8 +12,8 @@ const {initDb,get}=require('../database');
   const app=fs.readFileSync('public/app.js','utf8');
   assert(app.includes('async function formModal'),'V11 modal form helper missing');
   assert(app.includes('async function confirmModal'),'V11 confirmation modal helper missing');
-  assert(!/prompts*(/.test(app),'Legacy browser prompt() remains in admin UI');
-  assert(!/confirms*(/.test(app),'Legacy browser confirm() remains in admin UI');
+  assert(!/\\bprompt\\s*\\(/.test(app),'Legacy browser prompt() remains in admin UI');
+  assert(!/\\bconfirm\\s*\\(/.test(app),'Legacy browser confirm() remains in admin UI');
   console.log('Smoke tests passed');
   process.exit(0)
 })().catch(e=>{console.error(e);process.exit(1)});

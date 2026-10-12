@@ -14,7 +14,8 @@
     "ops:health-check": "node scripts/health-check.js",
     "ops:backup": "node scripts/backup-postgres.js",
     "security:audit": "node scripts/security-audit.js",
-    "persistence:audit": "node scripts/persistence-audit.js"
+    "persistence:audit": "node scripts/persistence-audit.js",
+    "seo:audit": "node scripts/seo-audit.js"
   },
   "dependencies": {
     "cors": "^2.8.5",

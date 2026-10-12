@@ -21,6 +21,7 @@ jobs:
       - run: node --check scripts/seed-demo.js
       - run: node --check public/app.js
       - run: npm test
+      - run: npm run seo:audit
       - run: npm run test:integration
   postgres:
     runs-on: ubuntu-latest
